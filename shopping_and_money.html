@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Style: Money & Shopping B1 + Idioms</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* --- BUBBLE BACKGROUND --- */
+  #bubble-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bubble {
+    position: absolute;
+    bottom: -100px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.2);
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-110vh) translateX(30px) rotate(360deg) scale(1.1); opacity: 0; }
+  }
+
+  /* --- GLASSUI CONTAINER --- */
+  .container {
+    width: 95%;
+    max-width: 900px;
+    height: 80vh;
+    min-height: 600px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
+    box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.15);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* --- SLIDES SECTION --- */
+  #slides-area {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    pointer-events: none;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .emoji {
+    font-size: 70px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .title-text {
+    font-size: 3rem;
+    color: #4a4e69;
+    margin: 0 0 10px 0;
+    font-weight: 900;
+  }
+
+  .word-title {
+    font-size: 4rem;
+    color: #ff6b6b;
+    margin: 0 0 10px 0;
+    text-transform: capitalize;
+  }
+
+  .word-type {
+    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(161, 196, 253, 0.4);
+  }
+
+  .idiom-type {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  }
+
+  .meaning {
+    font-size: 1.8rem;
+    color: #333;
+    max-width: 85%;
+    line-height: 1.4;
+  }
+
+  /* --- QUIZ SECTION --- */
+  #quiz-area {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    height: 100%;
+    text-align: center;
+    overflow-y: auto;
+  }
+
+  .quiz-header {
+    font-size: 1.4rem;
+    color: #4facfe;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .question-type-badge {
+    background: #ff9a9e;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  .question-text {
+    font-size: 1.6rem;
+    color: #4a4e69;
+    margin-bottom: 25px;
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 90%;
+  }
+
+  /* Quiz Formats */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    max-width: 650px;
+  }
+
+  .option-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #a1c4fd;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    color: #4a4e69;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .option-btn:hover {
+    background: #4facfe;
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+  }
+
+  .fill-input {
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    border: 3px solid #a1c4fd;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Nunito', sans-serif;
+    color: #4a4e69;
+    font-weight: bold;
+  }
+  
+  .fill-input:focus { outline: none; border-color: #fbc2eb; }
+
+  .word-bank, .answer-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .answer-box {
+    min-height: 60px;
+    border: 3px dashed #a1c4fd;
+    border-radius: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .chunk-btn {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(161, 140, 209, 0.4);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .chunk-btn:hover { transform: scale(1.05); }
+
+  /* --- CONTROLS --- */
+  .controls {
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .anime-btn {
+    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    transition: all 0.3s;
+  }
+
+  .anime-btn:hover { transform: scale(1.05); box-shadow: 0 7px 25px rgba(79, 172, 254, 0.6); }
+  .anime-btn:disabled { background: #e0e0e0; box-shadow: none; cursor: not-allowed; color: #999; transform: none; }
+  .btn-green { background: linear-gradient(to right, #43e97b 0%, #38f9d7 100%); box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4); margin: 0 5px;}
+  .btn-orange { background: linear-gradient(to right, #fa709a 0%, #fee140 100%); box-shadow: 0 4px 15px rgba(250, 112, 154, 0.4); margin: 0 5px;}
+
+  #startQuizBtn { display: none; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); box-shadow: 0 4px 15px rgba(161, 140, 209, 0.4); }
+
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+</style>
+</head>
+<body>
+
+<div id="bubble-container"></div>
+
+<div class="container">
+  
+  <div id="slides-area">
+    <div class="slide active"><div class="emoji">🫧💰</div><h1 class="title-text">Money & Shopping!</h1><p class="meaning">Welcome! Let's master our B1 vocabulary and idioms.</p></div>
+    
+    <div class="slide"><div class="emoji">🪙</div><h2 class="word-title">Coin</h2><div class="word-type">Noun</div><p class="meaning">A flat piece of metal used as money.</p></div>
+    <div class="slide"><div class="emoji">💴</div><h2 class="word-title">Currency</h2><div class="word-type">Noun</div><p class="meaning">The type of money used by a country (like Dollars or Yen!).</p></div>
+    <div class="slide"><div class="emoji">💰</div><h2 class="word-title">To Afford</h2><div class="word-type">Verb</div><p class="meaning">To have enough money to buy something.</p></div>
+    <div class="slide"><div class="emoji">🛍️</div><h2 class="word-title">Bargain</h2><div class="word-type">Noun</div><p class="meaning">An item bought at a much lower price than usual.</p></div>
+    <div class="slide"><div class="emoji">🤲</div><h2 class="word-title">Change</h2><div class="word-type">Noun</div><p class="meaning">The money returned to you when you pay more than the item costs.</p></div>
+    <div class="slide"><div class="emoji">💳</div><h2 class="word-title">Account</h2><div class="word-type">Noun</div><p class="meaning">An arrangement where a bank keeps your money safe.</p></div>
+    <div class="slide"><div class="emoji">⚖️</div><h2 class="word-title">Balance</h2><div class="word-type">Noun</div><p class="meaning">The sum of money that is left in your bank account.</p></div>
+    <div class="slide"><div class="emoji">😥</div><h2 class="word-title">Debt</h2><div class="word-type">Noun</div><p class="meaning">An amount of money that you owe to someone.</p></div>
+    <div class="slide"><div class="emoji">🙏</div><h2 class="word-title">To Owe</h2><div class="word-type">Verb</div><p class="meaning">To have the responsibility to pay someone back.</p></div>
+    <div class="slide"><div class="emoji">💎</div><h2 class="word-title">Luxury</h2><div class="word-type">Noun</div><p class="meaning">Something very expensive that brings great comfort and pleasure.</p></div>
+    <div class="slide"><div class="emoji">🛒</div><h2 class="word-title">Checkout</h2><div class="word-type">Noun</div><p class="meaning">The place in a supermarket where you pay for your items.</p></div>
+    <div class="slide"><div class="emoji">🏷️</div><h2 class="word-title">Discount</h2><div class="word-type">Noun</div><p class="meaning">The amount of money reduced from the usual price.</p></div>
+    <div class="slide"><div class="emoji">🧸</div><h2 class="word-title">Inexpensive</h2><div class="word-type">Adjective</div><p class="meaning">Having a reasonable price; not costing a lot.</p></div>
+    <div class="slide"><div class="emoji">🎁</div><h2 class="word-title">To Donate</h2><div class="word-type">Verb</div><p class="meaning">To freely give goods or money to an organization to help others.</p></div>
+    <div class="slide"><div class="emoji">🔙</div><h2 class="word-title">To Return</h2><div class="word-type">Verb</div><p class="meaning">To bring back an item to the store to get a refund.</p></div>
+
+    <div class="slide"><div class="emoji">🏥💸</div><h2 class="word-title">Cost an arm and a leg</h2><div class="word-type idiom-type">Idiom</div><p class="meaning">When something is incredibly expensive!</p></div>
+    <div class="slide"><div class="emoji">🪟👀</div><h2 class="word-title">Window shopping</h2><div class="word-type idiom-type">Idiom</div><p class="meaning">Looking at goods in store windows without intending to buy them.</p></div>
+    <div class="slide"><div class="emoji">🌧️🐖</div><h2 class="word-title">Save for a rainy day</h2><div class="word-type idiom-type">Idiom</div><p class="meaning">To save your money for a time in the future when you might need it.</p></div>
+    <div class="slide"><div class="emoji">🛍️😵</div><h2 class="word-title">Shop till you drop</h2><div class="word-type idiom-type">Idiom</div><p class="meaning">To go shopping for a very long time until you are completely exhausted.</p></div>
+
+  </div>
+
+  <div id="quiz-area">
+    <div class="quiz-header">Question <span id="q-current">1</span> of 20</div>
+    <div class="question-type-badge" id="q-badge">Type</div>
+    <div class="question-text" id="q-text">Question goes here?</div>
+    
+    <div id="interactive-zone" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+      </div>
+  </div>
+
+  <div class="controls" id="slide-controls">
+    <button class="anime-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>◀ Back</button>
+    <button class="anime-btn" id="nextBtn" onclick="changeSlide(1)">Next ▶</button>
+    <button class="anime-btn" id="startQuizBtn" onclick="startQuiz()">Start Exam! ✨</button>
+  </div>
+
+</div>
+
+<script>
+  // --- SYNTHESIZED SOUND EFFECTS ---
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let audioCtx;
+
+  function playSound(type) {
+    if (!audioCtx) { audioCtx = new AudioContext(); }
+    if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    if (type === 'pop') {
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.1);
+    } 
+    else if (type === 'correct') {
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); 
+      oscillator.frequency.setValueAtTime(1108.73, audioCtx.currentTime + 0.1); 
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.4);
+    } 
+    else if (type === 'wrong') {
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.3);
+    } 
+    else if (type === 'win') {
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); 
+      oscillator.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1); 
+      oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2); 
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3); 
+      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.8);
+    }
+  }
+
+  // --- BACKGROUND BUBBLES ---
+  function createBubbles() {
+    const container = document.getElementById('bubble-container');
+    for (let i = 0; i < 20; i++) {
+      let bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = (Math.random() * 40 + 10) + 'px';
+      bubble.style.width = size;
+      bubble.style.height = size;
+      bubble.style.left = Math.random() * 100 + 'vw';
+      bubble.style.animationDuration = (Math.random() * 5 + 7) + 's';
+      bubble.style.animationDelay = Math.random() * 5 + 's';
+      container.appendChild(bubble);
+    }
+  }
+  createBubbles();
+
+  // --- SLIDES LOGIC ---
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const startQuizBtn = document.getElementById('startQuizBtn');
+
+  function changeSlide(direction) {
+    playSound('pop');
+    slides[currentSlide].classList.remove('active');
+    currentSlide += direction;
+    slides[currentSlide].classList.add('active');
+    prevBtn.disabled = currentSlide === 0;
+    if (currentSlide === slides.length - 1) {
+      nextBtn.style.display = 'none';
+      startQuizBtn.style.display = 'block';
+    } else {
+      nextBtn.style.display = 'block';
+      startQuizBtn.style.display = 'none';
+    }
+  }
+
+  // --- QUIZ LOGIC & DATA (Now 20 Questions) ---
+  const quizData = [
+    // Multiple Choice
+    { type: "mc", q: "You really want to buy the new video game console, but you do not have enough money saved up, so you cannot _____ it right now.", options: ["afford", "return", "owe", "donate"], a: 0 },
+    { type: "mc", q: "The cashier took my twenty-dollar bill, and she handed me my new book along with my _____.", options: ["luxury", "change", "debt", "account"], a: 1 },
+    { type: "mc", q: "The winter coat was originally very expensive, yet I bought it on sale for twenty dollars, so it was a fantastic _____.", options: ["checkout", "tax", "bargain", "coin"], a: 2 },
+    { type: "mc", q: "We are traveling to Japan next week, so we need to exchange our dollars for the local _____.", options: ["discount", "currency", "debt", "balance"], a: 1 },
+    { type: "mc", q: "I finished putting all the groceries in my cart, and I walked to the _____ to pay for my food.", options: ["shopper", "checkout", "luxury", "return"], a: 1 },
+    { type: "mc", q: "The local animal shelter needs help, so my family decided to _____ money and dog food to them.", options: ["donate", "owe", "afford", "charge"], a: 0 },
+    { type: "mc", q: "The new sports car was absolutely beautiful, but it _____, so I bought a cheaper model instead.", options: ["cost an arm and a leg", "saved for a rainy day", "was window shopping", "donated"], a: 0 },
+    { type: "mc", q: "They have a lot of energy for buying things, and they will shop till they _____.", options: ["drop", "return", "afford", "balance"], a: 0 },
+
+    // Fill in the Blank
+    { type: "fill", q: "He borrowed a lot of money to buy his car, and now he has a large [ _____ ] that he must pay off every month.", a: "debt" },
+    { type: "fill", q: "Staying in a five-star hotel with a private pool is amazing, but it is a true [ _____ ] that not everyone can pay for.", a: "luxury" },
+    { type: "fill", q: "I opened a new savings [ _____ ] at the bank today, and I deposited fifty dollars to keep it safe.", a: "account" },
+    { type: "fill", q: "She reached into her pocket, and she pulled out a shiny silver [ _____ ] to pay for the bubblegum.", a: "coin" },
+    { type: "fill", q: "The store was incredibly busy on Saturday, and every [ _____ ] was looking for the best holiday deals.", a: "shopper" },
+    { type: "fill", q: "We didn't have any extra money to spend, so we just went [ _____ ] shopping at the mall.", a: "window" },
+
+    // Organize Words
+    { type: "organize", q: "Organize the words to make a compound sentence:", 
+      chunks: ["flawed,", "The jacket", "discount.", "gave", "a", "30%", "so", "the store", "was", "me"], 
+      target: "The jacket was flawed, so the store gave me a 30% discount." },
+    { type: "organize", q: "Organize the words to make a compound sentence:", 
+      chunks: ["paid", "you", "me.", "yesterday,", "owe", "I", "lunch", "so", "for"], 
+      target: "I paid for lunch yesterday, so you owe me." },
+    { type: "organize", q: "Organize the words to make a compound sentence:", 
+      chunks: ["wanted", "to", "buy", "costly.", "I", "gift,", "but", "an", "inexpensive", "everything", "was"], 
+      target: "I wanted to buy an inexpensive gift, but everything was costly." },
+    { type: "organize", q: "Organize the words to make a compound sentence:", 
+      chunks: ["to", "so", "return", "them", "store.", "The shoes", "didn't", "fit,", "I", "had", "the"], 
+      target: "The shoes didn't fit, so I had to return them to the store." },
+    { type: "organize", q: "Organize the words to make a compound sentence:", 
+      chunks: ["looked", "and", "bank", "I", "app,", "my", "I", "at", "checked", "balance.", "my"], 
+      target: "I looked at my app, and I checked my bank balance." },
+    { type: "organize", q: "Organize the words to make a compound sentence (Idiom):", 
+      chunks: ["got", "my", "paycheck,", "I", "it", "save", "so", "a", "for", "day.", "rainy", "I"], 
+      target: "I got my paycheck, so I save it for a rainy day." }
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+  let currentSelectedChunks = [];
+
+  function startQuiz() {
+    playSound('pop');
+    document.getElementById('slides-area').style.display = 'none';
+    document.getElementById('slide-controls').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'flex';
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    if (currentQ >= quizData.length) {
+      showResults();
+      return;
+    }
+    
+    const qData = quizData[currentQ];
+    document.getElementById('q-current').innerText = currentQ + 1;
+    document.getElementById('q-text').innerText = qData.q;
+    
+    const zone = document.getElementById('interactive-zone');
+    zone.innerHTML = '';
+
+    if (qData.type === 'mc') {
+      document.getElementById('q-badge').innerText = "Multiple Choice";
+      document.getElementById('q-badge').style.background = "#ff9a9e";
+      
+      const grid = document.createElement('div');
+      grid.className = 'options-grid';
+      qData.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => handleAnswer(index === qData.a);
+        grid.appendChild(btn);
+      });
+      zone.appendChild(grid);
+
+    } else if (qData.type === 'fill') {
+      document.getElementById('q-badge').innerText = "Complete the Sentence";
+      document.getElementById('q-badge').style.background = "#a18cd1";
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'fill-input';
+      input.placeholder = "Type missing word...";
+      input.id = "fillAnswer";
+      
+      const btn = document.createElement('button');
+      btn.className = 'anime-btn btn-green';
+      btn.innerText = "Submit Answer";
+      btn.onclick = () => {
+        const val = document.getElementById('fillAnswer').value.trim().toLowerCase();
+        handleAnswer(val === qData.a.toLowerCase());
+      };
+
+      zone.appendChild(input);
+      zone.appendChild(btn);
+
+    } else if (qData.type === 'organize') {
+      document.getElementById('q-badge').innerText = "Organize the Words";
+      document.getElementById('q-badge').style.background = "#fa709a";
+      currentSelectedChunks = [];
+
+      const answerBox = document.createElement('div');
+      answerBox.className = 'answer-box';
+      answerBox.id = 'answer-box';
+
+      const wordBank = document.createElement('div');
+      wordBank.className = 'word-bank';
+      wordBank.id = 'word-bank';
+
+      qData.chunks.forEach((chunk, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'chunk-btn';
+        btn.innerText = chunk;
+        btn.id = `chunk-${index}`;
+        btn.onclick = () => {
+          playSound('pop');
+          moveChunkToAnswer(chunk, btn.id);
+        };
+        wordBank.appendChild(btn);
+      });
+
+      const btnContainer = document.createElement('div');
+      
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'anime-btn btn-orange';
+      resetBtn.innerText = "Reset";
+      resetBtn.onclick = () => { playSound('pop'); loadQuestion(); };
+
+      const submitBtn = document.createElement('button');
+      submitBtn.className = 'anime-btn btn-green';
+      submitBtn.innerText = "Submit Sentence";
+      submitBtn.onclick = () => {
+        const formedSentence = currentSelectedChunks.join(' ').trim();
+        handleAnswer(formedSentence === qData.target);
+      };
+
+      btnContainer.appendChild(resetBtn);
+      btnContainer.appendChild(submitBtn);
+
+      zone.appendChild(answerBox);
+      zone.appendChild(wordBank);
+      zone.appendChild(btnContainer);
+    }
+  }
+
+  function moveChunkToAnswer(word, btnId) {
+    document.getElementById(btnId).style.display = 'none';
+    currentSelectedChunks.push(word);
+    
+    const answerBox = document.getElementById('answer-box');
+    const wordSpan = document.createElement('button');
+    wordSpan.className = 'chunk-btn';
+    wordSpan.innerText = word;
+    answerBox.appendChild(wordSpan);
+  }
+
+  function handleAnswer(isCorrect) {
+    if (isCorrect) { 
+      playSound('correct');
+      score++; 
+    } else {
+      playSound('wrong');
+    }
+    
+    setTimeout(() => {
+      currentQ++;
+      loadQuestion();
+    }, 400);
+  }
+
+  function showResults() {
+    playSound('win');
+    const quizArea = document.getElementById('quiz-area');
+    let message = score >= 15 ? "Amazing Job! 🌟" : "Keep Studying! 📚";
+    
+    quizArea.innerHTML = `
+      <div class="emoji" style="animation: none; transform: scale(1.5); margin-bottom: 30px;">🎓</div>
+      <h1 class="title-text">${message}</h1>
+      <p class="meaning" style="margin-top: 20px;">You scored <strong>${score} out of 20</strong>.</p>
+      <p style="color: #4a4e69; font-size: 1.2rem; margin-top: 10px;">Practice makes perfect!</p>
+      <button class="anime-btn btn-green" style="margin-top: 30px;" onclick="location.reload()">Study Again 🫧</button>
+    `;
+  }
+</script>
+
+</body>
+</html>

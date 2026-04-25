@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Guide</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --text: #f8fafc;
+            --energy: #10b981;
+            --bike: #3b82f6;
+            --danger: #ef4444;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 20px 10px;
+            line-height: 1.6;
+        }
+
+        .manual-container {
+            background: var(--panel);
+            max-width: 800px;
+            width: 100%;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #334155;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 10px; text-align: center; }
+        h2 { color: var(--bike); margin-top: 30px; display: flex; align-items: center; gap: 10px; }
+        
+        .step-card {
+            background: rgba(15, 23, 42, 0.5);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .stat-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .energy-bg { background: var(--energy); color: #000; }
+        .bike-bg { background: var(--bike); color: #fff; }
+        .danger-bg { background: var(--danger); color: #fff; }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 12px; }
+        
+        hr { border: 0; border-top: 1px solid #334155; margin: 30px 0; }
+
+        .btn-back {
+            display: block;
+            width: fit-content;
+            margin: 40px auto 0;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-back:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4); }
+    </style>
+</head>
+<body>
+
+<div class="manual-container">
+    <h1>🏔️ EXPEDITION MANUAL</h1>
+    <p style="text-align: center; font-style: italic; opacity: 0.8;">"Precision is the difference between a podium finish and a mountain rescue."</p>
+
+    <div class="step-card">
+        <h2>1. The Mission Objective</h2>
+        <p>Your goal is to navigate <strong>9 distinct legs</strong> of the Alpine Tour. You begin at the base and must reach the <strong>Oak Forest</strong> summit. Each leg requires a specific number of <strong>Correct Answers</strong> to move your bike from the starting point to the Safe Station.</p>
+    </div>
+
+    <h2>2. Resource Management</h2>
+    <p>You must monitor your dashboard constantly. Every action has a cost:</p>
+    <ul>
+        <li><span class="stat-badge energy-bg">⚡ ENERGY</span>: Consumed with every question. If you hit 0%, you collapse from exhaustion.</li>
+        <li><span class="stat-badge bike-bg">🚲 BIKE CONDITION</span>: Your mechanical status. Wears down over time.</li>
+        <li><span class="stat-badge danger-bg">⚠️ MALFUNCTIONS</span>: If you answer <strong>incorrectly</strong>, you suffer a random mechanical failure (e.g., Broken Spokes, Chain Snap). This causes <strong>massive damage</strong> to your meters.</li>
+    </ul>
+
+    <h2>3. The Navigation System</h2>
+    <div class="step-card" style="border-left-color: var(--bike);">
+        <p>Use the <strong>🗺️ SHOW/HIDE MAP</strong> button to track your physical progress. Your pin moves in real-time as you earn points. 
+        <br><br>
+        <strong>Note:</strong> You cannot see the next leg's terrain until you successfully reach the current checkpoint and save your progress.</p>
+    </div>
+
+    <h2>4. Question Protocols</h2>
+    <table>
+        <tr>
+            <td><strong>Multiple Choice</strong></td>
+            <td>Select the best grammatical fit to maintain speed.</td>
+        </tr>
+        <tr>
+            <td><strong>Scrambled Sentences</strong></td>
+            <td>Type the words in the exact correct order to clear the path.</td>
+        </tr>
+        <tr>
+            <td><strong>Fill the Blanks</strong></td>
+            <td>Type the correct verb conjugation to repair your momentum.</td>
+        </tr>
+    </table>
+
+    <h2>5. Checkpoints & Save Codes</h2>
+    <p>When you reach a <strong>Safe Station</strong> (Cabin), you will receive:</p>
+    <ul>
+        <li>🏆 <strong>A Merit Badge:</strong> Added to your permanent Trophy Room.</li>
+        <li>💾 <strong>A Save Code:</strong> A unique 4-8 character string. <strong>Write this down!</strong> Without this code, the mountain winds will reset your progress to Leg 1.</li>
+    </ul>
+
+    <hr>
+    <p style="text-align: center; color: var(--danger); font-weight: bold;">🚨 CRITICAL FAILURE WARNING</p>
+    <p style="text-align: center; font-size: 0.9rem;">If Energy or Bike Condition hit 0%, the leg is failed. You will be air-lifted back to the start of that specific leg to try again.</p>
+
+</div>
+
+</body>
+</html>

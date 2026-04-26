@@ -6,7 +6,7 @@
     <title>Mr.Towers | Central Hub</title>
     <style>
         :root {
-            --neon-blue: #00f2ff;
+    
             --bg: linear-gradient(180deg, #001f3f 0%, #000b1a 100%);
             --card: rgba(0, 31, 63, 0.85); 
             --correct: #00d4ff; 
@@ -19,11 +19,6 @@
             display: flex; flex-direction: column; align-items: center; 
             user-select: none; overflow-x: hidden; min-height: 100vh; margin: 0; padding: 20px;
         }
-
-        /* --- BUBBLES --- */
-        .bubble-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .bubble { position: absolute; bottom: -100px; background: rgba(255, 255, 255, 0.2); box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5); border-radius: 50%; animation: rise linear infinite; }
-        @keyframes rise { 0% { bottom: -100px; opacity: 0; } 20% { opacity: 0.6; } 100% { bottom: 110vh; opacity: 0; } }
 
         /* --- UI CONTAINER --- */
         #main-container { 
@@ -73,13 +68,12 @@
 </head>
 <body>
 
-    <div class="bubble-wrap" id="bubble-container"></div>
 
     <div id="main-container">
         <div id="timer-box">DATE: <span id="current-date"></span></div>
         <div style="clear: both;"></div>
         
-        <h1>🇬🇧GELTUS ARCHIVE👼🏼</h1>
+        <h1>🇬🇧Geltus Central hub👼🏼</h1>
 
         <div class="q-card">
             <h3>⛰️ Alpine Odyssey</h3>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wild Weekend - Interactive Story</title>
+    <style>
+        :root {
+            --bg-color: #1c2720;
+            --panel-bg: #2d3b32;
+            --text-main: #e2e8f0;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at center, #2d3b32 0%, #1c2720 100%);
+        }
+
+        #game-container {
+            background: rgba(20, 30, 25, 0.9);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 2px solid var(--accent);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Top Bar: Progress and Save Codes */
+        #top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #4a5d53;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .save-controls input {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #4a5d53;
+            background: #111827;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 120px;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover { background: var(--accent-hover); }
+        .btn-small { font-size: 0.8rem; }
+
+        /* Story Section */
+        #story-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 120px;
+        }
+
+        /* Choices Section */
+        #choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .choice-btn {
+            background: var(--panel-bg);
+            color: var(--text-main);
+            border: 2px solid #4a5d53;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .choice-btn:hover {
+            border-color: var(--accent);
+            background: #3b4d42;
+            transform: translateX(5px);
+        }
+
+        /* Feedback */
+        #feedback {
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 30px;
+        }
+        
+        #loading-overlay {
+            display: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            border-radius: 15px;
+            color: var(--accent);
+            font-size: 1.5rem;
+            justify-content: center; align-items: center;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="loading-overlay">Communicating with Server...</div>
+    
+    <div id="top-bar">
+        <div>
+            <strong>Level: <span id="level-indicator">1/10</span></strong>
+        </div>
+        <div class="save-controls">
+            <input type="text" id="student-code" placeholder="SAVE CODE" maxlength="10">
+            <button class="btn btn-small" onclick="saveGame()">SAVE</button>
+            <button class="btn btn-small" style="background: #3b82f6; color:white;" onclick="loadGame()">LOAD</button>
+        </div>
+    </div>
+
+    <h2 style="color: var(--accent); margin-top:0;">The Wild Weekend</h2>
+    
+    <div id="story-text">Loading story...</div>
+    
+    <div id="choices-container">
+        </div>
+
+    <div id="feedback"></div>
+</div>
+
+<script>
+    // =========================================================
+    // TEACHER CONFIGURATION
+    // PASTE YOUR GOOGLE WEB APP URL BETWEEN THE QUOTES BELOW!
+    // =========================================================
+    const GOOGLE_URL = "YOUR_GOOGLE_WEB_APP_URL_HERE"; 
+
+    // --- Story & Questionnaire Data (10 Questions) ---
+    const storyNodes = [
+        {
+            id: 1,
+            text: "Sam and Leo arrived at the dark forest. They opened their backpacks and realized they _____ to charge their phones before leaving.",
+            correct: "forgot",
+            options: ["have forgotten", "forgot", "were forgetting"],
+            grammarHint: "We need the Past Simple for a completed action in the past."
+        },
+        {
+            id: 2,
+            text: "Oh no! While they _____ through the dense trees, a terrible thunderstorm started.",
+            correct: "were hiking",
+            options: ["were hiking", "hiked", "have hiked"],
+            grammarHint: "Use the Past Continuous for an action in progress that gets interrupted."
+        },
+        {
+            id: 3,
+            text: "Leo looked around in panic. 'If we don't find a map, we _____ completely lost in the woods!'",
+            correct: "will get",
+            options: ["get", "would get", "will get"],
+            grammarHint: "This is a First Conditional sentence (If + Present Simple, ... + Will)."
+        },
+        {
+            id: 4,
+            text: "They ran to find shelter and found an old wooden cabin. It looked like it _____ a hundred years ago.",
+            correct: "was built",
+            options: ["built", "has built", "was built"],
+            grammarHint: "The cabin didn't build itself! You need the Passive Voice in the past."
+        },
+        {
+            id: 5,
+            text: "Inside the cabin, Sam shined his flashlight. 'I _____ a place this creepy in my entire life,' he whispered.",
+            correct: "have never seen",
+            options: ["have never seen", "never saw", "am never seeing"],
+            grammarHint: "Use Present Perfect when talking about life experiences up to the present moment."
+        },
+        {
+            id: 6,
+            text: "Suddenly, they heard a massive growl outside the door. 'That _____ be a bear!' yelled Leo, 100% terrified.",
+            correct: "must",
+            options: ["must", "can't", "might"],
+            grammarHint: "Use 'must' as a modal of deduction when you are almost 100% sure something is true."
+        },
+        {
+            id: 7,
+            text: "Sam tried to _____ his emergency radio, but the battery was dead.",
+            correct: "turn on",
+            options: ["take off", "turn on", "look after"],
+            grammarHint: "Which phrasal verb means to start a machine or electronic device?"
+        },
+        {
+            id: 8,
+            text: "They decided to escape through the back window. The path outside was much _____ than they expected.",
+            correct: "more dangerous",
+            options: ["dangerous", "more dangerous", "dangerouser"],
+            grammarHint: "How do you form the comparative for a long adjective (3+ syllables)?"
+        },
+        {
+            id: 9,
+            text: "They argued about which direction the highway was, but finally, they saw _____ and chose the right path.",
+            correct: "eye to eye",
+            options: ["eye to eye", "piece of cake", "under the weather"],
+            grammarHint: "Which idiom means 'to agree with someone'?"
+        },
+        {
+            id: 10,
+            text: "They finally saw the lights of their town! By the time they reached their house, their worried parents _____ the police.",
+            correct: "had called",
+            options: ["called", "have called", "had called"],
+            grammarHint: "Use the Past Perfect for an action that happened BEFORE another action in the past."
+        }
+    ];
+
+    let currentSlideIndex = 0; // Starts at 0 (Node 1)
+
+    // --- Game Logic ---
+    function renderSlide() {
+        // Check if game is over
+        if (currentSlideIndex >= storyNodes.length) {
+            document.getElementById("story-text").innerHTML = "🎉 <strong>CONGRATULATIONS!</strong><br><br>Sam and Leo survived the wild weekend thanks to your excellent English skills!";
+            document.getElementById("choices-container").innerHTML = "";
+            document.getElementById("level-indicator").innerText = "Completed!";
+            return;
+        }
+
+        const slide = storyNodes[currentSlideIndex];
+        document.getElementById("level-indicator").innerText = `${currentSlideIndex + 1} / 10`;
+        document.getElementById("story-text").innerText = slide.text;
+        document.getElementById("feedback").innerText = "";
+
+        const choicesDiv = document.getElementById("choices-container");
+        choicesDiv.innerHTML = "";
+
+        // Randomize the options so the correct answer isn't always in the same place
+        const shuffledOptions = slide.options.sort(() => Math.random() - 0.5);
+
+        shuffledOptions.forEach(option => {
+            let btn = document.createElement("button");
+            btn.className = "choice-btn";
+            btn.innerText = option;
+            btn.onclick = () => checkAnswer(option, slide.correct, slide.grammarHint);
+            choicesDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, correct, hint) {
+        const feedback = document.getElementById("feedback");
+        if (selected === correct) {
+            feedback.style.color = "var(--success)";
+            feedback.innerText = "Correct! The story continues...";
+            currentSlideIndex++;
+            setTimeout(renderSlide, 1500); // Wait 1.5s then go to next slide
+        } else {
+            feedback.style.color = "var(--danger)";
+            feedback.innerText = `Incorrect! Hint: ${hint}`;
+        }
+    }
+
+    // --- Cloud Save & Load Logic ---
+    function showLoading(show) {
+        document.getElementById("loading-overlay").style.display = show ? "flex" : "none";
+    }
+
+    function saveGame() {
+        const code = document.getElementById("student-code").value.trim();
+        if (code.length < 3) {
+            alert("Please enter a Save Code (at least 3 letters) to save your game.");
+            return;
+        }
+
+        showLoading(true);
+        let payload = {
+            saveCode: code,
+            gameData: { slide: currentSlideIndex }
+        };
+
+        fetch(GOOGLE_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showLoading(false);
+            alert(`Progress saved to the cloud! Use code '${code.toUpperCase()}' to load it later.`);
+        })
+        .catch(error => {
+            showLoading(false);
+            // Fallback for testing if no URL is provided
+            if(GOOGLE_URL === "https://script.google.com/macros/s/AKfycbxrr_ITyyy2n5Y0oP1X_ZOSP4f40AD3N2TjhlVPSb2vz9EKHFhra-wPteBcK8qIxVCf/exec") {
+                alert("Game Saved (Local test mode). To save to the cloud, paste your Google App Script URL into the code!");
+            } else {
+                alert("Error saving to the cloud. Please try again.");
+            }
+        });
+    }
+
+    function loadGame() {
+        const code = document.getElementById("student-code").value.trim();
+        if (code.length < 3) {
+            alert("Please enter your Save Code to load your game.");
+            return;
+        }
+
+        showLoading(true);
+        const url = `${GOOGLE_URL}?saveCode=${code}`;
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            showLoading(false);
+            if(data.error) {
+                alert("Save Code not found! Are you sure you typed it correctly?");
+            } else {
+                let parsedData = typeof data === "string" ? JSON.parse(data) : data;
+                currentSlideIndex = parsedData.slide || 0;
+                alert("Welcome back! Resuming your adventure...");
+                renderSlide();
+            }
+        })
+        .catch(error => {
+            showLoading(false);
+            if(GOOGLE_URL === "https://script.google.com/macros/s/AKfycbxrr_ITyyy2n5Y0oP1X_ZOSP4f40AD3N2TjhlVPSb2vz9EKHFhra-wPteBcK8qIxVCf/exec") {
+                alert("Could not load from cloud (Teacher has not added the Google URL yet).");
+            } else {
+                alert("Error connecting to server.");
+            }
+        });
+    }
+
+    // Start the game on load
+    window.onload = renderSlide;
+</script>
+
+</body>
+</html>

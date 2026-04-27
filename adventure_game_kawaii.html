@@ -326,7 +326,7 @@
           <img id="map-pin" src="img/bike1.png" style="position: absolute; width: 45px; height: 45px; transition: all 0.8s ease-out; z-index: 10;" alt="You Are Here">
         </div>
         
-        <img id="landscape-view" src="" style="display:none; width:100%; border-radius:20px; margin-bottom:15px; border: 3px solid #ffb3c6;">
+        <img id="landscape-view" src="" style="display: block; margin: auto; width: 100%; max-width: 280px; height: auto;">
 
         <div class="reading-mode">
             <div id="reading-passage"></div>
@@ -484,9 +484,9 @@
     
     // Local image paths for backgrounds
     const landscapeImages = {
-        'forest':     'img/4.png', 
-        'mountain':   'img/bg_mountain.jpg',    
-        'descent':    'img/bg_descent.jpg', 
+        'forest':     'img/herd.png', 
+        'mountain':   'img/5.png',    
+        'descent':    'img/2.png', 
         'campground': 'img/bg_campground.jpg', 
         'blackbear':  'img/bg_blackbear.jpg',    
         'aunty':      'img/bg_aunty.jpg', 
@@ -504,7 +504,7 @@
     // ON PAGE LOAD
     window.onload = function() {
         updateMapLocation('start');
-        document.getElementById("story-area").innerHTML = "Waking up the study bunnies... ☁️📡";
+        document.getElementById("story-area").innerHTML = "Waking up the study buddy... ☁️📡";
         fetch(GOOGLE_URL + "?action=getQuestions")
         .then(response => response.json())
         .then(data => {
@@ -515,8 +515,8 @@
             }
             document.getElementById("story-area").innerHTML = "Welcome to the Alpine Cycling Adventure! ✨ Choose your starting path wisely! (≧◡≦)";
             document.getElementById("options-area").innerHTML = `
-                <button class="option-btn" onclick="startPath('forest')">🌸 Take the Sakura Forest Path</button>
-                <button class="option-btn" onclick="startPath('mountain')">🐑 Take the Fluffy Hill Path</button>
+                <button class="option-btn" onclick="startPath('forest')">Take the Sakura Forest Path</button>
+                <button class="option-btn" onclick="startPath('mountain')">Take the Fluffy Hill Path</button>
             `;
         })
         .catch(err => {
@@ -725,14 +725,14 @@
         if (isAudioEnabled) AudioSynth.playCarHorn();
         points = 0; updateUI();
         document.getElementById("story-area").innerHTML = `
-            <span style="color: #ff8fab; font-family: 'Baloo 2', cursive; font-size: 1.8rem;">🚑 OH NO! RESCUE BUNNY!</span><br><br>
-            <div style="font-size: 80px; text-align: center;">🐰🚙</div>
+            <span style="color: #ff8fab; font-family: 'Baloo 2', cursive; font-size: 1.8rem;">🚑 OH NO! RESCUE CAR!</span><br><br>
+            <div style="font-size: 80px; text-align: center;">🚙</div>
             Your cute bike condition dropped to critical levels and the wheels stopped turning!<br><br>
-            Just when you felt stuck, a cute pink 4x4 Rescue Bunny Truck arrives! The bunny packs up your bike and drives you back to the <strong>previous cozy café</strong> to rest.
+            Just when you felt stuck, a cute pink 4x4 Rescue Truck arrives! The crew packs up your bike and drives you back to the <strong>previous cozy café</strong> to rest.
         `;
         document.getElementById("options-area").innerHTML = `
             <button class="option-btn" style="border-color: #ff8fab; background: #fff0f3; color: #ff8fab; font-weight: bold;" onclick="openRescueShop()">
-                🌸 Return to the Café Checkpoint
+                Return to the Café Checkpoint
             </button>
         `;
     }
@@ -770,8 +770,8 @@
         if (!currentPath) {
             story.innerHTML = "Choose your starting path ✨:";
             options.innerHTML = `
-                <button class="option-btn" onclick="startPath('forest')">🌸 Sakura Forest Path</button>
-                <button class="option-btn" onclick="startPath('mountain')">🐑 Fluffy Hill Path</button>
+                <button class="option-btn" onclick="startPath('forest')"> Sakura Forest Path</button>
+                <button class="option-btn" onclick="startPath('mountain')">Fluffy Hill Path</button>
             `;
         } else if (currentPath === 'forest' || currentPath === 'mountain') {
             story.innerHTML = "<strong>Stage 2: Sparkle Descent</strong><br>Whee! It's going to be a fast ride downhill!";

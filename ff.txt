@@ -1,5 +1,0 @@
-
-       ) {
-                optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--danger)" onclick="repairBike(${repairCost})">🔧 Mandatory Repair (Cost: ${repairCost})</button>`;
-            } else {
-                optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--accent); color: var(--a

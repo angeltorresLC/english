@@ -685,7 +685,7 @@
                 <em style="color: var(--danger);">⚠️ Bike Damage: ${malfunction} (-10%)</em>
             `;
             feedback.style.color = "var(--danger)";
-            delayTime = 3000; 
+            delayTime = 7000; 
             if (isAudioEnabled) {
                 let errorSound = document.getElementById("sfx-error");
                 errorSound.currentTime = 0; errorSound.play().catch(e => console.log(e));

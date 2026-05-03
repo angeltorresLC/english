@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine Odyssey</title>
+    <style>
+        :root {
+            /* Extreme Sports / Tactical Dark Mode Palette for 15-17yo */
+            --bg: #020617; /* Deep midnight woods */
+            --panel: rgba(15, 23, 42, 0.9); /* Dark slate frosted glass */
+            --text: #f8fafc; /* Crisp, high-contrast white */
+            --energy: #a3e635; /* High-vis neon trail green */
+            --bike: #ea580c; /* Aggressive dirt-orange */
+            --danger: #ef4444; /* Alert red */
+            --accent: #38bdf8; /* Ice blue for technical UI elements */
+        }
+
+       body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg); 
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            
+            /* Moody, rugged mountain background */
+            background-image: 
+                linear-gradient(rgba(2, 6, 23, 0.8), rgba(15, 23, 42, 0.95)), 
+                url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed; 
+        }
+        
+        #game-board {
+            background: var(--panel); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            width: 95%;
+            max-width: 900px; 
+            border-radius: 12px; /* Sharper, tech-focused corners */
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); 
+            border: 1px solid #334155; 
+            position: relative;
+            z-index: 1;
+        }
+
+        #map-container {
+            display: none; 
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 2px solid #475569;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: #0f172a;
+        }
+
+        .btn-map {
+            background: #1e293b;
+            color: #cbd5e1;
+            margin-bottom: 0px;
+            padding: 8px 16px;     
+            font-size: 0.85rem;     
+            width: auto;           
+            border: 1px solid #334155;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            display: block;        
+            margin-right: auto;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-map:hover { background: #334155; color: white; }
+        
+        #game-map {
+            width: 100%; height: 100%; display: block; opacity: 0.9;
+        }
+        
+        #map-pin {
+            position: absolute;
+            width: 40px; height: 40px;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); 
+            filter: drop-shadow(0 0 10px var(--bike));
+            z-index: 10;
+        }
+        
+        #top-bar {
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+        }
+
+        #top-bar h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        
+        /* Modals */
+        #instructions-modal, #feedback-modal, #station-modal, #transport-modal {
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(2, 6, 23, 0.8); 
+            z-index: 9999; justify-content: center; align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 2px solid #475569;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px; width: 90%;
+            color: var(--text);
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content h3 { color: var(--bike); margin-top: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-content ul { padding-left: 20px; font-size: 1rem; line-height: 1.6; color: #cbd5e1; }
+        .modal-content li { margin-bottom: 12px; }
+
+        .close-modal {
+            position: absolute; top: 15px; right: 20px;
+            cursor: pointer; font-size: 1.5rem;
+            color: #64748b; font-weight: bold; transition: 0.2s;
+        }
+        .close-modal:hover { color: var(--danger); transform: scale(1.1); }
+
+        .btn-info {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-info:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        input[type="text"] {
+            padding: 10px 15px; border-radius: 6px; border: 1px solid #475569; 
+            background: #0f172a; color: white; font-weight: bold; outline: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        input[type="text"]:focus { border-color: var(--accent); }
+        #save-code { width: 120px; }
+        
+        .btn {
+            background: var(--bike); color: white; border: none; padding: 12px 24px;
+            font-weight: 700; font-size: 1rem; border-radius: 6px; cursor: pointer; 
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.3);
+        }
+        .btn:hover { background: #c2410c; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.4); }
+        .btn-load { background: #0ea5e9; box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.3); }
+        .btn-load:hover { background: #0284c7; box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.4); }
+
+        .status-container { display: flex; gap: 15px; margin-bottom: 20px; }
+        .meter-box { 
+            flex: 1; background: #0f172a; padding: 12px 15px; 
+            border-radius: 8px; border: 1px solid #334155;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .meter-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; justify-content: space-between; color: #94a3b8;}
+        
+        .progress-bar { width: 100%; height: 12px; background: #1e293b; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+        .progress-fill { height: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 6px; }
+        #energy-fill { background: linear-gradient(90deg, #65a30d, #a3e635); width: 100%; box-shadow: 0 0 10px rgba(163, 230, 53, 0.5); }
+        #bike-fill { background: linear-gradient(90deg, #c2410c, #ea580c); width: 100%; box-shadow: 0 0 10px rgba(234, 88, 12, 0.5); }
+
+        #story-area { font-size: 1.15rem; line-height: 1.6; margin-bottom: 20px; min-height: 80px; color: #e2e8f0; font-weight: 400;}
+        #points-display { color: #94a3b8; font-weight: 700; font-size: 1rem; text-align: right; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        #score-text { color: var(--energy); font-size: 1.3rem; }
+        
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn {
+            background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 16px;
+            border-radius: 8px; cursor: pointer; font-size: 1.05rem; font-weight: 600; 
+            transition: all 0.2s ease; text-align: left; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        .option-btn:hover { border-color: var(--bike); background: #334155; transform: translateX(5px); }
+
+        #feedback { margin-top: 15px; font-weight: bold; min-height: 24px; font-size: 1.1rem; }
+        #save-station-controls { display: none; margin-top: 25px; text-align: center; background: rgba(16, 185, 129, 0.05); padding: 25px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3); }
+   
+        .dashboard-container {
+            background: #0f172a;
+            padding: 25px; border-radius: 12px; border: 1px solid #334155;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5); text-align: center;
+        }
+        .dashboard-header {
+            color: var(--accent); margin-top: 0; margin-bottom: 25px;
+            font-size: 1.5rem; border-bottom: 1px solid #334155; padding-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .badge-card {
+            background: #1e293b; padding: 15px 10px; border-radius: 8px; text-align: center;
+            border: 1px solid #334155; transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 110px;
+        }
+        .badge-card.unlocked { border-color: var(--bike); background: rgba(234, 88, 12, 0.05); opacity: 1; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.1); }
+        .badge-card.unlocked:hover { transform: translateY(-5px); border-color: var(--energy); box-shadow: 0 8px 20px rgba(163, 230, 53, 0.15); }
+        .badge-card.locked { opacity: 0.4; filter: grayscale(100%); background: #0f172a; }
+        .badge-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.7;}
+        .badge-img { width: 60px; height: 60px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .badge-title { font-size: 0.75rem; color: #cbd5e1; line-height: 1.3; font-weight: 600; text-transform: uppercase; }
+
+        /* --- Split-Screen Reading Mode Styles --- */
+        @media (min-width: 600px) {
+            .reading-mode { display: flex; gap: 25px; align-items: flex-start; }
+            #reading-passage { flex: 1; max-height: 400px; }
+            #quiz-interaction { flex: 1; width: 100%; }
+        }
+        @media (max-width: 599px) { #reading-passage { max-height: 200px; } }
+        
+        #reading-passage {
+            background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 8px; 
+            border: 1px solid #475569; margin-bottom: 15px; overflow-y: auto; 
+            font-size: 1rem; line-height: 1.7; color: #cbd5e1;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+        }
+        /* --- Drag and Drop Sentence Builder Styles --- */
+        .dd-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .dd-zone {
+            min-height: 70px; border: 2px dashed #475569; border-radius: 8px; padding: 15px;
+            display: flex; flex-wrap: wrap; gap: 10px; background: rgba(15, 23, 42, 0.5); align-items: center;
+        }
+        .dd-zone:empty::before {
+            content: "Drop elements here to build protocol...";
+            color: #64748b; font-style: italic; font-size: 0.95rem;
+        }
+        .dd-pool {
+            min-height: 70px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px;
+            background: #0f172a; border-radius: 8px; border: 1px solid #334155;
+        }
+        .dd-word {
+            padding: 10px 18px; background: #334155; color: #f8fafc; font-weight: 600; font-size: 1.05rem;
+            border-radius: 6px; cursor: pointer; user-select: none; border: 1px solid #475569;
+            transition: all 0.2s ease;
+        }
+        .dd-word:hover { background: var(--bike); border-color: #c2410c; transform: translateY(-2px); }
+        .dd-word:active { transform: scale(0.95); }
+        .dd-word.dragging { opacity: 0.4; }
+   </style>
+</head>
+<body>
+
+<div id="game-board">
+    <div id="top-bar">
+        <h2> 
+            
+            <span style="vertical-align: middle;">🏔️ Alpine Odyssey</span>
+            
+            <button class="btn btn-info" onclick="openInstructions()">Mission Brief</button>
+            <button class="btn btn-info" onclick="window.open('manual.html', 'manualTab')">Field Manual</button>
+            <button class="btn btn-info" id="btn-audio" onclick="toggleAudio()" style="background: #0f172a; border: 1px solid #334155;">🔇 COMMS OFF</button>
+        </h2>
+        <div>
+            <input type="text" id="save-code" placeholder="ENTER CODE" maxlength="8">
+            <button class="btn btn-load" onclick="loadGame()">Load...</button>
+        </div>
+    </div>
+
+    <div class="status-container">
+        <div class="meter-box">
+            <div class="meter-title"><span>⚡ Stamina</span> <span id="energy-text">100%</span></div>
+            <div class="progress-bar"><div id="energy-fill" class="progress-fill"></div></div>
+        </div>
+        <div class="meter-box">
+            <div class="meter-title"><span>🚲 Rig Integrity</span> <span id="bike-text">100%</span></div>
+            <div class="progress-bar"><div id="bike-fill" class="progress-fill"></div></div>
+        </div>
+    </div>
+
+    <div id="points-display">Waypoints Cleared: <span id="score-text">0</span> / <span id="target-text">10</span></div>
+    <div class="game-container">
+
+        <button class="btn btn-map" onclick="toggleMap()">🗺️ TOGGLE GPS MAP</button>
+
+        <div id="map-container">
+          <img id="game-map" src="img/mapa.png" style="width:100%; height:100%; object-fit:cover;" alt="GPS Map">
+          <img id="map-pin" src="img/bike1.png" style="position: absolute; width: 40px; height: 40px; transition: all 0.8s ease-out; z-index: 10; filter: drop-shadow(0 0 5px var(--bike));" alt="Tracker">
+        </div>
+        
+        <img id="landscape-view" src="" style="display: block; margin: auto; width: 100%; max-width: 280px; height: auto; border-radius: 8px; margin-bottom: 15px;">
+
+        <div class="reading-mode">
+            <div id="reading-passage" style="display:none;">
+            </div>
+            
+            <div id="quiz-interaction" style="width: 100%;">
+                <div id="story-area">...</div>
+                <div id="options-area" class="options-grid">...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="feedback"></div>
+
+    <div id="save-station-controls">
+        <h3 id="station-header" style="color: var(--energy); margin-top:0;">⛺ Basecamp Reached!</h3>
+        <p id="station-sub" style="color: #cbd5e1;">You survived this sector. Log your comm code ABOVE to sync your gear.</p>
+        <button class="btn" style="width: 100%; background: var(--energy);" onclick="saveGame()">💾 LOG PROGRESS</button>
+    </div>
+</div>
+
+<audio id="sfx-correct">
+    <source src="audio/correct.mp3" type="audio/mpeg">
+</audio>
+<audio id="sfx-error">
+    <source src="audio/error.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // --- YOUR GOOGLE SCRIPT URL ---
+    const GOOGLE_URL = "https://script.google.com/macros/s/AKfycbx7EB-SheHiub-nr9HM5wwtwkdp-A4Nl_15atYbIlm7OOBEZqenVM8cbctl0tjIJPGSLQ/exec";
+    
+    // --- AUDIO SYSTEM VARIABLE ---
+    let isAudioEnabled = false;
+
+    // --- MINI SYNTHESIZER FOR RESCUE VEHICLES ---
+    const AudioSynth = {
+        ctx: null,
+        init() {
+            if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+        },
+        playCarHorn() {
+            if (!isAudioEnabled) return; 
+            this.init();
+            
+            const osc1 = this.ctx.createOscillator();
+            const osc2 = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc1.type = 'sawtooth';
+            osc1.frequency.value = 350; 
+            
+            osc2.type = 'sawtooth';
+            osc2.frequency.value = 400; 
+            
+            gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.5); 
+
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(this.ctx.destination);
+            
+            osc1.start(); osc2.start();
+            osc1.stop(this.ctx.currentTime + 1.5);
+            osc2.stop(this.ctx.currentTime + 1.5);
+        },
+        playHelicopter() {
+            if (!isAudioEnabled) return;
+            this.init();
+            
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.value = 40; // Deep rumble
+            
+            // LFO simulates the chopping blades
+            const lfo = this.ctx.createOscillator();
+            lfo.type = 'square';
+            lfo.frequency.value = 12; // Speed of rotor
+            
+            const lfoGain = this.ctx.createGain();
+            lfoGain.gain.value = 1;
+            
+            lfo.connect(lfoGain);
+            lfoGain.connect(gain.gain); 
+            
+            gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 3.0);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            
+            osc.start(); lfo.start();
+            osc.stop(this.ctx.currentTime + 3.0);
+            lfo.stop(this.ctx.currentTime + 3.0);
+        }
+    };
+
+    function toggleAudio() {
+        isAudioEnabled = !isAudioEnabled;
+        const btn = document.getElementById("btn-audio");
+        
+        if (isAudioEnabled) {
+            btn.innerText = "🔊 COMMS ON";
+            btn.style.background = "var(--accent)";
+            btn.style.color = "#0f172a";
+            btn.style.borderColor = "var(--accent)";
+        } else {
+            btn.innerText = "🔇 COMMS OFF";
+            btn.style.background = "#0f172a";
+            btn.style.color = "#cbd5e1";
+            btn.style.borderColor = "#334155";
+        }
+    }
+
+    // --- MAP SYSTEM (9-Leg Path) ---
+    const mapRoutes = {
+        'forest': { 
+            waypoints: [ { t: 20, l: 82 }, { t: 12, l: 75 }, { t: 5,  l: 60 }, { t: 2,  l: 55 }, { t: 5,  l: 48 }, { t: 8,  l: 44 }, { t: 5,  l: 40 }, { t: 12, l: 42 } ] 
+        }, 
+        'mountain': { 
+            waypoints: [ { t: 25, l: 85 }, { t: 27, l: 82 }, { t: 20, l: 78 }, { t: 25, l: 70 }, { t: 28, l: 55 }, { t: 25, l: 50 }, { t: 15, l: 42 } ] 
+        }, 
+        'descent': { 
+            waypoints: [ { t: 15, l: 42 }, { t: 18, l: 35 }, { t: 20, l: 22 }, { t: 22, l: 18 }, { t: 24, l: 14 }, { t: 26, l: 12 }, { t: 28, l: 10 } ] 
+        },
+        'campground': { 
+            waypoints: [ { t: 28, l: 10 }, { t: 40, l: 5 }, { t: 50, l: 12 }, { t: 45, l: 23 } ] 
+        }, 
+        'blackbear': { 
+            waypoints: [ { t: 45, l: 23 }, { t: 52, l: 20 }, { t: 65, l: 22 }, { t: 70, l: 25 }, { t: 75, l: 32 }, { t: 88, l: 42 }, { t: 87, l: 48 } ] 
+        }, 
+        'aunty': { 
+            waypoints: [ { t: 87, l: 48 }, { t: 92, l: 55 }, { t: 92, l: 60 }, { t: 90, l: 65 }, { t: 92, l: 66 }, { t: 90, l: 67 }, { t: 86, l: 68 }, { t: 82, l: 67 }, { t: 78, l: 66 }, { t: 76, l: 69 }, { t: 74, l: 69 }, { t: 72, l: 68 } ] 
+        },
+        'junction': {
+            waypoints: [ { t: 87, l: 49 }, { t: 84, l: 50 }, { t: 80, l: 49 }, { t: 76, l: 50 }, { t: 70, l: 49 }, { t: 66, l: 50 }, { t: 62, l: 53 }, { t: 62, l: 55 }, { t: 60, l: 56 } ] 
+        }, 
+        'windy': { 
+           waypoints: [ { t: 60, l: 56 }, { t: 56, l: 56 }, { t: 52, l: 55 }, { t: 50, l: 51 }, { t: 48, l: 48 }, { t: 46, l: 47 }, { t: 44, l: 46 }, { t: 42, l: 49 }, { t: 38, l: 48 } ] 
+         },
+        'windy_down': {
+            waypoints: [ { t: 38, l: 48 }, { t: 42, l: 49 }, { t: 44, l: 46 }, { t: 46, l: 47 }, { t: 48, l: 48 }, { t: 50, l: 51 }, { t: 52, l: 55 }, { t: 56, l: 56 }, { t: 60, l: 56 } ] 
+         },
+        'oak_forest': {
+            waypoints: [ { t: 60, l: 56 }, { t: 61, l: 60 }, { t: 60, l: 64 }, { t: 62, l: 68 }, { t: 60, l: 70 }, { t: 56, l: 74 }, { t: 48, l: 80 }, { t: 44, l: 80 }, { t: 40, l: 82 } ] 
+         },
+        'cabin':       { start: {t: 15, l: 42}, end: {t: 15, l: 42} }, 
+        'start':       { start: {t: 20, l: 82}, end: {t: 20, l: 82} }  
+    };
+
+    function toggleMap() {
+        const map = document.getElementById("map-container");
+        map.style.display = (map.style.display === "none" || map.style.display === "") ? "block" : "none";
+    }
+
+    function updateMapLocation(locationKey) {
+        const container = document.getElementById("map-container");
+        const pin = document.getElementById("map-pin");
+        const route = mapRoutes[locationKey];
+
+        if (route && container && pin) {
+            container.style.display = "block";
+
+            let startT, startL;
+
+            if (route.waypoints && route.waypoints.length > 1) {
+                startT = route.waypoints[0].t;
+                startL = route.waypoints[0].l;
+            } else {
+                startT = route.start.t;
+                startL = route.start.l;
+            }
+
+            pin.style.top = startT + "%";
+            pin.style.left = startL + "%";
+            pin.style.transform = `translate(-50%, -50%)`;
+        }
+    }
+
+    function movePinProgressively() {
+        const pin = document.getElementById("map-pin");
+        const mapContainer = document.getElementById("map-container");
+        const route = mapRoutes[currentPath];
+
+        if (route && pin && targetPoints > 0) {
+            if (mapContainer && mapContainer.style.display !== "block") {
+                mapContainer.style.display = "block";
+            }
+
+            let progress = points / targetPoints;
+            if (progress > 1) progress = 1;
+
+            let currentTop, currentLeft;
+
+            if (route.waypoints && route.waypoints.length > 1) {
+                let segments = route.waypoints.length - 1;
+                let scaledProgress = progress * segments;
+                let currentIndex = Math.floor(scaledProgress);
+                
+                if (currentIndex >= segments) currentIndex = segments - 1; 
+
+                let segmentProgress = scaledProgress - currentIndex; 
+                let startWp = route.waypoints[currentIndex];
+                let endWp = route.waypoints[currentIndex + 1];
+
+                currentTop = startWp.t + (endWp.t - startWp.t) * segmentProgress;
+                currentLeft = startWp.l + (endWp.l - startWp.l) * segmentProgress;
+            } 
+            else {
+                currentTop = route.start.t + (route.end.t - route.start.t) * progress;
+                currentLeft = route.start.l + (route.end.l - route.start.l) * progress;
+            }
+
+            pin.style.top = currentTop + "%";
+            pin.style.left = currentLeft + "%";
+            pin.style.transform = `translate(-50%, -50%)`; 
+        }
+    }
+      
+    // --- GAME STATE VARIABLES ---
+    let energy = 100;
+    let bike = 100;
+    let points = 0;
+    let targetPoints = 10; 
+    let currentPath = null;
+    let credits = 0;
+    let badges = [];
+    let isRetryState = false; 
+    
+    let allQuestions = [];
+    let currentPathQuestions = [];
+    let currentPathBackup = []; 
+    
+    const landscapeImages = {
+        'forest':     'img/herd.png', 
+        'mountain':   'img/5.png',    
+        'descent':    'img/2.png', 
+        'campground': 'img/lake3.png', 
+        'blackbear':  'img/blackbear.png',    
+        'aunty':      'img/aunty.png', 
+        'junction':   'img/junction.png',         
+        'windy':      'img/windyu.png',
+        'windy_down':  'img/highpeak.png',
+        'oak_forest': 'img/oakforest.png'
+    };
+
+    const malfunctions = [
+        "Drive Chain Snap", "Brake Cable Tear", "Front Tire Blowout", "Rear Tire Puncture", 
+        "Suspension Fork Lock", "Gear Shifter Jam", "Pedal Crank Bend", "Spoke Fracture",
+        "Overheated Disc Brakes", "Hydraulic Fluid Leak", "Handlebar Misalignment" 
+    ]; 
+
+    window.onload = function() {
+        updateMapLocation('start');
+        document.getElementById("story-area").innerHTML = "Syncing GPS Trail Data... 📡";
+        fetch(GOOGLE_URL + "?action=getQuestions")
+        .then(response => response.json())
+        .then(data => {
+            allQuestions = data;
+            
+            if(allQuestions.length === 0 || allQuestions.error) {
+                document.getElementById("story-area").innerHTML = "⚠️ Sat-link connected, but no trail logs found. Did you deploy the server script?";
+                return;
+            }
+
+            document.getElementById("story-area").innerHTML = "Welcome to the Alpine Odyssey. Select your entry vector.";
+            document.getElementById("options-area").innerHTML = `
+                <button class="option-btn" onclick="startPath('forest')">🌲 Take the Forest Path (Standard)</button>
+                <button class="option-btn" onclick="startPath('mountain')">⛰️ Take the Mountain Ridge (Hardcore)</button>
+            `;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("story-area").innerHTML = "⚠️ COMMS ERROR. Check network connection or script deployment.";
+        });
+    };
+
+    function startPath(pathName) {
+        currentPath = pathName.toLowerCase(); 
+        points = 0;
+        let allowed = [];
+
+        if (currentPath === 'forest') {
+            targetPoints = 20;
+            allowed = ["basic"]; 
+        } else if (currentPath === 'mountain') {
+            targetPoints = 20; 
+            allowed = ["low", "basic"]; 
+        } else if (currentPath === 'descent') {
+            targetPoints = 10; 
+            allowed = ["low_intermediate", "low intermediate"]; 
+        } else if (currentPath === 'campground') {
+            targetPoints = 10; 
+            allowed = ["low_intermediate", "low intermediate"]; 
+        } else if (currentPath === 'blackbear') {
+            targetPoints = 10; 
+            allowed = ["intermediate", "intermediate"]; 
+        } else if (currentPath === 'aunty') {
+            targetPoints = 10; 
+            allowed = ["intermediate", "intermediate"]; 
+        } else if (currentPath === 'junction') {
+            targetPoints = 10; 
+            allowed = ["high_intermediate", "high intermediate"];
+        } else if (currentPath === 'windy') {
+            targetPoints = 10; 
+            allowed = ["high_intermediate", "high intermediate"];
+        } else if (currentPath === 'windy_down') {
+            targetPoints = 10; 
+            allowed = ["upper_intermediate", "upper intermediate"];
+        } else if (currentPath === 'oak_forest') {
+            targetPoints = 10; 
+            allowed = ["upper_intermediate", "upper intermediate"];
+        }
+
+        currentPathQuestions = allQuestions.filter(q => q.Difficulty && allowed.includes(q.Difficulty.trim().toLowerCase()));
+
+        if(currentPathQuestions.length === 0) {
+            console.warn("Failsafe triggered: No specific difficulty found for " + currentPath + ". Loading fallback questions.");
+            currentPathQuestions = [...allQuestions];
+        }
+
+        shuffleArray(currentPathQuestions);
+        currentPathBackup = [...currentPathQuestions];
+
+        if (typeof landscapeImages !== 'undefined') {
+            let bgPath = landscapeImages[currentPath];
+            let bgElement = document.getElementById("landscape-view");
+            
+            if (bgElement && bgPath) {
+                bgElement.src = bgPath;
+                bgElement.style.display = "block";
+            } else if (bgElement) {
+                bgElement.style.display = "none"; 
+            }
+        }
+        document.getElementById("target-text").innerText = targetPoints;
+        updateUI();
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (points >= targetPoints) {
+            reachStation();
+            return;
+        }
+
+        if (currentPathQuestions.length === 0) {
+            currentPathQuestions = [...currentPathBackup];
+            shuffleArray(currentPathQuestions);
+        }
+
+        const qData = currentPathQuestions[0]; 
+        const optionsArea = document.getElementById("options-area");
+        const passageArea = document.getElementById("reading-passage");
+        
+        if (qData.Passage && qData.Passage.trim() !== "") {
+            passageArea.innerHTML = `<strong style="color: var(--accent); letter-spacing: 1px;">📡 INTEL LOG:</strong><br><br>${qData.Passage.replace(/\n/g, '<br>')}`;
+            passageArea.style.display = "block";
+        } else {
+            passageArea.style.display = "none";
+        }
+
+        optionsArea.innerHTML = "";
+        document.getElementById("story-area").innerHTML = `<strong style="color: #cbd5e1;">TRAIL OBSTACLE:</strong><br><br>${qData.Question}`;
+        
+        let qType = qData.Type ? qData.Type.trim().toLowerCase().replace(" ", "_") : "multiple_choice"; 
+
+        if (qType === "multiple_choice") {
+            let optionsArray = qData.Options.split(",").map(item => item.trim());
+            optionsArray.sort(() => Math.random() - 0.5);
+
+            optionsArray.forEach(opt => {
+                let btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, qData.Answer, qData.Hint);
+                optionsArea.appendChild(btn);
+            });
+
+        } else if (qType === "true_false") {
+            let btnTrue = document.createElement("button");
+            btnTrue.className = "option-btn"; btnTrue.innerText = "True";
+            btnTrue.onclick = () => checkAnswer("True", qData.Answer, qData.Hint);
+            
+            let btnFalse = document.createElement("button");
+            btnFalse.className = "option-btn"; btnFalse.innerText = "False";
+            btnFalse.onclick = () => checkAnswer("False", qData.Answer, qData.Hint);
+            
+            optionsArea.appendChild(btnTrue);
+            optionsArea.appendChild(btnFalse);
+
+        } else if (qType === "dropdown_menu") {
+            let optionsArray = qData.Options.split(",").map(item => item.trim());
+            let selectHTML = `<select id="dropdown-answer" style="padding: 15px; font-size: 1.1rem; width: 80%; margin-bottom: 10px; background: #0f172a; color: white; border: 1px solid #475569; border-radius: 6px;">
+                <option value="" disabled selected>-- Select Override Protocol --</option>`;
+            
+            optionsArray.forEach(opt => {
+                selectHTML += `<option value="${opt.replace(/"/g, '"')}">${opt}</option>`;
+            });
+            
+            selectHTML += `</select><br><button class="btn" id="submit-btn" style="width: 80%;" onclick="submitDropdown()">EXECUTE</button>`;
+            optionsArea.innerHTML = selectHTML;
+
+         } else if (qType === "matching" || qType === "fill_blank" || qType === "scrambled_sentence" || qType === "error_correction") {
+        
+            if(qType === "matching") {
+                let optionsDisplay = qData.Options.split(",").map(item => item.trim()).join("<br>");
+                optionsArea.innerHTML = `
+                    <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: left; border: 1px solid #334155;">
+                        <strong style="color: var(--accent);">TARGETS:</strong><br>${optionsDisplay}
+                    </div>
+                    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0; text-transform: uppercase;">Input coordinates separated by comma (Ex: 1B, 2A)</p>`;
+            }
+            
+            optionsArea.innerHTML += `
+                <input type="text" id="blank-answer" placeholder="INPUT SEQUENCE" onkeypress="if(event.key === 'Enter') submitFillBlank()" style="padding: 15px; font-size: 1.1rem; width: 80%; margin-bottom: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+                <button class="btn" id="submit-btn" style="width: 80%;" onclick="submitFillBlank()">EXECUTE</button>
+            `;
+            setTimeout(() => {
+                let blank = document.getElementById("blank-answer");
+                if(blank) blank.focus();
+            }, 100);
+            } else if (qType === "drag_drop") {
+            let optionsArray = qData.Options.split(",").map(item => item.trim());
+            optionsArray.sort(() => Math.random() - 0.5); 
+
+            optionsArea.innerHTML = `
+                <div class="dd-container">
+                    <div style="font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Active Sequence:</div>
+                    <div id="drop-zone" class="dd-zone"></div>
+                    <div style="font-size: 0.9rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Available Components:</div>
+                    <div id="word-pool" class="dd-pool"></div>
+                    <button class="btn" id="submit-btn" style="width: 100%; margin-top: 10px;" onclick="submitDragDrop()">COMPILE SEQUENCE</button>
+                </div>
+            `;
+
+            const wordPool = document.getElementById("word-pool");
+            const dropZone = document.getElementById("drop-zone");
+
+            optionsArray.forEach((word, index) => {
+                let span = document.createElement("div");
+                span.className = "dd-word";
+                span.innerText = word;
+                span.draggable = true;
+                
+                span.onclick = function() {
+                    if (this.parentElement.id === "word-pool") {
+                        dropZone.appendChild(this);
+                    } else {
+                        wordPool.appendChild(this);
+                    }
+                };
+
+                span.addEventListener("dragstart", () => span.classList.add("dragging"));
+                span.addEventListener("dragend", () => span.classList.remove("dragging"));
+                wordPool.appendChild(span);
+            });
+
+            [wordPool, dropZone].forEach(zone => {
+                zone.addEventListener("dragover", e => {
+                    e.preventDefault();
+                    const draggable = document.querySelector(".dragging");
+                    if(draggable) zone.appendChild(draggable);
+                });
+            });
+        } else {
+            optionsArea.innerHTML = `<p style="color:var(--danger)">SYS ERROR: Unknown protocol '${qType}'.</p>`;
+        }
+    }
+    
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function submitDropdown() {
+        const select = document.getElementById("dropdown-answer");
+        if (!select || select.value === "") return;
+        const qData = currentPathQuestions[0];
+        processFeedback(select.value, qData.Answer, qData.Hint);
+    }
+    
+    function submitFillBlank() {
+        let blankEl = document.getElementById("blank-answer");
+        let userAnswer = blankEl.value.trim().toLowerCase();
+        if (userAnswer === "") {
+            alert("Input sequence required.");
+            return;
+        }
+        const qData = currentPathQuestions[0];
+        processFeedback(userAnswer, qData.Answer.toLowerCase(), qData.Hint);
+    }
+    function submitDragDrop() {
+        const dropZone = document.getElementById("drop-zone");
+        const words = [...dropZone.querySelectorAll('.dd-word')].map(el => el.innerText.trim());
+        if (words.length === 0) {
+            alert("Compile sequence before execution.");
+            return;
+        }
+        const userAnswer = words.join(" "); 
+        const qData = currentPathQuestions[0];
+        processFeedback(userAnswer, qData.Answer, qData.Hint);
+    }
+    function checkAnswer(userAnswer, correctAnswer, hint) {
+        processFeedback(userAnswer, correctAnswer, hint);
+    }
+
+    function processFeedback(userAnswer, correctAnswer, hint) {
+    const optionsArea = document.getElementById("options-area");
+    
+    const allInputs = optionsArea.querySelectorAll("button, input, select");
+    allInputs.forEach(el => {
+        el.disabled = true;
+        el.style.opacity = "0.5"; 
+        el.style.cursor = "not-allowed";
+    });
+    
+    let userClean = userAnswer.toString().trim().toLowerCase();
+    let correctClean = correctAnswer.toString().trim().toLowerCase();
+    let isCorrect = userClean === correctClean;
+
+    const feedbackModal = document.getElementById("feedback-modal");
+    const feedbackModalContent = document.getElementById("feedback-modal-content");
+    const feedbackTitle = document.getElementById("feedback-title");
+    const feedbackMessage = document.getElementById("feedback-message");
+    const continueBtn = document.getElementById("feedback-continue-btn");
+
+    if (isCorrect) {
+        points++;
+        energy -= 2; 
+        bike -= 0.5;
+        
+        feedbackModalContent.style.borderColor = "var(--energy)";
+        feedbackTitle.innerHTML = "OBSTACLE CLEARED";
+        feedbackTitle.style.color = "var(--energy)";
+        feedbackMessage.innerHTML = "Solid execution. The trail ahead is open.";
+
+        if (isAudioEnabled) {
+            let correctSound = document.getElementById("sfx-correct");
+            correctSound.currentTime = 0; 
+            correctSound.play().catch(e => console.log("Audio play blocked:", e));
+        }
+
+    } else {
+        bike -= 6; 
+        energy -= 5; 
+        
+        let malfunction = malfunctions[Math.floor(Math.random() * malfunctions.length)];
+        
+        feedbackModalContent.style.borderColor = "var(--danger)";
+        feedbackTitle.innerHTML = "CRITICAL FAILURE";
+        feedbackTitle.style.color = "var(--danger)";
+        feedbackMessage.innerHTML = `
+            <strong>Target execution was:</strong> <span style="color: var(--energy);">${correctAnswer}</span><br><br>
+            <strong style="color: #94a3b8;">INTEL:</strong> ${hint}<br><br>
+            <em style="color: var(--bike); font-size: 1.1rem; font-weight:bold;">⚠️ GEAR DAMAGE: ${malfunction} (-15%)</em>
+        `;
+        
+        if (isAudioEnabled) {
+            let errorSound = document.getElementById("sfx-error");
+            errorSound.currentTime = 0; 
+            errorSound.play().catch(e => console.log("Audio play blocked:", e));
+        }
+    }
+
+    updateUI(); 
+    feedbackModal.style.display = "flex";
+
+    continueBtn.onclick = function() {
+        feedbackModal.style.display = "none";
+        currentPathQuestions.shift(); 
+        
+        if (bike < 5) {
+            mechanicRescue();
+            return;
+        }
+
+        if (energy < 3) {
+            helicopterRescue();
+            return;
+        }
+
+        loadQuestion(); 
+    };
+    }
+    
+    function updateUI() {
+        document.getElementById("score-text").innerText = points;
+        
+        const energyFill = document.getElementById("energy-fill");
+        const bikeFill = document.getElementById("bike-fill");
+        
+        if(energyFill) energyFill.style.width = Math.max(0, energy) + "%";
+        if(bikeFill) bikeFill.style.width = Math.max(0, bike) + "%";
+        
+        document.getElementById("energy-text").innerText = Math.max(0, energy) + "%";
+        document.getElementById("bike-text").innerText = Math.max(0, bike) + "%";
+        
+        movePinProgressively();
+    }
+
+    // --- NEW EPIC RESCUE MECHANICS ---
+    function mechanicRescue() {
+        if (isAudioEnabled) AudioSynth.playCarHorn();
+
+        points = 0; 
+        updateUI();
+
+        document.getElementById("story-area").innerHTML = `
+            <span style="color: #38bdf8; font-weight: 800; font-size: 1.6rem; text-transform:uppercase;">EVAC TEAM DEPLOYED</span><br><br>
+           <img src="img/servicev.png" alt="Rescue Truck" style="display: block; margin: 15px auto; max-width: 100%; max-height: 250px; object-fit: cover; border-radius:8px; border: 1px solid #475569;">
+            Your rig took terminal damage. Frame integrity compromised.<br><br>
+            A 4x4 off-road recovery unit has intercepted your GPS beacon. They've loaded your scrap gear and are hauling you back to the <strong>last known basecamp</strong>.
+        `;
+        
+        document.getElementById("options-area").innerHTML = `
+            <button class="option-btn" style="border-color: #38bdf8; background: #0c4a6e; color: #e0f2fe; text-align: center; font-size: 1.1rem; font-weight: bold; text-transform:uppercase;" onclick="openRescueShop()">
+                INITIATE RTB (Return to Base)
+            </button>
+        `;
+        document.getElementById("feedback").innerText = "";
+    }
+
+    function helicopterRescue() {
+        if (isAudioEnabled) AudioSynth.playHelicopter();
+
+        points = 0; 
+        updateUI();
+
+        document.getElementById("story-area").innerHTML = `
+            <span style="color: #a3e635; font-weight: 800; font-size: 1.6rem; text-transform:uppercase;">AIR-LIFT DEPLOYED</span><br><br>
+            <img src="img/helicopter.png" alt="Rescue Chopper" style="display: block; margin: 15px auto; max-width: 100%; max-height: 250px; object-fit: cover; border-radius:8px; border: 1px solid #475569;">
+            Stamina depleted. Total physical failure on the trail.<br><br>
+            Search & Rescue tracked your vitals. A med-evac chopper is winching you off the mountain and dropping you at the <strong>last known basecamp</strong> for recovery.
+        `;
+        
+        document.getElementById("options-area").innerHTML = `
+            <button class="option-btn" style="border-color: #a3e635; background: #14532d; color: #dcfce7; text-align: center; font-size: 1.1rem; font-weight: bold; text-transform:uppercase;" onclick="openRescueShop()">
+                BOARD AIR-LIFT
+            </button>
+        `;
+        document.getElementById("feedback").innerText = "";
+    }
+
+    function retryLeg() {
+        energy = 100;
+        bike = 100;
+        points = 0;
+        isRetryState = false; 
+        
+        document.getElementById("save-station-controls").style.display = "none";
+        document.getElementById("landscape-view").style.display = "none";
+        
+        startPath(currentPath);
+    }
+
+    function resetGame() {
+        document.getElementById("save-station-controls").style.display = "none";
+        document.getElementById("landscape-view").style.display = "none";
+        let story = document.getElementById("story-area");
+        let options = document.getElementById("options-area");
+
+        if (!currentPath) {
+            story.innerHTML = "Select entry vector:";
+            options.innerHTML = `
+                <button class="option-btn" onclick="startPath('forest')">🌲 Take the Forest Path</button>
+                <button class="option-btn" onclick="startPath('mountain')">⛰️ Take the Mountain Ridge</button>
+            `;
+        } else if (currentPath === 'forest' || currentPath === 'mountain') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 2: ALPINE DESCENT</strong><br>High-speed technical terrain ahead.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('descent')">📉 INITIATE DESCENT</button>`;
+        } else if (currentPath === 'descent') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 3: CAMPGROUND TRAIL</strong><br>Entering deep backcountry territory.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('campground')">⛺ PUSH TO CAMPGROUND</button>`;
+        } else if (currentPath === 'campground') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 4: BLACKBEAR RUN</strong><br>Apex predator zone. Maintain speed and awareness.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('blackbear')">🐻 ENTER BLACKBEAR RUN</button>`;
+        } else if (currentPath === 'blackbear') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 5: AUNTY LOG DROP</strong><br>Heavy timber and severe drops. Commit to the line.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('aunty')">🪵 PROCEED TO DROP</button>`;
+        } else if (currentPath === 'aunty') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 6: JUNCTION PLACE</strong><br>Critical altitude reached. Oxygen density dropping.";
+            options.innerHTML = `<button class="option-btn" onclick="showTransportModal()">🛤️ ENTER JUNCTION</button>`;
+        } else if (currentPath === 'junction') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 7: WINDY VILLAGE</strong><br>Severe crosswinds detected. Keep your center of gravity low.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('windy')">💨 PUSH TO SUMMIT</button>`;
+        } else if (currentPath === 'windy') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 8: THE DOWNHILL</strong><br>Maximum velocity sector. Don't touch the brakes.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('windy_down')">⛰️ DROP IN</button>`;
+        } else if (currentPath === 'windy_down') {
+            story.innerHTML = "<strong style='color:#94a3b8;'>SECTOR 9: THE OAK FOREST</strong><br>Final sprint through the ancient timber. Burn everything you have left.";
+            options.innerHTML = `<button class="option-btn" onclick="startPath('oak_forest')">🌳 SPRINT TO FINISH</button>`;
+        } else {
+            story.innerHTML = "<strong style='color:var(--energy); font-size:1.5rem;'>🏁 TOUR COMPLETE</strong><br>You survived the Alpine Odyssey.";
+            options.innerHTML = `<button class="option-btn" style="border-color:var(--accent);" onclick="showTrophyRoom()">🏆 VIEW SERVICE RECORD</button>`;
+        }
+    }
+
+    function openRescueShop() {
+        isRetryState = true; 
+        updateMapLocation(currentPath);
+        document.getElementById("landscape-view").style.display = "none";
+        
+        document.getElementById("station-header").innerText = "⛺ Basecamp (Recovery)";
+        document.getElementById("station-sub").innerHTML = "<strong style='color:var(--danger);'>PENALTY APPLIED:</strong> You must resupply before re-engaging the sector. Save comm code to log out.";
+        
+        let stationHTML = `
+            <h3 style="color:#f8fafc;">⛺ Basecamp Status</h3>
+            <p>You have been dumped at the last secured basecamp.</p>
+            <p style="color: var(--danger); font-weight:600;">Sector uncompleted. No credentials or credits awarded. Patch your rig and rest up before re-engaging.</p>
+        `;
+        
+        document.getElementById("story-area").innerHTML = stationHTML;
+        document.getElementById("save-station-controls").style.display = "block";
+        updateShopUI(); 
+    }
+
+    function reachStation() {
+        isRetryState = false; 
+        movePinProgressively();
+        credits += 150;
+        let earnedBadge = "";
+        let badgeID = "";
+        
+        document.getElementById("landscape-view").style.display = "none";
+        document.getElementById("station-header").innerText = "⛺ Basecamp Reached!";
+        document.getElementById("station-sub").innerText = "Sector cleared. Log your comm code to sync progress to the cloud.";
+        
+        const badgeMap = {
+            'forest':     { name: "🐑 Sheep Path GP", id: "img/sheep.png" },
+            'mountain':   { name: "🌲 Forest Survivor", id: "img/cabin.png" },
+            'descent':    { name: "📉 Alpine Hard trail", id: "img/descent.png" }, 
+            'campground': { name: "⛺ Campground Challenge", id: "img/campground.png" },
+            'blackbear':  { name: "🐻 Free Ride", id: "img/black_bear.png" },
+            'aunty':      { name: "🪵 Outdoor Adventure", id: "img/aunty_adventure.png" },
+            'junction':   { name: "🛤️ Junction Master", id: "img/junction_prix.png" },
+            'windy':      { name: "💨 Windy Village", id: "img/windy.png" },
+            'windy_down':  { name: "⛰️ Downhill Challenge", id: "img/windyd.png" },
+            'oak_forest': { name: "🌳 Flat Leg Legend", id: "img/oak_forest.png" }
+        };
+
+        let currentData = badgeMap[currentPath];
+        if (currentData) {
+            earnedBadge = currentData.name;
+            badgeID = currentData.id;
+        }
+
+        if (earnedBadge && !badges.includes(earnedBadge)) {
+            badges.push(earnedBadge);
+        }
+
+        let earnedLegendThisTurn = false;
+        if (currentPath === 'oak_forest' && !badges.includes("👑 Grand Tour Legend")) {
+            badges.push("👑 Grand Tour Legend");
+            earnedLegendThisTurn = true;
+        }
+
+        let badgeImageURL = badgeID ? badgeID : "";
+        
+        let stationHTML = `
+            <h3 style="color:#f8fafc;">🏁 Sector Cleared</h3>
+            <p>You acquired <strong>150 Credits</strong> and the <strong>${earnedBadge}</strong> insignia.</p>
+        `;
+        
+        if (badgeImageURL) {
+             stationHTML += `<img src="${badgeImageURL}" style="width:130px; border-radius:10px; box-shadow: 0 8px 15px rgba(0,0,0,0.5);" alt="${earnedBadge}">`;
+        } else {
+             stationHTML += `<div style="font-size: 50px;">🏅</div>`;
+        }
+
+        if (earnedLegendThisTurn) {
+            let legendImageURL = "img/badge_legend.png"; 
+            
+            stationHTML += `
+                <hr style="border: 0; border-top: 1px solid #475569; margin: 20px 0;">
+                <h3 style="color: var(--accent);">👑 VETERAN STATUS SECURED</h3>
+                <p>Extreme endurance recognized. You have conquered 5 heavy stages and earned the <strong>Grand Tour Insignia</strong>.</p>
+            `;
+            
+            if (legendImageURL) {
+                stationHTML += `<img src="${legendImageURL}" style="width:150px; border-radius:8px; border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);" alt="Grand Tour Legend">`;
+            } else {
+                stationHTML += `<div style="font-size: 70px; filter: drop-shadow(0 0 10px var(--accent));">🏆</div>`;
+            }
+        }
+        if (currentPath === 'junction' && !badges.includes("🧥 Waterproof Jacket")) {
+            badges.push("🧥 Waterproof Jacket"); 
+            stationHTML += `
+                <hr style="border: 0; border-top: 1px solid #475569; margin: 20px 0;">
+                <h3 style="color: #38bdf8;">📦 SUPPLY DROP RECOVERED</h3>
+                <p>Surviving the sub-zero temps of High Peak yielded a <strong>Tactical Waterproof Jacket</strong>.</p>
+                <div style="font-size: 60px; filter: drop-shadow(0 0 10px #38bdf8); margin-bottom: 10px;">🧥</div>
+            `;
+        }
+        
+        if (currentPath === 'windy' && bike >= 95 && !badges.includes("🧣 Windbreaker Scarf")) {
+            badges.push("🧣 Windbreaker Scarf"); 
+            stationHTML += `
+                <hr style="border: 0; border-top: 1px solid #475569; margin: 20px 0;">
+                <h3 style="color: #ea580c;">📦 AERO-GEAR RECOVERED</h3>
+                <p>Pushing into the howling winds with your rig at (${bike}%) integrity yielded a <strong>Performance Windbreaker Scarf</strong>.</p>
+                <div style="font-size: 60px; filter: drop-shadow(0 0 10px #ea580c); margin-bottom: 10px;">🧣</div>
+            `;
+        }
+        stationHTML += `
+            <br><br>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn" style="background:var(--accent); color:#0f172a; flex: 1;" onclick="showTrophyRoom()">🏆 RECORD</button>
+                <button class="btn" style="background:#475569; flex: 1;" onclick="showGearRoom()">🎒 LOADOUT</button>
+            </div>
+            `;
+
+        document.getElementById("story-area").innerHTML = stationHTML;
+        document.getElementById("save-station-controls").style.display = "block";
+        updateShopUI();
+        document.getElementById("station-modal").style.display = "flex";
+    }
+
+    function showTransportModal() {
+        if (isAudioEnabled) AudioSynth.playCarHorn();
+        document.getElementById("transport-modal").style.display = "flex";
+    }
+
+    function confirmTransport() {
+        document.getElementById("transport-modal").style.display = "none";
+        startPath('junction');
+    }
+
+    function showTrophyRoom() {
+        const badgeDictionary = {
+            "🐑 Sheep Path GP": { id: "img/sheep.png", legacy: [] },
+            "🌲 Forest Survivor": { id: "img/cabin.png", legacy: [] },
+            "📉 Alpine Hard trail": { id: "img/descent.png", legacy: ["📉 Alpine Descent"] }, 
+            "⛺ Campground Challenge": { id: "img/campground.png", legacy: ["⛺ Campground"] },
+            "🐻 Free Ride":  { id: "img/black_bear.png", legacy: ["🐻 Blackbear"] },
+            "🪵 Outdoor Adventure": { id: "img/aunty_adventure.png", legacy: ["🪵 Aunty Log"] },
+            "🛤️ Junction Master":   { id: "img/junction_prix.png", legacy: [] },
+            "💨 Windy Village":      { id: "img/windy.png", legacy: [] },
+            "⛰️ Downhill Challenge":  { id: "img/windyd.png", legacy: ["⛰️ Windy Down"] },
+            "🌳 Flat Leg Legend": { id: "img/oak_forest.png", legacy: ["🌳 Oak Legend"] },
+            "👑 Grand Tour Legend":  { id: "img/legend.png", legacy: [] }
+        };
+
+        let pathBadgeCount = badges.filter(b => {
+            return Object.keys(badgeDictionary).some(newBadge => newBadge === b || badgeDictionary[newBadge].legacy.includes(b));
+        }).length;
+
+        let roomHTML = `
+            <div class="dashboard-container">
+                <h3 class="dashboard-header">🏆 Service Record (${pathBadgeCount}/10)</h3>
+                <div class="badge-grid">
+        `;
+
+        Object.keys(badgeDictionary).forEach(bName => {
+            let bData = badgeDictionary[bName];
+            let hasBadge = badges.includes(bName) || bData.legacy.some(leg => badges.includes(leg));
+            
+            if (bName === "👑 Grand Tour Legend" && !hasBadge) return;
+            if (bName === "🌲 Forest Survivor" && !hasBadge && currentPath !== 'mountain' && pathBadgeCount > 0) return;
+            if (bName === "🐑 Sheep Path GP" && !hasBadge && currentPath !== 'forest' && pathBadgeCount > 0) return;
+
+            let badgeID = bData.id;
+            let iconHTML = "";
+            
+            if (hasBadge && badgeID) {
+                iconHTML = `<img src="${badgeID}" class="badge-img" alt="${bName}">`;
+            } else if (hasBadge) {
+                iconHTML = `<div class="badge-icon">🏅</div>`;
+            } else {
+                iconHTML = `<div class="badge-icon">🔒</div>`;
+            }
+
+            let statusClass = hasBadge ? "unlocked" : "locked";
+
+            roomHTML += `
+                <div class="badge-card ${statusClass}">
+                    ${iconHTML}
+                    <div class="badge-title">${bName}</div>
+                </div>
+            `;
+        });
+
+        roomHTML += `
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" style="flex: 1; font-size: 1.1rem; background: #475569;" onclick="showGearRoom()">🎒 LOADOUT</button>
+                    <button class="btn" style="flex: 1; font-size: 1.1rem; background: #1e293b; border: 1px solid #475569;" onclick="updateShopUI()">⬅️ BACK TO SHOP</button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById("options-area").innerHTML = roomHTML;
+    }
+
+    function showGearRoom() {
+        let hasJacket = badges.includes("🧥 Waterproof Jacket");
+        let hasGoggles = badges.includes("🥽 Biking Goggles");
+        let hasScarf = badges.includes("🧣 Windbreaker Scarf"); 
+        
+        let roomHTML = `
+            <div class="dashboard-container">
+                <h3 class="dashboard-header" style="color: var(--accent);">🎒 Tactical Loadout</h3>
+                <p style="color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">Specialized gear salvaged on the trail.</p>
+                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 25px;">
+        `;
+
+        if (hasJacket) {
+            roomHTML += `
+                <div class="badge-card unlocked" style="border-color: #38bdf8; background: rgba(56,189,248,0.05); width: 160px;">
+                    <div style="font-size: 4rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(56,189,248,0.5));">🧥</div>
+                    <div class="badge-title" style="font-size: 0.9rem; color: #38bdf8;">Tactical Jacket</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 8px;">Sub-zero thermal resistance.</div>
+                </div>
+            `;
+        } else {
+            roomHTML += `
+                <div class="badge-card locked" style="width: 160px;">
+                    <div class="badge-icon" style="font-size: 4rem;">❓</div>
+                    <div class="badge-title" style="font-size: 0.9rem;">Classified Gear</div>
+                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Push higher altitude to unlock.</div>
+                </div>
+            `;
+        }
+
+        if (hasGoggles) {
+            roomHTML += `
+                <div class="badge-card unlocked" style="border-color: #a3e635; background: rgba(163,230,53,0.05); width: 160px;">
+                    <div style="font-size: 4rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(163,230,53,0.5));">🥽</div>
+                    <div class="badge-title" style="font-size: 0.9rem; color: #a3e635;">Trail Goggles</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 8px;">Optics clear. Awarded for flawless riding.</div>
+                </div>
+            `;
+        } else {
+            roomHTML += `
+                <div class="badge-card locked" style="width: 160px;">
+                    <div class="badge-icon" style="font-size: 4rem;">❓</div>
+                    <div class="badge-title" style="font-size: 0.9rem;">Classified Gear</div>
+                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Reach Bear territory with high rig integrity.</div>
+                </div>
+            `;
+        }
+
+        if (hasScarf) {
+            roomHTML += `
+                <div class="badge-card unlocked" style="border-color: var(--bike); background: rgba(234,88,12,0.05); width: 160px;">
+                    <div style="font-size: 4rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(234,88,12,0.5));">🧣</div>
+                    <div class="badge-title" style="font-size: 0.9rem; color: var(--bike);">Aero-Scarf</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 8px;">Deflects gale-force winds.</div>
+                </div>
+            `;
+        } else {
+            roomHTML += `
+                <div class="badge-card locked" style="width: 160px;">
+                    <div class="badge-icon" style="font-size: 4rem;">❓</div>
+                    <div class="badge-title" style="font-size: 0.9rem;">Classified Gear</div>
+                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Brave the howling winds flawlessly.</div>
+                </div>
+            `;
+        }
+
+        roomHTML += `
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" style="flex: 1; font-size: 1.1rem; background: var(--accent); color:#0f172a;" onclick="showTrophyRoom()">🏆 RECORD</button>
+                    <button class="btn" style="flex: 1; font-size: 1.1rem; background: #1e293b; border: 1px solid #475569;" onclick="updateShopUI()">⬅️ BACK TO SHOP</button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById("options-area").innerHTML = roomHTML;
+    }
+
+    function updateShopUI() {
+        let optionsArea = document.getElementById("options-area");
+        optionsArea.innerHTML = `<h3 style="color: var(--accent); letter-spacing:1px; margin-bottom:20px;">💳 FUNDS: ${credits} CREDITS</h3>`;
+        
+        let repairCost = 100 - bike;
+        let foodCost = 100 - energy;
+
+        if (bike < 60) {
+            optionsArea.innerHTML += `<p style="color:var(--danger); font-weight:bold;">⚠️ RIG INTEGRITY CRITICAL (${bike}%)! REPAIR MANDATORY.</p>`;
+            if (credits >= repairCost) {
+                optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--danger)" onclick="repairBike(${repairCost})">🔧 INITIATE REPAIR (COST: ${repairCost})</button>`;
+            } else {
+                optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--accent); color: var(--accent);" onclick="credits += 100; updateShopUI();">🆘 REQUEST SPONSOR DROP (+100 CR)</button>`;
+            }
+        } else if (bike < 100) {
+            if (credits >= repairCost) {
+                optionsArea.innerHTML += `<button class="option-btn" onclick="repairBike(${repairCost})">🔧 TUNE-UP RIG (COST: ${repairCost})</button>`;
+            }
+        }
+
+        if (energy < 40) {
+            optionsArea.innerHTML += `<p style="color:var(--danger); font-weight:bold;">⚠️ STAMINA DEPLETED (${energy}%)! RATIONS MANDATORY.</p>`;
+            if (credits >= foodCost) {
+                optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--danger)" onclick="buyFood(${foodCost})">🍔 CONSUME RATIONS (COST: ${foodCost})</button>`;
+            } else {
+                 optionsArea.innerHTML += `<button class="option-btn" style="border-color:var(--accent); color: var(--accent);" onclick="credits += 100; updateShopUI();">🆘 REQUEST SPONSOR DROP (+100 CR)</button>`;
+            }
+        } else if (energy < 100) {
+            if (credits >= foodCost) {
+                optionsArea.innerHTML += `<button class="option-btn" onclick="buyFood(${foodCost})">🍔 SUPPLEMENT RATIONS (COST: ${foodCost})</button>`;
+            }
+        }
+
+        if (bike >= 55 && energy >= 30) {
+            let proceedAction = isRetryState ? "retryLeg()" : "resetGame()";
+            let proceedText = isRetryState ? "🚵 RE-ENGAGE SECTOR" : "🚵 ADVANCE TO NEXT WAYPOINT";
+            
+            optionsArea.innerHTML += `
+                <hr style="border: 0; border-top: 1px solid #334155; margin: 25px 0;">
+                <button class="btn" style="width: 100%; background: var(--energy); color: #0f172a;" onclick="${proceedAction}">${proceedText}</button>
+            `;
+        } else {
+            optionsArea.innerHTML += `
+                <hr style="border: 0; border-top: 1px solid #334155; margin: 25px 0;">
+                <button class="btn" style="width: 100%; background: #334155; color:#94a3b8; cursor:not-allowed;" onclick="alert('CLEARANCE DENIED. Mandatory repairs or rations required before proceeding.')">🚧 CLEARANCE DENIED</button>
+            `;
+        }
+    }
+
+    function repairBike(cost) {
+        if (credits >= cost) {
+            credits -= cost;
+            bike = 100;
+            updateUI();
+            updateShopUI();
+            document.getElementById("feedback").innerText = "✅ RIG OPTIMIZED.";
+            document.getElementById("feedback").style.color = "var(--bike)";
+        } else {
+            alert("Insufficient funds for repair.");
+        }
+    }
+
+    function buyFood(cost) {
+        if (credits >= cost) {
+            credits -= cost;
+            energy = 100;
+            updateUI();
+            updateShopUI();
+            document.getElementById("feedback").innerText = "✅ STAMINA MAXED.";
+            document.getElementById("feedback").style.color = "var(--energy)";
+        } else {
+            alert("Insufficient funds for rations.");
+        }
+    }
+
+    function saveGame() {
+        const code = document.getElementById("save-code").value.trim().toUpperCase();
+        if (code.length < 3) {
+            alert("Comm code required to establish save link (min 3 chars).");
+            return;
+        }
+
+        document.getElementById("feedback").innerText = "Uplinking to satellite...";
+
+        let payload = {
+            saveCode: code,
+            gameData: { 
+                savedPoints: points, 
+                savedEnergy: energy, 
+                savedBike: bike, 
+                savedPath: currentPath,
+                savedCredits: credits, 
+                savedBadges: badges    
+            }
+        };
+
+        fetch(GOOGLE_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("✅ LOG SYNCED. You can disconnect and resume operations later.");
+            document.getElementById("feedback").innerText = "";
+        })
+        .catch(error => {
+            alert("COMMS ERROR. Failed to push to cloud.");
+        });
+    }
+
+    function loadGame() {
+        const code = document.getElementById("save-code").value.trim().toUpperCase();
+        if (code.length < 3) {
+            alert("Valid comm code required to decrypt.");
+            return;
+        }
+
+        document.getElementById("feedback").innerText = "Decrypting cloud payload...";
+        const url = `${GOOGLE_URL}?saveCode=${code}`;
+
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if(data.error) {
+                alert("Comm code invalid or expired.");
+                document.getElementById("feedback").innerText = "";
+            } else {
+                let parsedData = typeof data === "string" ? JSON.parse(data) : data;
+                
+                points = parsedData.savedPoints;
+                energy = parsedData.savedEnergy;
+                bike = parsedData.savedBike;
+                currentPath = parsedData.savedPath;
+                credits = parsedData.savedCredits || 0; 
+                badges = parsedData.savedBadges || [];
+                
+                const legacyConversions = {
+                    "📉 Alpine Descent": "📉 Alpine Hard trail",
+                    "⛺ Campground": "⛺ Campground Challenge",
+                    "🐻 Blackbear": "🐻 Free Ride",
+                    "🪵 Aunty Log": "🪵 Outdoor Adventure",
+                    "⛰️ High Peak": "⛰️ Uphill Challenge",
+                    "⛰️ Windy Down": "⛰️ Downhill Challenge",
+                    "🌳 Oak Legend": "🌳 Flat Leg Legend"
+                };
+                badges = badges.map(b => legacyConversions[b] || b);
+                
+                document.getElementById("feedback").innerText = "PAYLOAD DECRYPTED.";
+                updateUI();
+                
+                if (currentPath === 'forest') targetPoints = 20;
+                else if (currentPath === 'mountain') targetPoints = 20;
+                else targetPoints = 10;
+                
+                if (points >= targetPoints) {
+                    reachStation();
+                } else if (currentPath) {
+                    let allowed = [];
+                    if (currentPath === 'forest') allowed = ["basic", "beginner"];
+                    else if (currentPath === 'mountain') allowed = ["low", "basic"];
+                    else if (currentPath === 'descent') allowed = ["low_intermediate", "low intermediate"];
+                    else if (currentPath === 'campground') allowed = ["intermediate"];
+                    else if (currentPath === 'blackbear') allowed = ["high_intermediate", "high intermediate"];
+                    else if (currentPath === 'aunty') allowed = ["upper_intermediate", "upper intermediate"];
+                    else if (currentPath === 'junction') allowed = ["advanced"];
+                    else if (currentPath === 'windy') allowed = ["exceptional"];
+                    else if (currentPath === 'windy_down') allowed = ["exceptional"];
+                    else if (currentPath === 'oak_forest') allowed = ["proficiency"];
+
+                    currentPathQuestions = allQuestions.filter(q => q.Difficulty && allowed.includes(q.Difficulty.trim().toLowerCase()));
+                    
+                    if(currentPathQuestions.length === 0) {
+                        currentPathQuestions = [...allQuestions];
+                    }
+
+                    shuffleArray(currentPathQuestions); 
+                    
+                    currentPathBackup = [...currentPathQuestions];
+                    
+                    loadQuestion();
+                }
+            }
+        })
+        .catch(error => {
+            alert("COMMS ERROR. Decryption failed.");
+            document.getElementById("feedback").innerText = "";
+        });
+    }
+
+    function openInstructions() {
+        document.getElementById("instructions-modal").style.display = "flex";
+    }
+
+    function closeInstructions() {
+        document.getElementById("instructions-modal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("instructions-modal");
+        if (event.target == modal) {
+            closeInstructions();
+        }
+    }
+</script>
+
+
+<div id="instructions-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeInstructions()">&times;</span>
+        <h3 style="color: var(--accent);">🚵 Field Manual</h3>
+        <ul>
+            <li><strong style="color:white;">Select Vector:</strong> Forest (20 pts - Standard) or Mountain (20 pts - Hardcore).</li>
+            <li>Clear obstacles to push your rig across the GPS map. Use the 🗺️ toggle to track coordinates.</li>
+            <li><strong style="color:white;">Vitals:</strong> Every obstacle burns ⚡ Stamina and degrades 🚲 Rig Integrity. Failures cause severe ⚠️ Gear Damage.</li>
+            <li><strong style="color:white;">Extraction:</strong> Reach a Basecamp to secure an insignia and log your comm code.</li>
+        </ul>
+        <button class="btn" style="width:100%; background: var(--accent); color: #0f172a;" onclick="closeInstructions()">ACKNOWLEDGE</button>
+    </div>
+</div>
+
+<div id="feedback-modal">
+    <div class="modal-content" style="text-align: center; border-color: var(--danger);" id="feedback-modal-content">
+        <h2 id="feedback-title" style="margin-top: 0; font-size: 2rem; text-transform:uppercase; letter-spacing:1px;"></h2>
+        <div id="feedback-message" style="font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; color:#e2e8f0;"></div>
+        <button class="btn" id="feedback-continue-btn" style="width: 100%; font-size: 1.2rem; background: #334155;">PROCEED</button>
+    </div>
+</div>
+
+<div id="station-modal">
+    <div class="modal-content" style="text-align: center; border-color: var(--energy);">
+        <h2 style="margin-top: 0; font-size: 2.2rem; color: var(--energy); text-transform:uppercase; letter-spacing:1px;">✅ SECTOR SECURED</h2>
+        <div style="font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; color:#cbd5e1;">
+            You have successfully pushed through this sector and established a safe zone.
+        </div>
+        <button class="btn" style="width: 100%; font-size: 1.2rem; background: var(--energy); color:#0f172a;" onclick="document.getElementById('station-modal').style.display='none'">ENTER BASECAMP</button>
+    </div>
+</div>
+
+<div id="transport-modal">
+    <div class="modal-content" style="text-align: center; border-color: var(--accent);">
+        <h2 style="margin-top: 0; font-size: 2.2rem; color: var(--accent); text-transform:uppercase; letter-spacing:1px;">🚠 EVAC ASSIST</h2>
+        <img src="img/servicev.png" alt="Transport Vehicle" style="display: block; margin: 0 auto 15px auto; max-width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #475569;">
+        <div style="font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; color:#cbd5e1;">
+            The descent from High Peak is classified as highly volatile. You are being loaded into an off-road recovery unit to safely bypass this altitude drop.
+        </div>
+        <button class="btn" style="width: 100%; font-size: 1.1rem; background: var(--accent); color:#0f172a;" onclick="confirmTransport()">INITIATE BYPASS</button>
+    </div>
+</div>
+</body>
+</html>

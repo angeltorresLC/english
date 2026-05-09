@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health vocabulary</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --header-blue: #00d2ff;
+            --header-purple: #3a7bd5;
+            --text-dark: #2d3436;
+            --card-blue: #c7ecee;
+            --card-pink: #f8c291;
+            --card-yellow: #fbe28d;
+            --card-purple: #e0b4f5;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--header-blue), var(--header-purple));
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            border-bottom: 5px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        header h1 {
+            font-family: 'Fredoka One', cursive;
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0px #000;
+        }
+
+        nav {
+            background-color: #7b2cbf;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            background-color: #7b2cbf;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2em;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 6px 0 #5a189a;
+            transition: all 0.1s;
+        }
+
+        .toggle-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        /* Flashcard Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 3px dashed #fff;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        /* Card Colors matching the screenshot */
+        .card.blue { background-color: var(--card-blue); border-color: #81ecec; }
+        .card.pink { background-color: #ffcccc; border-color: #ff7675; }
+        .card.yellow { background-color: var(--card-yellow); border-color: #fdcb6e; }
+        .card.purple { background-color: var(--card-purple); border-color: #a29bfe; }
+
+        .card-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3em;
+            margin: 10px 0 0 0;
+            color: #2d3436;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-phonetic {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9em;
+            color: #7b2cbf;
+            margin-bottom: 10px;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* Speak Button Styling */
+        .speak-btn {
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-left: 10px;
+            transition: transform 0.2s;
+            display: inline-block;
+            user-select: none;
+        }
+        
+        .speak-btn:hover {
+            transform: scale(1.3);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Icon Container styling */
+        .icon-container {
+            font-size: 5.5em;
+            margin: 5px 0 15px 0;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+        }
+
+        .card-def {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            padding: 0 10px;
+        }
+
+        .card-example {
+            font-size: 1.0em;
+            color: #444;
+            background: rgba(255,255,255,0.5);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 0 5px 5px 5px;
+            text-align: left;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 4px solid #7b2cbf;
+        }
+
+        .quiz-header {
+            font-family: 'Fredoka One', cursive;
+            color: #7b2cbf;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .question-box {
+            background: #f1f2f6;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #3a7bd5;
+        }
+
+        .question-box p {
+            margin-top: 0;
+            font-weight: bold;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-family: 'Nunito', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            background-color: #00d2ff;
+            color: #2d3436;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5em;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 10px;
+            box-shadow: 0 6px 0 #0097e6;
+            transition: all 0.1s;
+        }
+
+        .submit-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 1.5em;
+            font-family: 'Fredoka One', cursive;
+            margin-top: 20px;
+            color: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>👩‍⚕️ HEALTH VOCABULARY - STARTERS & A1 👨‍⚕️</h1>
+    </header>
+
+    <div class="container">
+        
+        <button id="toggleBtn" class="toggle-btn">👁️ Hide Flashcards & Start Exam</button>
+
+        <div class="grid" id="flashcardGrid">
+            <div class="card blue">
+                <div class="card-title">Doctor <span class="speak-btn" onclick="speakWord('Doctor')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ˈdɒk.tər/</div>
+                <div class="icon-container">👨‍⚕️</div>
+                <div class="card-def">A person who helps sick people.</div>
+                <div class="card-example"><strong>Example:</strong> The doctor gave me medicine.</div>
+            </div>
+
+            <div class="card pink">
+                <div class="card-title">Nurse <span class="speak-btn" onclick="speakWord('Nurse')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/nɜːs/</div>
+                <div class="icon-container">👩‍⚕️</div>
+                <div class="card-def">A person who works with the doctor.</div>
+                <div class="card-example"><strong>Example:</strong> The kind nurse checked my temperature.</div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-title">Hospital <span class="speak-btn" onclick="speakWord('Hospital')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ˈhɒs.pɪ.təl/</div>
+                <div class="icon-container">🏥</div>
+                <div class="card-def">A big place for sick people.</div>
+                <div class="card-example"><strong>Example:</strong> We went to the hospital to see the doctor.</div>
+            </div>
+
+            <div class="card blue">
+                <div class="card-title">Sick <span class="speak-btn" onclick="speakWord('Sick')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/sɪk/</div>
+                <div class="icon-container">🤒</div>
+                <div class="card-def">When you do not feel well.</div>
+                <div class="card-example"><strong>Example:</strong> I am sick today, so I can't go to school.</div>
+            </div>
+
+            <div class="card pink">
+                <div class="card-title">Hurt <span class="speak-btn" onclick="speakWord('Hurt')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/hɜːt/</div>
+                <div class="icon-container">🩹</div>
+                <div class="card-def">To feel pain.</div>
+                <div class="card-example"><strong>Example:</strong> I fell down and my knee hurts.</div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-title">Medicine <span class="speak-btn" onclick="speakWord('Medicine')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ˈmed.ɪ.sən/</div>
+                <div class="icon-container">💊</div>
+                <div class="card-def">You take this to feel better.</div>
+                <div class="card-example"><strong>Example:</strong> The sweet medicine helped my tummy.</div>
+            </div>
+
+            <div class="card purple">
+                <div class="card-title">Sleep <span class="speak-btn" onclick="speakWord('Sleep')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/sliːp/</div>
+                <div class="icon-container">🛌</div>
+                <div class="card-def">To close your eyes and rest in bed.</div>
+                <div class="card-example"><strong>Example:</strong> You need to sleep a lot when you are sick.</div>
+            </div>
+
+            <div class="card purple">
+                <div class="card-title">Head <span class="speak-btn" onclick="speakWord('Head')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/hed/</div>
+                <div class="icon-container">🤕</div>
+                <div class="card-def">The top part of your body.</div>
+                <div class="card-example"><strong>Example:</strong> I have a pain in my head.</div>
+            </div>
+
+            <div class="card blue">
+                <div class="card-title">Tummy <span class="speak-btn" onclick="speakWord('Tummy')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ˈtʌm.i/</div>
+                <div class="icon-container">🤢</div>
+                <div class="card-def">Your stomach.</div>
+                <div class="card-example"><strong>Example:</strong> Eating too much candy gives you a tummy ache.</div>
+            </div>
+
+            <div class="card pink">
+                <div class="card-title">Tooth <span class="speak-btn" onclick="speakWord('Tooth')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/tuːθ/</div>
+                <div class="icon-container">🦷</div>
+                <div class="card-def">The white things in your mouth to chew.</div>
+                <div class="card-example"><strong>Example:</strong> Brush your tooth so it does not hurt.</div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-title">Ear <span class="speak-btn" onclick="speakWord('Ear')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ɪər/</div>
+                <div class="icon-container">👂</div>
+                <div class="card-def">You use this to hear sounds.</div>
+                <div class="card-example"><strong>Example:</strong> The loud music hurts my ear.</div>
+            </div>
+
+            <div class="card purple">
+                <div class="card-title">Eye <span class="speak-btn" onclick="speakWord('Eye')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/aɪ/</div>
+                <div class="icon-container">👁️</div>
+                <div class="card-def">You use this to see things.</div>
+                <div class="card-example"><strong>Example:</strong> My eye is red because I am sleepy.</div>
+            </div>
+
+            <div class="card blue">
+                <div class="card-title">Arm <span class="speak-btn" onclick="speakWord('Arm')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/ɑːm/</div>
+                <div class="icon-container">💪</div>
+                <div class="card-def">The long part of your body with a hand.</div>
+                <div class="card-example"><strong>Example:</strong> The nurse put a bandage on my arm.</div>
+            </div>
+
+            <div class="card pink">
+                <div class="card-title">Leg <span class="speak-btn" onclick="speakWord('Leg')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/leɡ/</div>
+                <div class="icon-container">🦵</div>
+                <div class="card-def">The part of your body you use to walk.</div>
+                <div class="card-example"><strong>Example:</strong> I hurt my leg when I was playing football.</div>
+            </div>
+
+            <div class="card yellow">
+                <div class="card-title">Foot <span class="speak-btn" onclick="speakWord('Foot')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/fʊt/</div>
+                <div class="icon-container">🦶</div>
+                <div class="card-def">The part at the bottom of your leg.</div>
+                <div class="card-example"><strong>Example:</strong> I have a shoe on my foot.</div>
+            </div>
+
+            <div class="card purple">
+                <div class="card-title">Hand <span class="speak-btn" onclick="speakWord('Hand')" title="Listen">🔊</span></div>
+                <div class="card-phonetic">/hænd/</div>
+                <div class="icon-container">🖐️</div>
+                <div class="card-def">The part of your body with five fingers.</div>
+                <div class="card-example"><strong>Example:</strong> Wash your hand before you eat!</div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <div class="quiz-header">📝 Final Exam Questionnaire</div>
+            <form id="quizForm">
+                <div class="quiz-grid">
+                    
+                    <div class="question-box">
+                        <p>1. A person who helps sick people is a...</p>
+                        <select id="q1">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Doctor</option>
+                            <option value="b">b) Teacher</option>
+                            <option value="c">c) Farmer</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>2. A place for sick people is a...</p>
+                        <select id="q2">
+                            <option value="">- Select -</option>
+                            <option value="a">a) School</option>
+                            <option value="b">b) Hospital</option>
+                            <option value="c">c) Park</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>3. You take this when you are sick.</p>
+                        <select id="q3">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Medicine</option>
+                            <option value="b">b) Candy</option>
+                            <option value="c">c) Juice</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>4. If you play all day, you need to...</p>
+                        <select id="q4">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Sleep</option>
+                            <option value="b">b) Run</option>
+                            <option value="c">c) Jump</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>5. You use this to see things.</p>
+                        <select id="q5">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Ear</option>
+                            <option value="b">b) Eye</option>
+                            <option value="c">c) Hand</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>6. You use this to hear sounds.</p>
+                        <select id="q6">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Ear</option>
+                            <option value="b">b) Eye</option>
+                            <option value="c">c) Foot</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>7. You have ten fingers on your...</p>
+                        <select id="q7">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Feet</option>
+                            <option value="b">b) Hands</option>
+                            <option value="c">c) Ears</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>8. You walk and jump with your...</p>
+                        <select id="q8">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Head</option>
+                            <option value="b">b) Feet</option>
+                            <option value="c">c) Eyes</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>9. If you eat too much candy, your ____ hurts.</p>
+                        <select id="q9">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Tummy</option>
+                            <option value="b">b) Arm</option>
+                            <option value="c">c) Foot</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>10. A woman or man who helps the doctor is a...</p>
+                        <select id="q10">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Pilot</option>
+                            <option value="b">b) Nurse</option>
+                            <option value="c">c) Driver</option>
+                        </select>
+                    </div>
+
+                    <div class="question-box">
+                        <p>11. Type the missing word: My ____ hurts from walking a lot.</p>
+                        <input type="text" id="q11" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>12. Type the missing word: I read my book with my ____.</p>
+                        <input type="text" id="q12" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>13. Type the missing word: I hear a bird singing with my ____.</p>
+                        <input type="text" id="q13" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>14. Type the missing word: The ____ gives me medicine to feel better.</p>
+                        <input type="text" id="q14" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>15. Type the missing word: I go to ____ in my bed at night.</p>
+                        <input type="text" id="q15" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>16. Type the missing word: I have a pain in my ____ from eating too much.</p>
+                        <input type="text" id="q16" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>17. Type the missing word: Ouch! My arm ____!</p>
+                        <input type="text" id="q17" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>18. Type the missing word: I have a fever. I am very ____.</p>
+                        <input type="text" id="q18" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>19. Type the missing word: The ____ helps the doctor in the hospital.</p>
+                        <input type="text" id="q19" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>20. Type the missing word: I chew food with my ____.</p>
+                        <input type="text" id="q20" placeholder="Type answer here">
+                    </div>
+
+                    <div class="question-box">
+                        <p>21. Unscramble: Type the correct word for "D E H A" (The top of your body).</p>
+                        <input type="text" id="q21" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>22. Unscramble: Type the correct word for "M R A" (You have two of these with hands).</p>
+                        <input type="text" id="q22" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>23. True or False: You go to the hospital when you are very happy and playing.</p>
+                        <select id="q23">
+                            <option value="">- Select -</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>24. Definition Match: Type the word for the big place where doctors work.</p>
+                        <input type="text" id="q24" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>25. Odd One Out: Which word is NOT a part of your body? (arm / leg / doctor / head)</p>
+                        <input type="text" id="q25" placeholder="Type answer here">
+                    </div>
+
+                    <div class="question-box">
+                        <p>26. What do you drink or eat when you are sick?</p>
+                        <select id="q26">
+                            <option value="">- Select -</option>
+                            <option value="a">a) Medicine</option>
+                            <option value="b">b) Toys</option>
+                            <option value="c">c) Books</option>
+                        </select>
+                    </div>
+                    <div class="question-box">
+                        <p>27. Type the missing word: You hold a pencil with your ____.</p>
+                        <input type="text" id="q27" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>28. Type the missing word: You wear long pants on your ____.</p>
+                        <input type="text" id="q28" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>29. Word Formation: Wash your hands so you don't get a fever and get ____.</p>
+                        <input type="text" id="q29" placeholder="Type answer here">
+                    </div>
+                    <div class="question-box">
+                        <p>30. True or False: A nurse works in a hospital.</p>
+                        <select id="q30">
+                            <option value="">- Select -</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+
+                </div>
+                <button type="button" class="submit-btn" onclick="checkAnswers()">SUBMIT EXAM</button>
+                <div id="result" class="result"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- TEXT TO SPEECH FUNCTION ---
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                let utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-GB'; 
+                utterance.rate = 0.85; // Slower speed for kids learning
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Sorry, your browser doesn't support Text-to-Speech.");
+            }
+        }
+
+        const totalQuestions = 30; 
+        const grid = document.getElementById('flashcardGrid');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const quizForm = document.getElementById('quizForm');
+        let cardsVisible = true;
+
+        // Function to fully reset the quiz
+        function resetQuiz() {
+            quizForm.reset();
+            document.getElementById('result').innerHTML = '';
+            
+            // Reset question box colors back to default
+            for (let i = 1; i <= totalQuestions; i++) {
+                let el = document.getElementById('q' + i);
+                if (el) {
+                    let parentBox = el.parentElement;
+                    parentBox.style.borderLeft = "5px solid #3a7bd5"; 
+                    parentBox.style.backgroundColor = "#f1f2f6"; 
+                }
+            }
+        }
+
+        // Toggle button logic
+        toggleBtn.addEventListener('click', function() {
+            cardsVisible = !cardsVisible;
+            if (cardsVisible) {
+                grid.style.display = 'grid';
+                toggleBtn.innerHTML = '👁️ Hide Flashcards & Start Exam';
+            } else {
+                grid.style.display = 'none';
+                toggleBtn.innerHTML = '📖 Show Flashcards & Restart Exam';
+            }
+            resetQuiz();
+        });
+
+        // Hide flashcards automatically when a student begins typing/answering the quiz
+        quizForm.addEventListener('input', function() {
+            if (cardsVisible) {
+                cardsVisible = false;
+                grid.style.display = 'none';
+                toggleBtn.innerHTML = '📖 Show Flashcards & Restart Exam';
+            }
+        });
+
+        // Grading Logic
+        function checkAnswers() {
+            let score = 0;
+
+            const answers = {
+                q1: "a", q2: "b", q3: "a", q4: "a", q5: "b",
+                q6: "a", q7: "b", q8: "b", q9: "a", q10: "b",
+                q11: "foot", q12: "eye", q13: "ear", 
+                q14: "doctor", q15: "sleep", q16: "tummy", 
+                q17: "hurt", q18: "sick", q19: "nurse", q20: "tooth",
+                q21: "head", q22: "arm", q23: "false", q24: "hospital", q25: "doctor",
+                q26: "a", q27: "hand", q28: "leg", q29: "sick", q30: "true"
+            };
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                let el = document.getElementById('q' + i);
+                if (el) {
+                    let userAnswer = el.value.trim().toLowerCase();
+                    let parentBox = el.parentElement;
+
+                    if (userAnswer === answers['q' + i]) {
+                        score++;
+                        parentBox.style.borderLeft = "5px solid #00b894"; // Green for correct
+                        parentBox.style.backgroundColor = "#e8f8f5";
+                    } else {
+                        parentBox.style.borderLeft = "5px solid #d63031"; // Red for incorrect
+                        parentBox.style.backgroundColor = "#fdeaea";
+                    }
+                }
+            }
+
+            let resultDiv = document.getElementById('result');
+            let percentage = Math.round((score / totalQuestions) * 100);
+            resultDiv.innerHTML = `You scored ${score} / ${totalQuestions} (${percentage}%)!`;
+        }
+    </script>
+</body>
+</html>

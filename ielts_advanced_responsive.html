@@ -161,9 +161,7 @@
         .btn-action-primary { background: var(--neon-pink); color: #fff; border-color: var(--neon-pink); }
         .btn-action-primary:hover { background: transparent; color: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); }
 
-        /* =========================================
-           RESPONSIVE DESIGN
-           ========================================= */
+        
         @media (max-width: 768px) {
             .game-container { padding: 15px; }
             
@@ -240,9 +238,7 @@
 </div>
 
 <script>
-    // ==========================================
-    // ⚠️ PASTE YOUR GOOGLE WEB APP URL HERE:
-    // ==========================================
+   
     const GOOGLE_APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZW76StbsW-Dpu9Gkyje9WTEGibO5ITdpwlLepUCNO1fKN0tKRELVAso73phSmCee32A/exec"; 
 
     // --- Game Logic State ---
@@ -387,7 +383,7 @@
             else element.style.borderColor = "var(--success)";
             
             qText.innerHTML = `<span style="color: var(--success);">"Well done! Let's gooo! 🔥"</span>`;
-            setTimeout(nextQuestion, 4000);
+            setTimeout(nextQuestion, 6000);
         } else {
             if(element.tagName === "BUTTON") element.classList.add("wrong");
             else element.style.borderColor = "var(--danger)";

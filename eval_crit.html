@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Evaluation Framework</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --glass-bg: rgba(30, 30, 32, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent: #0A84FF;
+            --blur-amount: 40px;
+            --radius-large: 36px;
+            --radius-medium: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(10, 132, 255, 0.35), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(94, 92, 230, 0.35), transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(255, 55, 95, 0.25), transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        /* Updated to fit the whole screen */
+        .container {
+            max-width: 100%; 
+            margin: 0;
+            padding: 4rem 5%; /* Using percentage for responsive edge spacing */
+        }
+
+        header {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-large);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%; /* Ensures panel spans container width */
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            background: rgba(40, 40, 42, 0.7);
+        }
+
+        .indicator-list {
+            list-style: none;
+        }
+
+        .indicator-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .indicator-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: #fff;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .indicator-text {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* iOS Data Table Style */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius-medium);
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.15rem;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        td strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .grid-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: var(--radius-medium);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .grid-item h4 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .grid-item ul {
+            list-style: none;
+            color: var(--text-secondary);
+        }
+        
+        .grid-item ul li {
+            margin-bottom: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .glass-panel { padding: 1.5rem; border-radius: 28px; }
+            th, td { padding: 1rem; font-size: 1rem; }
+            .indicator-text { font-size: 1.1rem; }
+            .badge { font-size: 1rem; padding: 0.3rem 0.8rem; }
+            .container { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Evaluation Framework</h1>
+            <div class="subtitle">Liceo de Cervantes Bilingual • Term III</div>
+        </header>
+
+        <section class="glass-panel">
+            <h2>Performance Indicators</h2>
+            <p>Target Profile: 10th Grade / IELTS Preparation</p>
+            
+            <ul class="indicator-list">
+                <li class="indicator-item">
+                    <span class="badge">3.1</span>
+                    <div class="indicator-text">Identifies information needed to complete notes, sentences, or a process diagram, by understanding the use of signposting words when listening to a lecture.</div>
+                </li>
+                <li class="indicator-item">
+                    <span class="badge">3.2</span>
+                    <div class="indicator-text">Skims a text to identify opinions and theories, by answering Yes/No/Not given questions, and summarizing information.</div>
+                </li>
+                <li class="indicator-item">
+                    <span class="badge">3.3</span>
+                    <div class="indicator-text">Writes an essay by analyzing the advantages and disadvantages of a given statement, organizing the ideas in paragraphs, and using grammar patterns, cohesive devices, and vocabulary with accuracy.</div>
+                </li>
+                <li class="indicator-item">
+                    <span class="badge">3.4</span>
+                    <div class="indicator-text">Discusses abstract ideas and opinions in detail when talking about a specific topic for a limited time, contrasting and suggesting solutions; providing longer, structured answers with examples and evidence.</div>
+                </li>
+                <li class="indicator-item">
+                    <span class="badge">3.5</span>
+                    <div class="indicator-text">Develops the proposed activities in the academic spaces in a responsible and organized manner; showing interest and compliance in delivering them within the established time.</div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="glass-panel">
+            <h2>Classwork Rubric</h2>
+            <h3>Indicator 3.5</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterion</th>
+                            <th>5.0 (Superior)</th>
+                            <th>4.0 (High)</th>
+                            <th>3.0 (Basic)</th>
+                            <th>1.0-2.0 (Low)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Speak in English</strong></td>
+                            <td>Consistently uses English for all tasks and social interactions. Takes linguistic risks.</td>
+                            <td>Mostly uses English; occasionally reverts to native language for complex thoughts.</td>
+                            <td>Uses English only when prompted or for very short, simple answers.</td>
+                            <td>Refuses to speak English; relies on others to translate or stays silent.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Completion & Effort</strong></td>
+                            <td>Textbook tasks finished. Notebook notes are detailed, color-coded, or well-organized.</td>
+                            <td>Most book tasks finished. Notes are complete but may lack detail or extra examples.</td>
+                            <td>Book tasks are partially finished. Notes are sparse, messy, or copied last-minute.</td>
+                            <td>Very little work completed in the book. Notebook is empty or disorganized.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Active Participation</strong></td>
+                            <td>Frequently volunteers, asks high-level questions, and responds to peers. Eager to learn.</td>
+                            <td>Participates when called upon. Stays focused and answers questions correctly.</td>
+                            <td>Occasionally distracted; participates only with teacher's direct pressure.</td>
+                            <td>Off-task, disrupts the lesson, or shows zero engagement in activities.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Presentation & Organization</strong></td>
+                            <td>Always has necessary materials. Work is neat, dated, and easy to read.</td>
+                            <td>Usually has materials. Work is legible and generally organized.</td>
+                            <td>Often forgets materials. Work is difficult to read or missing dates/titles.</td>
+                            <td>Never brings materials. Work is chaotic, torn, or incomplete.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Laboratory Work</strong></td>
+                            <td>Follows all safety and technical steps. Uses lab time for English practice only.</td>
+                            <td>Completes lab tasks correctly and stays focused on the technical goal.</td>
+                            <td>Struggles with lab equipment or instructions; needs constant guidance.</td>
+                            <td>Misuses lab equipment, is unsafe, or uses the lab for social distraction.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section class="glass-panel">
+            <h2>Useful Signposting Words</h2>
+            <p>Essential vocabulary for writing, speaking, and identifying structure in lectures.</p>
+            <div class="grid-list">
+                <div class="grid-item">
+                    <h4>🧭 Introduction</h4>
+                    <ul>
+                        <li>To begin with</li>
+                        <li>It is often argued that...</li>
+                        <li>Many people believe that...</li>
+                        <li>This essay will discuss...</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🧠 Giving Opinions</h4>
+                    <ul>
+                        <li>In my opinion,</li>
+                        <li>I believe that...</li>
+                        <li>From my point of view,</li>
+                        <li>Personally, I think...</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🔀 Adding Ideas</h4>
+                    <ul>
+                        <li>Furthermore</li>
+                        <li>Moreover</li>
+                        <li>In addition</li>
+                        <li>Not only that, but...</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>⚖️ Contrasting</h4>
+                    <ul>
+                        <li>However</li>
+                        <li>On the other hand</li>
+                        <li>Nevertheless</li>
+                        <li>Although / Even though</li>
+                        <li>Despite / In spite of</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>➕ Giving Examples</h4>
+                    <ul>
+                        <li>For example</li>
+                        <li>For instance</li>
+                        <li>Such as</li>
+                        <li>To illustrate</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>📌 Explaining Cause/Effect</h4>
+                    <ul>
+                        <li>Because / Because of</li>
+                        <li>Since / As a result</li>
+                        <li>Therefore / Thus</li>
+                        <li>Consequently / Due to</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 7 - English Evaluation Criteria 2026</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-gradient: linear-gradient(135deg, #007AFF 0%, #AF52DE 100%);
+            --island-bg: rgba(0, 0, 0, 0.85);
+            --island-text: #ffffff;
+            --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 80px 40px;
+            font-size: 1.35rem; 
+            line-height: 1.6;
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            background-color: #f5f5f7;
+            /* Ambient spatial gradient background */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(210,100%,85%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(280,100%,85%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, hsla(190,100%,85%,1) 0, transparent 50%), 
+                radial-gradient(at 0% 100%, hsla(340,100%,85%,1) 0, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: slideDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-container h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 4px 20px rgba(0, 122, 255, 0.2);
+        }
+
+        .header-container p {
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        /* Dynamic Island style badges */
+        .badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .badge {
+            background: var(--island-bg);
+            color: var(--island-text);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+            background: #000000;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Spatial Glassmorphism Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            border-radius: 40px;
+            padding: 50px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--glass-border);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        .card h2 {
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 35px;
+            letter-spacing: -0.03em;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .list-item {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .list-item strong {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #000;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        /* Refined Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            font-size: 1.15rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        th, td {
+            padding: 22px;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+
+        th {
+            font-weight: 700;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.4);
+        }
+
+        /* Editing Grid */
+        .editing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .edit-mark {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px 20px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .edit-mark:hover {
+            transform: scale(1.04);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .edit-symbol {
+            background: var(--text-main);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* Evaluation Chart Orbs */
+        .eval-chart {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .eval-box {
+            flex: 1;
+            min-width: 150px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+            padding: 30px 20px;
+            border-radius: 36px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .eval-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .eval-percent {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.04em;
+        }
+
+        .icon-large {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            body { padding: 40px 15px; }
+            .header-container h1 { font-size: 3rem; flex-direction: column; }
+            .card { padding: 30px; border-radius: 30px; }
+            .eval-chart { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-container">
+        <h1>🇬🇧 Area of Foreign Languages - English 🏴󠁧󠁢󠁥󠁮󠁧󠁿</h1>
+        <p>📋 Criterios de Trabajo en clase y Evaluación</p>
+        <div class="badges">
+            <span class="badge">🏫 Liceo de Cervantes</span>
+            <span class="badge">🎓 Grade 7</span>
+            <span class="badge">⏳ Term III - 2026</span>
+            <span class="badge">🏆 EFQM Recognised</span>
+        </div>
+        <p style="margin-top: 30px; font-size: 1.4rem; color: var(--text-main); font-weight: 600;">👨‍🏫 Docentes: Katherin & Angel</p>
+    </div>
+
+    <div class="grid">
+        
+        <div class="card full-width">
+            <h2>🎯 Desempeños (Performances)</h2>
+            <div class="list-item">
+                <strong>🧠 3.1 Grammar & Vocabulary</strong>
+                Talks about the sequence of events, actions done by others, shifts focus away from a subject, and defines specific people, places, and concepts using past perfect tenses, causative structures, the passive voice, relative clauses, and articles. Focuses on vocabulary related to school, travel, social media, and the natural/artificial worlds.
+            </div>
+            <div class="list-item">
+                <strong>📖 3.2 Reading Comprehension</strong>
+                Demonstrates reading comprehension by recognizing the purpose and meaning of short texts, identifying main ideas, key details, and implied information in longer passages. Analyzes characters, events, and themes making logical connections supported by textual evidence.
+            </div>
+            <div class="list-item">
+                <strong>🎧 3.3 Listening Comprehension</strong>
+                Comprehends longer spoken texts by identifying key points, detailed information, the speaker's purpose, and implied meaning. Improves skills in following sequences of events, recognizing transitions, and interpreting opinions or attitudes.
+            </div>
+            <div class="list-item">
+                <strong>✍️ 3.4 Writing Skills</strong>
+                Writes effective stories by adjusting language to purpose, sequencing ideas logically, and using appropriate grammar and vocabulary. Develops skills in expressing personal experiences, describing events, and using narrative features.
+            </div>
+            <div class="list-item">
+                <strong>🗣️ 3.5 Speaking Skills</strong>
+                Talks about trips or memorable events using organized ideas, time markers, and descriptive expressions. Strengthens skills in discussing ideas with a partner, suggesting alternatives, and reaching simple agreements.
+            </div>
+            <div class="list-item">
+                <strong>🤝 3.6 Responsibility (Classwork)</strong>
+                Develops proposed activities in a responsible and organized manner, showing interest and compliance in delivering them within the established time.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📚 Temas y Recursos</h2>
+            <div class="list-item">
+                <strong>🇬🇧 Cambridge PET Focus</strong>
+                Use of English (past perfect tenses, causative structures, passive voice, relative clauses, articles).
+            </div>
+            <div class="list-item">
+                <strong>📖 Plan Lector</strong>
+                "And Then There Were None" by Agatha Christie (Chapters 6 to 10).
+            </div>
+            <div class="list-item">
+                <strong>📓 Texto Guía</strong>
+                Prepare Level 5 Workbook with digital pack (Units 11 to 15).
+            </div>
+            <div class="list-item">
+                <strong>🛠️ Skills Covered</strong>
+                Listening (extracting facts), Reading (locating precise details, inferring intentions), Writing (handling real-world topics), Speaking (organizing ideas, discussing with partners).
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Criterios de Evaluación</h2>
+            <div class="eval-chart">
+                <div class="eval-box">
+                    <div class="icon-large">🧠</div>
+                    <div class="eval-percent">15%</div>
+                    <div style="font-weight: 600;">Conceptual<br><small style="font-weight: 400; color: var(--text-secondary);">Use of English</small></div>
+                </div>
+                <div class="eval-box">
+                    <div class="icon-large">⚙️</div>
+                    <div class="eval-percent">75%</div>
+                    <div style="font-weight: 600;">Procedimental<br><small style="font-weight: 400; color: var(--text-secondary);">Classwork 15%, Listening 15%, Reading 15%, Writing 15%, Speaking 15%</small></div>
+                </div>
+                <div class="eval-box">
+                    <div class="icon-large">🪞</div>
+                    <div class="eval-percent">10%</div>
+                    <div style="font-weight: 600;">Autoevaluación</div>
+                </div>
+            </div>
+            <p style="margin-top: 30px; font-size: 1.1rem; color: var(--text-secondary); font-weight: 500;">
+                📌 *Includes Coevaluación & Heteroevaluación.<br>
+                📌 *Reading includes Plan Lector activities.
+            </p>
+        </div>
+
+        <div class="card full-width">
+            <h2>⚖️ Protocolos y Aspectos a Tener en Cuenta</h2>
+            <div class="list-item">
+                <strong>📜 Procedimientos Académicos</strong>
+                Mandatory adherence to Manual de Convivencia 2026 (SICE). Late submissions require coordination approval. Autonomous work in school and at home via the virtual classroom is required. Books cannot be lent to others as evaluations occur within them.
+            </div>
+            <div class="list-item">
+                <strong>📝 Writing Process</strong>
+                Includes Brainstorming, Drafting, Revising, Editing, and Publishing. Scored on calligraphy, order, clarity, and cleanliness. Editing marks and rubrics will be used.
+            </div>
+            <div class="list-item">
+                <strong>🎙️ Speaking & Exams</strong>
+                Preparation for international PET exams with simulations. Speaking is evaluated using CEFR B1 level criteria.
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>📋 Classwork Rubric</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>🌟 Criterion</th>
+                        <th>🥇 5.0 (Superior)</th>
+                        <th>🥈 4.0 (High)</th>
+                        <th>🥉 3.0 (Basic)</th>
+                        <th>🚩 1.0-2.0 (Low)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🗣️ Speak in English</strong></td>
+                        <td>Consistently uses English for all tasks. Takes linguistic risks.</td>
+                        <td>Mostly uses English; occasionally reverts to native language.</td>
+                        <td>Uses English only when prompted or for short answers.</td>
+                        <td>Refuses to speak English; relies on others or stays silent.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>✅ Completion & Effort</strong></td>
+                        <td>Textbook tasks finished. Notebook is detailed, color-coded, well-organized.</td>
+                        <td>Most tasks finished. Notes complete but lack detail.</td>
+                        <td>Partially finished. Notes sparse, messy, copied late.</td>
+                        <td>Very little completed. Notebook empty or disorganized.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🙋 Participation</strong></td>
+                        <td>Frequently volunteers, asks high-level questions, eager to learn.</td>
+                        <td>Participates when called upon. Stays focused.</td>
+                        <td>Distracted; participates only with direct pressure.</td>
+                        <td>Off-task, disrupts lesson, zero engagement.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📂 Presentation</strong></td>
+                        <td>Always has materials. Work neat, dated, easy to read.</td>
+                        <td>Usually has materials. Work legible and organized.</td>
+                        <td>Often forgets materials. Difficult to read.</td>
+                        <td>Never brings materials. Work chaotic or torn.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔬 Laboratory Work</strong></td>
+                        <td>Follows safety steps. Uses lab for English practice.</td>
+                        <td>Completes tasks correctly, stays focused.</td>
+                        <td>Struggles with equipment, needs constant guidance.</td>
+                        <td>Misuses equipment, unsafe, distracted.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card full-width">
+            <h2>🎙️ Speaking Rubric (B1)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>⭐ Score</th>
+                        <th>🧠 Grammar & Vocab</th>
+                        <th>💬 Discourse Management</th>
+                        <th>🔊 Pronunciation</th>
+                        <th>🤝 Interactive Communication</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Good control of simple/complex forms. Range of appropriate vocab.</td>
+                        <td>Extended stretches. Relevant despite hesitation. Range of cohesive devices.</td>
+                        <td>Intelligible. Appropriate intonation & word stress.</td>
+                        <td>Initiates/responds appropriately. Develops interaction with little support.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Sufficient control of simple forms. Limited range of vocab.</td>
+                        <td>Short phrases, frequent hesitation. Repetition or digression.</td>
+                        <td>Mostly intelligible despite limited phonological control.</td>
+                        <td>Maintains simple exchanges. Requires prompting.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td colspan="4" style="text-align: center; font-weight: 600; color: #ff3b30;">📉 Performance below Band 1.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card full-width">
+            <h2>✍️ Writing Rubric (B1)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>⭐ Score</th>
+                        <th>📝 Content</th>
+                        <th>🎯 Communicative Achievement</th>
+                        <th>🏗️ Organisation</th>
+                        <th>🔤 Language</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>All content relevant. Target reader fully informed.</td>
+                        <td>Holds reader's attention to communicate ideas.</td>
+                        <td>Well organised, coherent, variety of linking words.</td>
+                        <td>Everyday vocab, simple & complex grammar. Errors don't impede.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Minor irrelevances. Reader is on the whole informed.</td>
+                        <td>Communicates straightforward ideas in appropriate ways.</td>
+                        <td>Connected and coherent using basic linking words.</td>
+                        <td>Everyday vocab used generally appropriately. Errors noticeable but meaning clear.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Irrelevances present. Reader minimally informed.</td>
+                        <td>Communicates simple ideas in simple ways.</td>
+                        <td>Connected using high-frequency linking words.</td>
+                        <td>Basic vocab. Errors may impede meaning.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card full-width">
+            <h2>🖍️ High School Editing Marks</h2>
+            <div class="editing-grid">
+                <div class="edit-mark"><div class="edit-symbol">Aa</div> 🔠 Capitalize a letter</div>
+                <div class="edit-mark"><div class="edit-symbol">_</div> 🤏 Add finger space</div>
+                <div class="edit-mark"><div class="edit-symbol">aa</div> 🔡 Use lowercase</div>
+                <div class="edit-mark"><div class="edit-symbol">⇄</div> 🔄 Transpose</div>
+                <div class="edit-mark"><div class="edit-symbol">.</div> 🛑 Period</div>
+                <div class="edit-mark"><div class="edit-symbol">⌴</div> 🗜️ Close-up space</div>
+                <div class="edit-mark"><div class="edit-symbol">SP</div> 📖 Spelling</div>
+                <div class="edit-mark"><div class="edit-symbol">✕</div> ❌ Delete</div>
+                <div class="edit-mark"><div class="edit-symbol">WW</div> ❓ Wrong word</div>
+                <div class="edit-mark"><div class="edit-symbol">¶</div> 📑 New Paragraph</div>
+                <div class="edit-mark"><div class="edit-symbol">VT</div> ⏳ Verb tense</div>
+                <div class="edit-mark"><div class="edit-symbol">SVA</div> ⚖️ Subject verb agreement</div>
+                <div class="edit-mark"><div class="edit-symbol">^</div> ➕ Missing word</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

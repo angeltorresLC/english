@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Race: Destination Pluto</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Syne:wght@700;800&display=swap');
+
+        :root {
+            --space-bg: #030712;
+            --panel-light: #ffffff;
+            --text-dark: #0f172a;
+            --neon-blue: #00bbf9;
+            --neon-green: #00f5d4;
+            --neon-pink: #f15bb5;
+            --sun-yellow: #fee440;
+            --border-dark: #1e293b;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--space-bg);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                linear-gradient(180deg, rgba(3, 7, 18, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%), 
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px 40px;
+            border-radius: 24px;
+            border: 2px solid #334155;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(0, 187, 249, 0.3);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            color: white;
+            text-shadow: 0 0 15px var(--neon-blue);
+            margin: 0;
+            font-size: 2.6rem;
+        }
+
+        .subtitle {
+            color: var(--neon-green);
+            margin: 5px 0 0 0;
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        #setup-container {
+            background: var(--panel-light);
+            padding: 35px;
+            border-radius: 28px;
+            border: 4px solid var(--border-dark);
+            box-shadow: 0 0 35px rgba(0, 245, 212, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+            background-image: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .input-group {
+            margin: 18px 0;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--border-dark);
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            font-size: 1rem;
+            font-family: 'Fredoka', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .btn {
+            background: var(--sun-yellow);
+            color: #4a3b00;
+            border: 3px solid var(--border-dark);
+            padding: 14px 32px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.15s ease;
+            box-shadow: 0 6px 0px var(--border-dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px var(--border-dark);
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--border-dark);
+        }
+
+        #game-container {
+            display: none;
+            width: 100%;
+            max-width: 1450px;
+            grid-template-columns: 2.3fr 1fr;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        #board-wrapper {
+            background: rgba(15, 23, 42, 0.8);
+            border: 4px solid #334155;
+            border-radius: 36px;
+            padding: 25px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7), inset 0 0 30px rgba(0, 187, 249, 0.15);
+            backdrop-filter: blur(15px);
+        }
+
+        #board-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 14px;
+        }
+
+        .cell {
+            border: 2px solid rgba(255,255,255,0.18);
+            border-radius: 16px;
+            height: 135px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px;
+            box-sizing: border-box;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.75) 1px, transparent 1px), 
+                radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px);
+            background-size: 28px 28px, 18px 18px;
+            background-position: 4px 4px, 12px 9px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
+
+        .nebula-r5 { background: linear-gradient(148deg, #020c28 0%, #060f3a 45%, #030818 100%); border-color: rgba(50,100,220,0.55); }
+        .nebula-r4 { background: linear-gradient(140deg, #0a0430 0%, #130852 45%, #070222 100%); border-color: rgba(120,40,240,0.55); }
+        .nebula-r3 { background: linear-gradient(135deg, #001e28 0%, #003545 45%, #000f18 100%); border-color: rgba(0,160,185,0.55); }
+        .nebula-r2 { background: linear-gradient(150deg, #180040 0%, #2e0068 45%, #0c0025 100%); border-color: rgba(170,0,255,0.55); }
+        .nebula-r1 { background: linear-gradient(138deg, #240015 0%, #440028 45%, #180010 100%); border-color: rgba(230,0,110,0.55); }
+        .nebula-r0 { background: linear-gradient(142deg, #2c1200 0%, #4e2200 45%, #1c0c00 100%); border-color: rgba(230,130,0,0.55); }
+
+        .cell-num {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            align-self: flex-start;
+            background: rgba(0,0,0,0.52);
+            padding: 2px 6px;
+            border-radius: 7px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cell-type {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+            color: rgba(255,255,255,0.88);
+            position: relative;
+            z-index: 2;
+        }
+
+        .cell-start { background: linear-gradient(135deg, #001d3d 0%, #003070 40%, #001428 100%) !important; border-color: var(--neon-blue) !important; box-shadow: 0 3px 18px rgba(0,187,249,0.65) !important; }
+        .cell-finish { background: linear-gradient(135deg, #1c0048 0%, #38008a 40%, #100030 100%) !important; border-color: #d8b4fe !important; box-shadow: 0 3px 18px rgba(168,85,247,0.75) !important; }
+        .cell-boost { background: linear-gradient(135deg, #001e10 0%, #003a20 40%, #000e08 100%) !important; border-color: var(--neon-green) !important; box-shadow: 0 3px 18px rgba(0,245,212,0.65) !important; }
+        .cell-hazard { background: linear-gradient(135deg, #25000e 0%, #480018 40%, #160008 100%) !important; border-color: var(--neon-pink) !important; box-shadow: 0 3px 18px rgba(241,91,181,0.65) !important; }
+
+        .cell-start .cell-type  { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
+        .cell-finish .cell-type { color: #d8b4fe; text-shadow: 0 0 8px #a855f7; }
+        .cell-boost .cell-type  { color: var(--neon-green); text-shadow: 0 0 8px var(--neon-green); }
+        .cell-hazard .cell-type { color: var(--neon-pink); text-shadow: 0 0 8px var(--neon-pink); }
+
+        .dir-arrow { font-size: 0.8rem; font-weight: 900; color: rgba(255,255,255,0.65); position: relative; z-index: 2; align-self: flex-end; }
+        .dir-arrow.turn-up { color: rgba(255,220,80,0.85); font-size: 0.85rem; }
+        .cell-icon { font-size: 1.45rem; line-height: 1; position: relative; z-index: 2; }
+
+        .token-holder {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 52px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .player-token {
+            font-size: 3.5rem;
+            animation: float 2.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            user-select: none;
+        }
+
+        #controls-panel { display: flex; flex-direction: column; gap: 20px; }
+        .card { background: var(--panel-light); border: 4px solid var(--border-dark); border-radius: 28px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        #turn-card { text-align: center; background-image: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); }
+        .active-player-banner { font-size: 1.45rem; font-weight: 700; margin-bottom: 18px; padding: 14px; border-radius: 16px; border: 3px solid var(--border-dark); }
+        
+        .scene {
+            width: 90px;
+            height: 90px;
+            perspective: 300px;
+            margin: 20px auto 15px auto;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+
+        @keyframes cubeTumble {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(720deg) rotateY(1440deg) rotateZ(360deg); }
+        }
+        .tumbling {
+            animation: cubeTumble 1s linear infinite;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: #ffffff;
+            border: 3px solid var(--border-dark);
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.15), 0 0 10px rgba(0, 187, 249, 0.2);
+            box-sizing: border-box;
+        }
+
+        .face-1 { transform: rotateY(0deg) translateZ(45px);      background: #fff; color: #ff0055;}
+        .face-6 { transform: rotateY(180deg) translateZ(45px);    background: #fff; color: #00bbf9;}
+        .face-2 { transform: rotateY(90deg) translateZ(45px);     background: #fff; color: #00f5d4;}
+        .face-5 { transform: rotateY(-90deg) translateZ(45px);    background: #fff; color: #a855f7;}
+        .face-3 { transform: rotateX(90deg) translateZ(45px);     background: #fff; color: #f15bb5;}
+        .face-4 { transform: rotateX(-90deg) translateZ(45px);    background: #fff; color: #fee440;}
+
+        /* 📡 COGNITIVE ROLL TELEMETRY LOCKING OVERLAY BADGE */
+        .roll-badge {
+            background: #0f172a;
+            color: var(--neon-green);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+            border: 2px solid #334155;
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        #question-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(3, 7, 18, 0.94); 
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(14px);
+        }
+
+        .modal-task-box {
+            background: #ffffff;
+            border: 6px solid var(--neon-blue);
+            border-radius: 36px;
+            padding: 40px;
+            max-width: 680px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0, 187, 249, 0.5);
+            text-align: center;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #task-question {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 22px;
+            border-radius: 22px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            padding: 16px 22px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: left;
+            transition: all 0.15s ease;
+            color: var(--text-dark);
+            box-shadow: 0 4px 0px #cbd5e1;
+        }
+
+        .option-btn:hover {
+            border-color: var(--neon-blue);
+            background: #f0f9ff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 0px var(--neon-blue);
+        }
+
+        #text-input-area { display: none; margin-bottom: 15px; }
+        #blank-input { width: 100%; padding: 16px; border-radius: 16px; border: 3px solid #cbd5e1; font-size: 1.25rem; font-family: 'Fredoka', sans-serif; outline: none; box-sizing: border-box; text-align: center; }
+
+        #log-card { max-height: 140px; overflow-y: auto; font-size: 0.95rem; background: #f8fafc; border-radius: 14px; padding: 12px; border: 2px solid #e2e8f0; }
+        .log-entry { padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-weight: 500; }
+
+        @keyframes float { 0% { transform: translateY(0px); } 100% { transform: translateY(-7px); } }
+        @keyframes spin { 0% { transform: rotate(0deg) scale(0.9); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(0.9); } }
+
+        #popup-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.9); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .popup-content { background: white; padding: 35px; border-radius: 32px; border: 4px solid var(--border-dark); text-align: center; max-width: 480px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        #popup-title { font-family: 'Syne', sans-serif; font-size: 2rem; margin-top: 0; }
+    </style>
+
+    <script src="pluto_questions.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <h1>🚀 Cosmic Race: Destination Pluto</h1>
+        <div class="subtitle">A2 Flyers English Mission Control</div>
+    </header>
+
+    <div id="setup-container">
+        <h3 style="margin-top:0; font-size:1.5rem; color:var(--text-dark);">🛸 Assemble Space Crews</h3>
+        <div class="input-group">
+            <label for="player-count">How many students are racing?</label>
+            <select id="player-count" onchange="adjustPlayerSetupInputs()">
+                <option value="1">1 Student</option>
+                <option value="2" selected>2 Students</option>
+                <option value="3">3 Students</option>
+            </select>
+        </div>
+        
+        <div id="player-names-inputs"></div>
+
+        <button class="btn" style="width:100%; margin-top:10px;" onclick="launchCosmicExpedition()">Launch Rocket 🚀</button>
+    </div>
+
+    <div id="game-container">
+        <div id="board-wrapper">
+            <div id="board-grid"></div>
+        </div>
+
+        <div id="controls-panel">
+            <div class="card" id="turn-card">
+                <div id="active-player-indicator" class="active-player-banner">Ship Initializing</div>
+                
+                <div class="scene">
+                    <div class="cube" id="cube-die">
+                        <div class="cube-face face-1">1</div>
+                        <div class="cube-face face-6">6</div>
+                        <div class="cube-face face-2">2</div>
+                        <div class="cube-face face-5">5</div>
+                        <div class="cube-face face-3">3</div>
+                        <div class="cube-face face-4">4</div>
+                    </div>
+                </div>
+
+                <div class="roll-badge" id="live-roll-readout">DIE READY 📡</div>
+
+                <button class="btn" id="roll-btn" onclick="executeDieRollAction()">Roll Die 🎲</button>
+            </div>
+
+            <div class="card">
+                <h4 style="margin:0 0 2px 0; text-transform:uppercase; color:#64748b; letter-spacing:0.5px;">📋 Flight Logs</h4>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;">Designed by Angel Torres</div>
+                <div id="log-card">
+                    <div class="log-entry">System ready. Waiting for countdown launch sequence...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="question-modal">
+        <div class="modal-task-box">
+            <h3 style="margin-top:0; color:var(--neon-blue); font-family:'Syne',sans-serif; font-size:1.8rem; display:flex; align-items:center; justify-content:center; gap:10px;">🛰️ Mission Task Transmission</h3>
+            <div id="task-question">Loading transmission feed...</div>
+            
+            <div class="options-grid" id="multiple-choice-box"></div>
+            
+            <div id="text-input-area">
+                <input type="text" id="blank-input" placeholder="Type your answer here...">
+                <button class="btn" id="text-submit-btn" style="margin-top:18px; width:100%;" onclick="verifyTextInputAnswer()">Submit Verification Code</button>
+            </div>
+
+            <div id="hint-text" style="font-size:0.95rem; color:#64748b; font-style:italic; margin-top:15px; background:#f1f5f9; padding:10px; border-radius:12px;"></div>
+        </div>
+    </div>
+
+    <div id="popup-modal">
+        <div class="popup-content">
+            <h2 id="popup-title">Telemetry Update</h2>
+            <p id="popup-text" style="font-size:1.2rem; margin:15px 0; font-weight:700; color:#334155;"></p>
+            <button class="btn" onclick="dismissPopupModalNotification()">Resume Journey</button>
+        </div>
+    </div>
+
+<script>
+    // 🎼 SYNTH SPACE SOUND GENERATOR ENGINE
+    let audioCtx = null;
+
+    function initSpaceAudioEngine() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playSoundSynthEffect(type) {
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.08);
+            osc.start(now); osc.stop(now + 0.08);
+        } 
+        else if (type === 'dice') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, now);
+            osc.frequency.setValueAtTime(240, now + 0.03);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.06);
+            osc.start(now); osc.stop(now + 0.06);
+        }
+        else if (type === 'start') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(100, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 1.2);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 1.2);
+            osc.start(now); osc.stop(now + 1.2);
+
+            const subOsc = audioCtx.createOscillator();
+            const subGain = audioCtx.createGain();
+            subOsc.type = 'triangle';
+            subOsc.frequency.setValueAtTime(60, now);
+            subOsc.frequency.linearRampToValueAtTime(40, now + 1.2);
+            subOsc.connect(subGain); subGain.connect(audioCtx.destination);
+            subGain.gain.setValueAtTime(0.3, now);
+            subGain.gain.linearRampToValueAtTime(0, now + 1.2);
+            subOsc.start(now); subOsc.stop(now + 1.2);
+        }
+        else if (type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.setValueAtTime(900, now + 0.1);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.setValueAtTime(0.2, now + 0.1);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        }
+        else if (type === 'wrong') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.linearRampToValueAtTime(120, now + 0.4);
+            gainNode.gain.setValueAtTime(0.25, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        }
+        else if (type === 'boost') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(1800, now + 0.6);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.6);
+            osc.start(now); osc.stop(now + 0.6);
+        }
+        else if (type === 'hazard') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(150, now + 0.2);
+            osc.frequency.setValueAtTime(300, now + 0.2);
+            osc.frequency.linearRampToValueAtTime(150, now + 0.4);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.7);
+            osc.start(now); osc.stop(now + 0.7);
+        }
+        else if (type === 'win') {
+            const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+            notes.forEach((freq, idx) => {
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.type = 'sine';
+                o.frequency.setValueAtTime(freq, now + idx * 0.08);
+                g.gain.setValueAtTime(0.15, now + idx * 0.08);
+                g.gain.linearRampToValueAtTime(0, now + idx * 0.08 + 0.4);
+                o.connect(g); g.connect(audioCtx.destination);
+                o.start(now + idx * 0.08); o.stop(now + idx * 0.08 + 0.4);
+            });
+        }
+    }
+
+    let gamePlayers = [];
+    let dynamicActiveTurnIndex = 0;
+    let indexCurrentSelectedQuestion = null;
+    let currentTurnRollValue = 0; 
+    let isProcessingAnswer = false; // Guard flag blocks rapid multiple option multi-clicks completely
+
+    const boosterCellsMap = { 4: 2, 11: 3, 21: 2, 32: 3 };  
+    const hazardCellsMap = { 8: 2, 17: 3, 26: 2, 37: 4 };   
+
+    function adjustPlayerSetupInputs() {
+        const count = parseInt(document.getElementById("player-count").value);
+        const container = document.getElementById("player-names-inputs");
+        container.innerHTML = "";
+
+        const tokens = ["🚀", "🛸", "🛰️"];
+        const colors = ["#ef4444", "#3b82f6", "#eab308"];
+
+        for (let idx = 1; idx <= count; idx++) {
+            container.innerHTML += `
+                <div class="input-group" style="border-left: 5px solid ${colors[idx-1]}; padding-left: 10px;">
+                    <label>Crew ${idx} Rocket Name ${tokens[idx-1]}:</label>
+                    <input type="text" id="player-name-${idx}" value="Crew ${idx}" maxlength="12">
+                </div>
+            `;
+        }
+    }
+
+    function launchCosmicExpedition() {
+        initSpaceAudioEngine();
+        playSoundSynthEffect('start');
+
+        const count = parseInt(document.getElementById("player-count").value);
+        gamePlayers = [];
+
+        const tokens = ["🚀", "🛸", "🛰️"];
+        const backgroundTints = ["rgba(239,68,68,0.12)", "rgba(59,130,246,0.12)", "rgba(234,179,8,0.12)"];
+        const colors = ["#ef4444", "#3b82f6", "#eab308"];
+
+        for (let i = 1; i <= count; i++) {
+            const registeredValue = document.getElementById(`player-name-${i}`).value.trim();
+            gamePlayers.push({
+                id: i,
+                name: registeredValue || `Crew ${i}`,
+                cell: 1,
+                token: tokens[i - 1],
+                color: colors[i - 1],
+                bg: backgroundTints[i - 1]
+            });
+        }
+
+        document.getElementById("setup-container").style.display = "none";
+        document.getElementById("game-container").style.display = "grid";
+
+        generateVisualBoardCells();
+        updateActiveTurnInterfaceDisplay();
+        addLogEntry("🔥 Rocket engines active! Board configurations loaded successfully.");
+    }
+
+    function generateVisualBoardCells() {
+        const gridElement = document.getElementById("board-grid");
+        gridElement.innerHTML = "";
+
+        const columnsCount = 7;
+        const totalRowsCount = 6;
+
+        const spaceIcons = {
+            1:'🚀', 2:'🌍', 3:'⭐', 4:'💫', 5:'🌙', 6:'☄️', 7:'🌟',
+            8:'🌕', 9:'🪨', 10:'⚡', 11:'💫', 12:'🌑', 13:'🔭', 14:'🌙',
+            15:'🔴', 16:'🌋', 17:'💥', 18:'⭐', 19:'🌌', 20:'🏜️', 21:'🔴',
+            22:'🪨', 23:'☄️', 24:'🌀', 25:'💀', 26:'🌊', 27:'🌌', 28:'🪐',
+            29:'🪐', 30:'💫', 31:'⭐', 32:'🌟', 33:'🌌', 34:'✨', 35:'🛸',
+            36:'❄️', 37:'🌀', 38:'✨', 39:'🌌', 40:'⭐', 41:'💫', 42:'🪐'
+        };
+
+        for (let rowIdx = 0; rowIdx < totalRowsCount; rowIdx++) {
+            let rowVal = (totalRowsCount - 1) - rowIdx;
+            let startBase = rowVal * columnsCount + 1;
+            let isEvenRow = (rowVal % 2 === 0);
+
+            let rowCells = [];
+            for (let c = 0; c < columnsCount; c++) rowCells.push(startBase + c);
+            if (!isEvenRow) rowCells.reverse();
+
+            rowCells.forEach((cellNum, colIndex) => {
+                let arrowHTML = '';
+                if (cellNum === 42) {
+                    arrowHTML = `<span class="dir-arrow finish-flag">🏁</span>`;
+                } else if (isEvenRow) {
+                    if (colIndex === columnsCount - 1) {
+                        arrowHTML = `<span class="dir-arrow turn-up">⬆</span>`;
+                    } else {
+                        arrowHTML = `<span class="dir-arrow">→</span>`;
+                    }
+                } else {
+                    if (colIndex === 0 && rowIdx !== 0) {
+                        arrowHTML = `<span class="dir-arrow turn-up">⬆</span>`;
+                    } else {
+                        arrowHTML = `<span class="dir-arrow">←</span>`;
+                    }
+                }
+
+                let classCategory = "";
+                let specialLabel = "";
+
+                if (cellNum === 1)                   { classCategory = "cell-start";  specialLabel = "⚡ LAUNCH"; }
+                else if (cellNum === 42)             { classCategory = "cell-finish"; specialLabel = "🪐 PLUTO"; }
+                else if (boosterCellsMap[cellNum])   { classCategory = "cell-boost";  specialLabel = `🚀 +${boosterCellsMap[cellNum]}`; }
+                else if (hazardCellsMap[cellNum])    { classCategory = "cell-hazard"; specialLabel = `☄️ -${hazardCellsMap[cellNum]}`; }
+
+                const icon = spaceIcons[cellNum] || '✨';
+                const nebulaClass = `nebula-r${rowIdx}`;
+
+                gridElement.innerHTML += `
+                    <div class="cell ${nebulaClass} ${classCategory}" id="board-cell-${cellNum}">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;position:relative;z-index:2;">
+                            <div class="cell-num">${String(cellNum).padStart(2,'0')}</div>
+                            ${arrowHTML}
+                        </div>
+                        <div class="cell-icon">${icon}</div>
+                        <div class="token-holder" id="token-zone-${cellNum}"></div>
+                        <div class="cell-type">${specialLabel}</div>
+                    </div>
+                `;
+            });
+        }
+        repositionPlayerTokensOnBoard();
+    }
+
+    function repositionPlayerTokensOnBoard() {
+        for (let i = 1; i <= 42; i++) {
+            const el = document.getElementById(`token-zone-${i}`);
+            if (el) el.innerHTML = "";
+        }
+
+        gamePlayers.forEach(p => {
+            const cellTarget = document.getElementById(`token-zone-${p.cell}`);
+            if (cellTarget) {
+                cellTarget.innerHTML += `<span class="player-token" style="color:${p.color};" title="${p.name}">${p.token}</span>`;
+            }
+        });
+    }
+
+    function updateActiveTurnInterfaceDisplay() {
+        const currentActiveShip = gamePlayers[dynamicActiveTurnIndex];
+        const indicator = document.getElementById("active-player-indicator");
+        
+        indicator.innerText = `Turn: ${currentActiveShip.name} ${currentActiveShip.token}`;
+        indicator.style.backgroundColor = currentActiveShip.bg;
+        indicator.style.borderColor = currentActiveShip.color;
+        indicator.style.color = "#0f172a"; 
+
+        document.getElementById("roll-btn").disabled = false;
+        document.getElementById("live-roll-readout").innerText = "DIE READY 📡";
+        document.getElementById("live-roll-readout").style.color = "var(--neon-green)";
+        document.getElementById("question-modal").style.display = "none";
+        isProcessingAnswer = false; // Reset lock gate for the next explorer
+    }
+
+    function executeDieRollAction() {
+        playSoundSynthEffect('click');
+        document.getElementById("roll-btn").disabled = true;
+        
+        const cube = document.getElementById("cube-die");
+        cube.className = "cube tumbling"; 
+        document.getElementById("live-roll-readout").innerText = "SCANNING SYSTEM...";
+        document.getElementById("live-roll-readout").style.color = "var(--sun-yellow)";
+
+        const finalDiceRoll = Math.floor(Math.random() * 6) + 1;
+        let sfxTimer = setInterval(() => { playSoundSynthEffect('dice'); }, 120);
+
+        setTimeout(() => {
+            clearInterval(sfxTimer);
+            cube.className = "cube"; 
+
+            // High-precision vector alignment maps perfectly to numbers
+            const preciseRotations = {
+                1: "rotateX(0deg) rotateY(0deg)",
+                6: "rotateX(180deg) rotateY(0deg)",
+                2: "rotateX(0deg) rotateY(-90deg)",
+                5: "rotateX(0deg) rotateY(90deg)",
+                3: "rotateX(-90deg) rotateY(0deg)",
+                4: "rotateX(90deg) rotateY(0deg)"
+            };
+            cube.style.transform = preciseRotations[finalDiceRoll];
+
+            // Print numerical badge readout to eliminate any 3D sight confusion
+            document.getElementById("live-roll-readout").innerText = `ROLLED A: ${finalDiceRoll} ⚡`;
+            document.getElementById("live-roll-readout").style.color = "#ffffff";
+
+            processPlayerMovementCalculation(finalDiceRoll);
+        }, 1000);
+    }
+
+    function processPlayerMovementCalculation(rolledAmount) {
+        currentTurnRollValue = rolledAmount;
+        const activeShip = gamePlayers[dynamicActiveTurnIndex];
+        addLogEntry(`A2 Telemetry: ${activeShip.name} rolled a ${rolledAmount}. Decrypting question frequency...`);
+        setTimeout(triggerMissionQuestionChallenge, 500);
+    }
+
+    function triggerMissionQuestionChallenge() {
+        indexCurrentSelectedQuestion = Math.floor(Math.random() * a2FlyersQuestionPool.length);
+        const taskData = a2FlyersQuestionPool[indexCurrentSelectedQuestion];
+
+        document.getElementById("question-modal").style.display = "flex";
+        document.getElementById("task-question").innerText = taskData.q;
+        document.getElementById("hint-text").innerText = `Hint: ${taskData.h}`;
+
+        const choiceBox = document.getElementById("multiple-choice-box");
+        const entryFieldArea = document.getElementById("text-input-area");
+
+        choiceBox.innerHTML = "";
+        document.getElementById("blank-input").value = "";
+        document.getElementById("text-submit-btn").disabled = false;
+
+        if (taskData.type === "multiple_choice") {
+            choiceBox.style.display = "flex";
+            entryFieldArea.style.display = "none";
+
+            taskData.o.forEach((opt) => {
+                const choiceBtn = document.createElement("button");
+                choiceBtn.className = "option-btn";
+                choiceBtn.innerText = `🔹 ${opt}`;
+                choiceBtn.onclick = function() { evaluateAnswerAction(opt); };
+                choiceBox.appendChild(choiceBtn);
+            });
+        } else {
+            choiceBox.style.display = "none";
+            entryFieldArea.style.display = "block";
+        }
+    }
+
+    function verifyTextInputAnswer() {
+        const studentInput = document.getElementById("blank-input").value.trim();
+        if (!studentInput) return;
+        evaluateAnswerAction(studentInput);
+    }
+
+    function evaluateAnswerAction(submittedText) {
+        // Strict guard gate blocks multiple fast click submissions
+        if (isProcessingAnswer) return;
+        isProcessingAnswer = true;
+
+        // Immediately disable textual interactive options
+        document.getElementById("text-submit-btn").disabled = true;
+        const optionButtons = document.querySelectorAll(".option-btn");
+        optionButtons.forEach(btn => btn.disabled = true);
+
+        // Hide transmission screen
+        document.getElementById("question-modal").style.display = "none";
+
+        const activeShip = gamePlayers[dynamicActiveTurnIndex];
+        const taskData = a2FlyersQuestionPool[indexCurrentSelectedQuestion];
+        const isMatchCorrect = submittedText.toLowerCase().trim() === taskData.a.toLowerCase().trim();
+
+        if (isMatchCorrect) {
+            playSoundSynthEffect('correct');
+            
+            // Absolute calculation bound strictly to current turn parameter roll
+            let calculatedTargetCell = activeShip.cell + currentTurnRollValue;
+            if (calculatedTargetCell > 42) calculatedTargetCell = 42;
+            
+            activeShip.cell = calculatedTargetCell;
+            repositionPlayerTokensOnBoard();
+
+            addLogEntry(`✅ Correct! ${activeShip.name} advanced exactly ${currentTurnRollValue} cells to space ${activeShip.cell}.`);
+            
+            setTimeout(() => { triggerCellModifierCheck(activeShip); }, 600);
+        } else {
+            playSoundSynthEffect('wrong');
+            addLogEntry(`❌ Incorrect! ${activeShip.name} engines stalled. Remaining at space ${activeShip.cell}.`);
+            displayNotificationPopup("Signal Lost 📡", `Incorrect answer! Engines stalled. Your crew remains at space ${activeShip.cell}.`);
+        }
+    }
+
+    function triggerCellModifierCheck(shipObj) {
+        if (shipObj.cell === 42) {
+            executeGameWinnerFanfare(shipObj);
+            return;
+        }
+
+        if (boosterCellsMap[shipObj.cell]) {
+            playSoundSynthEffect('boost');
+            const spacesForward = boosterCellsMap[shipObj.cell];
+            shipObj.cell += spacesForward;
+            if (shipObj.cell > 42) shipObj.cell = 42;
+            
+            repositionPlayerTokensOnBoard();
+            addLogEntry(`🚀 Hyper-Warp Gate! Jumped bonus +${spacesForward} spaces forward to cell ${shipObj.cell}.`);
+            displayNotificationPopup("Warp Velocity unlocked! 🌀", `${shipObj.name} entered a solar wind stream and jumped forward to space ${shipObj.cell}!`);
+        } 
+        else if (hazardCellsMap[shipObj.cell]) {
+            playSoundSynthEffect('hazard');
+            const spacesBackward = hazardCellsMap[shipObj.cell];
+            shipObj.cell -= spacesBackward;
+            if (shipObj.cell < 1) shipObj.cell = 1;
+            
+            repositionPlayerTokensOnBoard();
+            addLogEntry(`💥 Solar Flare! Pushed back -${spacesBackward} spaces to cell ${shipObj.cell}.`);
+            displayNotificationPopup("Solar Flare Trap! 👾", `A radiation leak knocked ${shipObj.name} back ${spacesBackward} spaces to cell ${shipObj.cell}!`);
+        } else {
+            displayNotificationPopup("Position Locked! ✨", `${shipObj.name} safely stabilized operations at space ${shipObj.cell}.`);
+        }
+
+        if (shipObj.cell === 42) {
+            executeGameWinnerFanfare(shipObj);
+        }
+    }
+
+    function executeGameWinnerFanfare(winnerShipObj) {
+        playSoundSynthEffect('win');
+        addLogEntry(`🏆 DESTINATION REACHED! ${winnerShipObj.name} conquered Pluto and won the Space Race!`);
+        
+        const title = document.getElementById("popup-title");
+        const text = document.getElementById("popup-text");
+        
+        title.innerText = "👑 PLUTO CONQUERED!";
+        title.style.color = "#fee440"; 
+        text.innerHTML = `⭐ Outstanding work <strong>${winnerShipObj.name}</strong>! Your crew ${winnerShipObj.token} cleared all A2 Challenges perfectly and anchored on Pluto first! 🪐`;
+        
+        document.getElementById("popup-modal").style.display = "flex";
+        document.getElementById("roll-btn").disabled = true;
+    }
+
+    function displayNotificationPopup(title, msg) {
+        if (gamePlayers[dynamicActiveTurnIndex].cell === 42) return;
+
+        document.getElementById("popup-title").innerText = title;
+        document.getElementById("popup-text").innerText = msg;
+        document.getElementById("popup-modal").style.display = "flex";
+    }
+
+    function dismissPopupModalNotification() {
+        playSoundSynthEffect('click');
+        document.getElementById("popup-modal").style.display = "none";
+        
+        if (gamePlayers[dynamicActiveTurnIndex].cell === 42) return;
+
+        dynamicActiveTurnIndex = (dynamicActiveTurnIndex + 1) % gamePlayers.length;
+        updateActiveTurnInterfaceDisplay();
+    }
+
+    function addLogEntry(textString) {
+        const logBox = document.getElementById("log-card");
+        logBox.innerHTML += `<div class="log-entry">${textString}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    adjustPlayerSetupInputs();
+</script>
+</body>
+</html>

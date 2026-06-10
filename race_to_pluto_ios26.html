@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Race: Destination Pluto (iOS 26 Theme)</title>
+    <style>
+        :root {
+            /* Apple System Colors */
+            --ios-bg: #000000;
+            --ios-glass: rgba(255, 255, 255, 0.05);
+            --ios-glass-heavy: rgba(30, 30, 30, 0.6);
+            --ios-border: rgba(255, 255, 255, 0.1);
+            --ios-text-primary: #ffffff;
+            --ios-text-secondary: rgba(235, 235, 245, 0.6);
+            --ios-blue: #0A84FF;
+            --ios-green: #32D74B;
+            --ios-pink: #FF375F;
+            --ios-yellow: #FFD60A;
+            --ios-purple: #BF5AF2;
+            --blur-standard: blur(24px) saturate(150%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--ios-text-primary);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(10, 132, 255, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(191, 90, 242, 0.15), transparent 25%);
+            background-size: cover;
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Dynamic Island Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: #000000;
+            padding: 12px 32px;
+            border-radius: 40px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        h1 {
+            font-weight: 700;
+            color: var(--ios-text-primary);
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--ios-text-secondary);
+            margin: 2px 0 0 0;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Glassmorphic Containers */
+        #setup-container, .card, #board-wrapper, .modal-task-box, .popup-content {
+            background: var(--ios-glass);
+            backdrop-filter: var(--blur-standard);
+            -webkit-backdrop-filter: var(--blur-standard);
+            border-radius: 28px;
+            border: 1px solid var(--ios-border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        #setup-container {
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--ios-text-secondary);
+        }
+
+        input[type="text"], select, #blank-input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--ios-text-primary);
+            font-size: 1.05rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, select:focus, #blank-input:focus {
+            border-color: var(--ios-blue);
+            background: rgba(255,255,255,0.12);
+        }
+
+        select option {
+            background: #1c1c1e;
+            color: white;
+        }
+
+        /* iOS Pill Buttons */
+        .btn {
+            background: var(--ios-blue);
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4);
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(10, 132, 255, 0.6);
+            background: #148eff;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background: rgba(255,255,255,0.1);
+            color: var(--ios-text-secondary);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        #game-container {
+            display: none;
+            width: 100%;
+            max-width: 1450px;
+            grid-template-columns: 2.3fr 1fr;
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        #board-wrapper {
+            padding: 24px;
+            background: var(--ios-glass-heavy);
+        }
+
+        #board-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+        }
+
+        .cell {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            height: 135px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .cell-num {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ios-text-secondary);
+            align-self: flex-start;
+        }
+
+        .cell-type {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Cleaned up cell indicators */
+        .cell-start { border-color: var(--ios-blue); background: rgba(10,132,255,0.05); }
+        .cell-finish { border-color: var(--ios-purple); background: rgba(191,90,242,0.05); }
+        .cell-boost { border-color: var(--ios-green); background: rgba(50,215,75,0.05); }
+        .cell-hazard { border-color: var(--ios-pink); background: rgba(255,55,95,0.05); }
+
+        .cell-start .cell-type  { color: var(--ios-blue); }
+        .cell-finish .cell-type { color: var(--ios-purple); }
+        .cell-boost .cell-type  { color: var(--ios-green); }
+        .cell-hazard .cell-type { color: var(--ios-pink); }
+
+        .dir-arrow { font-size: 0.85rem; font-weight: 600; color: var(--ios-text-secondary); align-self: flex-end; }
+        .dir-arrow.turn-up { color: var(--ios-yellow); }
+        .cell-icon { font-size: 1.5rem; line-height: 1; margin-top: 4px;}
+
+        .token-holder {
+            display: flex;
+            gap: 2px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 48px;
+        }
+
+        .player-token {
+            font-size: 2.8rem;
+            animation: float 3s ease-in-out infinite alternate;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+            user-select: none;
+        }
+
+        #controls-panel { display: flex; flex-direction: column; gap: 24px; }
+        .card { padding: 24px; }
+        #turn-card { text-align: center; display: flex; flex-direction: column; align-items: center; }
+        
+        .active-player-banner { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            margin-bottom: 24px; 
+            padding: 12px 20px; 
+            border-radius: 20px; 
+            background: rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.15);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Minimalist 3D Dice */
+        .scene {
+            width: 80px;
+            height: 80px;
+            perspective: 400px;
+            margin: 10px auto 30px auto;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes cubeTumble {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(720deg) rotateY(1440deg) rotateZ(360deg); }
+        }
+        .tumbling { animation: cubeTumble 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+
+        .cube-face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1c1c1e;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .face-1 { transform: rotateY(0deg) translateZ(40px); }
+        .face-6 { transform: rotateY(180deg) translateZ(40px); }
+        .face-2 { transform: rotateY(90deg) translateZ(40px); }
+        .face-5 { transform: rotateY(-90deg) translateZ(40px); }
+        .face-3 { transform: rotateX(90deg) translateZ(40px); }
+        .face-4 { transform: rotateX(-90deg) translateZ(40px); }
+
+        .roll-badge {
+            background: rgba(255,255,255,0.1);
+            color: var(--ios-text-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #question-modal, #popup-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); 
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .modal-task-box {
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            animation: iosPop 0.4s cubic-bezier(0.25, 1.2, 0.5, 1);
+        }
+
+        @keyframes iosPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #task-question {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            font-weight: 500;
+            color: var(--ios-text-primary);
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .option-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 18px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--ios-text-primary);
+            font-family: inherit;
+        }
+
+        .option-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.01);
+        }
+
+        #text-input-area { display: none; margin-bottom: 20px; }
+
+        #hint-text { font-size: 0.9rem; color: var(--ios-text-secondary); margin-top: 15px; }
+
+        #log-card { max-height: 160px; overflow-y: auto; font-size: 0.85rem; color: var(--ios-text-secondary); margin-top: 10px; }
+        .log-entry { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .log-entry:last-child { border-bottom: none; }
+
+        @keyframes float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
+
+        .popup-content {
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        #popup-title { font-weight: 700; font-size: 1.8rem; margin-top: 0; margin-bottom: 15px;}
+        #popup-text { font-size: 1.1rem; line-height: 1.5; color: var(--ios-text-secondary); margin-bottom: 30px; }
+
+        /* Custom Scrollbar for Logs */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    </style>
+
+    <script src="pluto_questions.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Cosmic Race</h1>
+        <div class="subtitle">A2 Mission Control</div>
+    </header>
+
+    <div id="setup-container">
+        <h3 style="margin-top:0; font-size:1.4rem; font-weight:600;">Assemble Space Crews</h3>
+        <div class="input-group">
+            <label for="player-count">Number of Students</label>
+            <select id="player-count" onchange="adjustPlayerSetupInputs()">
+                <option value="1">1 Student</option>
+                <option value="2" selected>2 Students</option>
+                <option value="3">3 Students</option>
+            </select>
+        </div>
+        
+        <div id="player-names-inputs"></div>
+
+        <button class="btn" style="width:100%; margin-top:20px;" onclick="launchCosmicExpedition()">Launch Mission</button>
+    </div>
+
+    <div id="game-container">
+        <div id="board-wrapper">
+            <div id="board-grid"></div>
+        </div>
+
+        <div id="controls-panel">
+            <div class="card" id="turn-card">
+                <div id="active-player-indicator" class="active-player-banner">Ship Initializing</div>
+                
+                <div class="scene">
+                    <div class="cube" id="cube-die">
+                        <div class="cube-face face-1">1</div>
+                        <div class="cube-face face-6">6</div>
+                        <div class="cube-face face-2">2</div>
+                        <div class="cube-face face-5">5</div>
+                        <div class="cube-face face-3">3</div>
+                        <div class="cube-face face-4">4</div>
+                    </div>
+                </div>
+
+                <div class="roll-badge" id="live-roll-readout">System Ready</div>
+
+                <button class="btn" id="roll-btn" style="width:100%;" onclick="executeDieRollAction()">Roll Die</button>
+            </div>
+
+            <div class="card">
+                <h4 style="margin:0 0 5px 0; font-size: 0.9rem; text-transform:uppercase; color:var(--ios-text-secondary); letter-spacing:1px;">Flight Logs</h4>
+                <div id="log-card">
+                    <div class="log-entry">System ready. Waiting for launch sequence...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="question-modal">
+        <div class="modal-task-box">
+            <h3 style="margin-top:0; color:var(--ios-blue); font-size:1.4rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Mission Task
+            </h3>
+            <div id="task-question">Loading transmission feed...</div>
+            
+            <div class="options-grid" id="multiple-choice-box"></div>
+            
+            <div id="text-input-area">
+                <input type="text" id="blank-input" placeholder="Type your answer here...">
+                <button class="btn" id="text-submit-btn" style="margin-top:16px; width:100%;" onclick="verifyTextInputAnswer()">Submit Answer</button>
+            </div>
+
+            <div id="hint-text"></div>
+        </div>
+    </div>
+
+    <div id="popup-modal">
+        <div class="popup-content">
+            <h2 id="popup-title">Update</h2>
+            <p id="popup-text"></p>
+            <button class="btn" style="width:100%" onclick="dismissPopupModalNotification()">Continue</button>
+        </div>
+    </div>
+
+<script>
+    // 🎼 SYNTH SPACE SOUND GENERATOR ENGINE
+    let audioCtx = null;
+
+    function initSpaceAudioEngine() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playSoundSynthEffect(type) {
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.08);
+            osc.start(now); osc.stop(now + 0.08);
+        } 
+        else if (type === 'dice') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, now);
+            osc.frequency.setValueAtTime(240, now + 0.03);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.06);
+            osc.start(now); osc.stop(now + 0.06);
+        }
+        else if (type === 'start') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(100, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 1.2);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 1.2);
+            osc.start(now); osc.stop(now + 1.2);
+
+            const subOsc = audioCtx.createOscillator();
+            const subGain = audioCtx.createGain();
+            subOsc.type = 'triangle';
+            subOsc.frequency.setValueAtTime(60, now);
+            subOsc.frequency.linearRampToValueAtTime(40, now + 1.2);
+            subOsc.connect(subGain); subGain.connect(audioCtx.destination);
+            subGain.gain.setValueAtTime(0.3, now);
+            subGain.gain.linearRampToValueAtTime(0, now + 1.2);
+            subOsc.start(now); subOsc.stop(now + 1.2);
+        }
+        else if (type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.setValueAtTime(900, now + 0.1);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.setValueAtTime(0.2, now + 0.1);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        }
+        else if (type === 'wrong') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.linearRampToValueAtTime(120, now + 0.4);
+            gainNode.gain.setValueAtTime(0.25, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        }
+        else if (type === 'boost') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.exponentialRampToValueAtTime(1800, now + 0.6);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.6);
+            osc.start(now); osc.stop(now + 0.6);
+        }
+        else if (type === 'hazard') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.linearRampToValueAtTime(150, now + 0.2);
+            osc.frequency.setValueAtTime(300, now + 0.2);
+            osc.frequency.linearRampToValueAtTime(150, now + 0.4);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.7);
+            osc.start(now); osc.stop(now + 0.7);
+        }
+        else if (type === 'win') {
+            const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+            notes.forEach((freq, idx) => {
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.type = 'sine';
+                o.frequency.setValueAtTime(freq, now + idx * 0.08);
+                g.gain.setValueAtTime(0.15, now + idx * 0.08);
+                g.gain.linearRampToValueAtTime(0, now + idx * 0.08 + 0.4);
+                o.connect(g); g.connect(audioCtx.destination);
+                o.start(now + idx * 0.08); o.stop(now + idx * 0.08 + 0.4);
+            });
+        }
+    }
+
+    let gamePlayers = [];
+    let dynamicActiveTurnIndex = 0;
+    let indexCurrentSelectedQuestion = null;
+    let currentTurnRollValue = 0; 
+    let isProcessingAnswer = false; 
+
+    const boosterCellsMap = { 4: 2, 11: 3, 21: 2, 32: 3 };  
+    const hazardCellsMap = { 8: 2, 17: 3, 26: 2, 37: 4 };   
+
+    function adjustPlayerSetupInputs() {
+        const count = parseInt(document.getElementById("player-count").value);
+        const container = document.getElementById("player-names-inputs");
+        container.innerHTML = "";
+
+        const tokens = ["🚀", "🛸", "🛰️"];
+
+        for (let idx = 1; idx <= count; idx++) {
+            container.innerHTML += `
+                <div class="input-group">
+                    <label>Crew ${idx} Name ${tokens[idx-1]}</label>
+                    <input type="text" id="player-name-${idx}" value="Crew ${idx}" maxlength="12">
+                </div>
+            `;
+        }
+    }
+
+    function launchCosmicExpedition() {
+        initSpaceAudioEngine();
+        playSoundSynthEffect('start');
+
+        const count = parseInt(document.getElementById("player-count").value);
+        gamePlayers = [];
+
+        const tokens = ["🚀", "🛸", "🛰️"];
+        const backgroundTints = ["rgba(255, 55, 95, 0.15)", "rgba(10, 132, 255, 0.15)", "rgba(255, 214, 10, 0.15)"];
+        const colors = ["#FF375F", "#0A84FF", "#FFD60A"];
+
+        for (let i = 1; i <= count; i++) {
+            const registeredValue = document.getElementById(`player-name-${i}`).value.trim();
+            gamePlayers.push({
+                id: i,
+                name: registeredValue || `Crew ${i}`,
+                cell: 1,
+                token: tokens[i - 1],
+                color: colors[i - 1],
+                bg: backgroundTints[i - 1]
+            });
+        }
+
+        document.getElementById("setup-container").style.display = "none";
+        document.getElementById("game-container").style.display = "grid";
+
+        generateVisualBoardCells();
+        updateActiveTurnInterfaceDisplay();
+        addLogEntry("Engines active. Board configurations loaded.");
+    }
+
+    function generateVisualBoardCells() {
+        const gridElement = document.getElementById("board-grid");
+        gridElement.innerHTML = "";
+
+        const columnsCount = 7;
+        const totalRowsCount = 6;
+
+        const spaceIcons = {
+            1:'🚀', 2:'🌍', 3:'⭐', 4:'💫', 5:'🌙', 6:'☄️', 7:'🌟',
+            8:'🌕', 9:'🪨', 10:'⚡', 11:'💫', 12:'🌑', 13:'🔭', 14:'🌙',
+            15:'🔴', 16:'🌋', 17:'💥', 18:'⭐', 19:'🌌', 20:'🏜️', 21:'🔴',
+            22:'🪨', 23:'☄️', 24:'🌀', 25:'💀', 26:'🌊', 27:'🌌', 28:'🪐',
+            29:'🪐', 30:'💫', 31:'⭐', 32:'🌟', 33:'🌌', 34:'✨', 35:'🛸',
+            36:'❄️', 37:'🌀', 38:'✨', 39:'🌌', 40:'⭐', 41:'💫', 42:'🪐'
+        };
+
+        for (let rowIdx = 0; rowIdx < totalRowsCount; rowIdx++) {
+            let rowVal = (totalRowsCount - 1) - rowIdx;
+            let startBase = rowVal * columnsCount + 1;
+            let isEvenRow = (rowVal % 2 === 0);
+
+            let rowCells = [];
+            for (let c = 0; c < columnsCount; c++) rowCells.push(startBase + c);
+            if (!isEvenRow) rowCells.reverse();
+
+            rowCells.forEach((cellNum, colIndex) => {
+                let arrowHTML = '';
+                if (cellNum === 42) {
+                    arrowHTML = `<span class="dir-arrow">🏁</span>`;
+                } else if (isEvenRow) {
+                    if (colIndex === columnsCount - 1) {
+                        arrowHTML = `<span class="dir-arrow turn-up">↑</span>`;
+                    } else {
+                        arrowHTML = `<span class="dir-arrow">→</span>`;
+                    }
+                } else {
+                    if (colIndex === 0 && rowIdx !== 0) {
+                        arrowHTML = `<span class="dir-arrow turn-up">↑</span>`;
+                    } else {
+                        arrowHTML = `<span class="dir-arrow">←</span>`;
+                    }
+                }
+
+                let classCategory = "";
+                let specialLabel = "";
+
+                if (cellNum === 1)                   { classCategory = "cell-start";  specialLabel = "LAUNCH"; }
+                else if (cellNum === 42)             { classCategory = "cell-finish"; specialLabel = "PLUTO"; }
+                else if (boosterCellsMap[cellNum])   { classCategory = "cell-boost";  specialLabel = `+${boosterCellsMap[cellNum]}`; }
+                else if (hazardCellsMap[cellNum])    { classCategory = "cell-hazard"; specialLabel = `-${hazardCellsMap[cellNum]}`; }
+
+                const icon = spaceIcons[cellNum] || '✨';
+
+                gridElement.innerHTML += `
+                    <div class="cell ${classCategory}" id="board-cell-${cellNum}">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;">
+                            <div class="cell-num">${cellNum}</div>
+                            ${arrowHTML}
+                        </div>
+                        <div class="cell-icon">${icon}</div>
+                        <div class="token-holder" id="token-zone-${cellNum}"></div>
+                        <div class="cell-type">${specialLabel}</div>
+                    </div>
+                `;
+            });
+        }
+        repositionPlayerTokensOnBoard();
+    }
+
+    function repositionPlayerTokensOnBoard() {
+        for (let i = 1; i <= 42; i++) {
+            const el = document.getElementById(`token-zone-${i}`);
+            if (el) el.innerHTML = "";
+        }
+
+        gamePlayers.forEach(p => {
+            const cellTarget = document.getElementById(`token-zone-${p.cell}`);
+            if (cellTarget) {
+                cellTarget.innerHTML += `<span class="player-token" style="color:${p.color};" title="${p.name}">${p.token}</span>`;
+            }
+        });
+    }
+
+    function updateActiveTurnInterfaceDisplay() {
+        const currentActiveShip = gamePlayers[dynamicActiveTurnIndex];
+        const indicator = document.getElementById("active-player-indicator");
+        
+        indicator.innerText = `${currentActiveShip.name}'s Turn ${currentActiveShip.token}`;
+        indicator.style.backgroundColor = currentActiveShip.bg;
+        indicator.style.borderColor = currentActiveShip.color;
+        indicator.style.color = currentActiveShip.color;
+
+        document.getElementById("roll-btn").disabled = false;
+        document.getElementById("live-roll-readout").innerText = "Ready to Roll";
+        document.getElementById("live-roll-readout").style.color = "var(--ios-text-primary)";
+        document.getElementById("question-modal").style.display = "none";
+        isProcessingAnswer = false; 
+    }
+
+    function executeDieRollAction() {
+        playSoundSynthEffect('click');
+        document.getElementById("roll-btn").disabled = true;
+        
+        const cube = document.getElementById("cube-die");
+        cube.className = "cube tumbling"; 
+        document.getElementById("live-roll-readout").innerText = "Rolling...";
+
+        const finalDiceRoll = Math.floor(Math.random() * 6) + 1;
+        let sfxTimer = setInterval(() => { playSoundSynthEffect('dice'); }, 120);
+
+        setTimeout(() => {
+            clearInterval(sfxTimer);
+            cube.className = "cube"; 
+
+            const preciseRotations = {
+                1: "rotateX(0deg) rotateY(0deg)",
+                6: "rotateX(180deg) rotateY(0deg)",
+                2: "rotateX(0deg) rotateY(-90deg)",
+                5: "rotateX(0deg) rotateY(90deg)",
+                3: "rotateX(-90deg) rotateY(0deg)",
+                4: "rotateX(90deg) rotateY(0deg)"
+            };
+            cube.style.transform = preciseRotations[finalDiceRoll];
+
+            document.getElementById("live-roll-readout").innerText = `Rolled a ${finalDiceRoll}`;
+            processPlayerMovementCalculation(finalDiceRoll);
+        }, 1000);
+    }
+
+    function processPlayerMovementCalculation(rolledAmount) {
+        currentTurnRollValue = rolledAmount;
+        const activeShip = gamePlayers[dynamicActiveTurnIndex];
+        addLogEntry(`${activeShip.name} rolled a ${rolledAmount}. Fetching question...`);
+        setTimeout(triggerMissionQuestionChallenge, 500);
+    }
+
+    function triggerMissionQuestionChallenge() {
+        indexCurrentSelectedQuestion = Math.floor(Math.random() * a2FlyersQuestionPool.length);
+        const taskData = a2FlyersQuestionPool[indexCurrentSelectedQuestion];
+
+        document.getElementById("question-modal").style.display = "flex";
+        document.getElementById("task-question").innerText = taskData.q;
+        document.getElementById("hint-text").innerText = `Hint: ${taskData.h}`;
+
+        const choiceBox = document.getElementById("multiple-choice-box");
+        const entryFieldArea = document.getElementById("text-input-area");
+
+        choiceBox.innerHTML = "";
+        document.getElementById("blank-input").value = "";
+        document.getElementById("text-submit-btn").disabled = false;
+
+        if (taskData.type === "multiple_choice") {
+            choiceBox.style.display = "flex";
+            entryFieldArea.style.display = "none";
+
+            taskData.o.forEach((opt) => {
+                const choiceBtn = document.createElement("button");
+                choiceBtn.className = "option-btn";
+                choiceBtn.innerText = opt;
+                choiceBtn.onclick = function() { evaluateAnswerAction(opt); };
+                choiceBox.appendChild(choiceBtn);
+            });
+        } else {
+            choiceBox.style.display = "none";
+            entryFieldArea.style.display = "block";
+        }
+    }
+
+    function verifyTextInputAnswer() {
+        const studentInput = document.getElementById("blank-input").value.trim();
+        if (!studentInput) return;
+        evaluateAnswerAction(studentInput);
+    }
+
+    function evaluateAnswerAction(submittedText) {
+        if (isProcessingAnswer) return;
+        isProcessingAnswer = true;
+
+        document.getElementById("text-submit-btn").disabled = true;
+        const optionButtons = document.querySelectorAll(".option-btn");
+        optionButtons.forEach(btn => btn.disabled = true);
+
+        document.getElementById("question-modal").style.display = "none";
+
+        const activeShip = gamePlayers[dynamicActiveTurnIndex];
+        const taskData = a2FlyersQuestionPool[indexCurrentSelectedQuestion];
+        const isMatchCorrect = submittedText.toLowerCase().trim() === taskData.a.toLowerCase().trim();
+
+        if (isMatchCorrect) {
+            playSoundSynthEffect('correct');
+            
+            let calculatedTargetCell = activeShip.cell + currentTurnRollValue;
+            if (calculatedTargetCell > 42) calculatedTargetCell = 42;
+            
+            activeShip.cell = calculatedTargetCell;
+            repositionPlayerTokensOnBoard();
+
+            addLogEntry(`Correct. ${activeShip.name} advanced to space ${activeShip.cell}.`);
+            setTimeout(() => { triggerCellModifierCheck(activeShip); }, 600);
+        } else {
+            playSoundSynthEffect('wrong');
+            addLogEntry(`Incorrect. ${activeShip.name} remains at space ${activeShip.cell}.`);
+            displayNotificationPopup("Incorrect", `Engines stalled. Your crew remains at space ${activeShip.cell}.`);
+        }
+    }
+
+    function triggerCellModifierCheck(shipObj) {
+        if (shipObj.cell === 42) {
+            executeGameWinnerFanfare(shipObj);
+            return;
+        }
+
+        if (boosterCellsMap[shipObj.cell]) {
+            playSoundSynthEffect('boost');
+            const spacesForward = boosterCellsMap[shipObj.cell];
+            shipObj.cell += spacesForward;
+            if (shipObj.cell > 42) shipObj.cell = 42;
+            
+            repositionPlayerTokensOnBoard();
+            addLogEntry(`Bonus jump! Moved +${spacesForward} spaces to cell ${shipObj.cell}.`);
+            displayNotificationPopup("Warp Velocity", `Caught a solar wind stream! Jumped forward to space ${shipObj.cell}.`);
+        } 
+        else if (hazardCellsMap[shipObj.cell]) {
+            playSoundSynthEffect('hazard');
+            const spacesBackward = hazardCellsMap[shipObj.cell];
+            shipObj.cell -= spacesBackward;
+            if (shipObj.cell < 1) shipObj.cell = 1;
+            
+            repositionPlayerTokensOnBoard();
+            addLogEntry(`Hazard! Pushed back -${spacesBackward} spaces to cell ${shipObj.cell}.`);
+            displayNotificationPopup("Solar Flare", `Radiation leak! Pushed back to cell ${shipObj.cell}.`);
+        } else {
+            displayNotificationPopup("Move Complete", `${shipObj.name} successfully navigated to space ${shipObj.cell}.`);
+        }
+
+        if (shipObj.cell === 42) {
+            executeGameWinnerFanfare(shipObj);
+        }
+    }
+
+    function executeGameWinnerFanfare(winnerShipObj) {
+        playSoundSynthEffect('win');
+        addLogEntry(`MISSION ACCOMPLISHED! ${winnerShipObj.name} reached Pluto first.`);
+        
+        document.getElementById("popup-title").innerText = "Mission Accomplished";
+        document.getElementById("popup-title").style.color = "var(--ios-blue)"; 
+        document.getElementById("popup-text").innerHTML = `Excellent work, <strong>${winnerShipObj.name}</strong>. You have successfully navigated the challenges and reached Pluto.`;
+        
+        document.getElementById("popup-modal").style.display = "flex";
+        document.getElementById("roll-btn").disabled = true;
+    }
+
+    function displayNotificationPopup(title, msg) {
+        if (gamePlayers[dynamicActiveTurnIndex].cell === 42) return;
+
+        document.getElementById("popup-title").innerText = title;
+        document.getElementById("popup-title").style.color = "var(--ios-text-primary)";
+        document.getElementById("popup-text").innerText = msg;
+        document.getElementById("popup-modal").style.display = "flex";
+    }
+
+    function dismissPopupModalNotification() {
+        playSoundSynthEffect('click');
+        document.getElementById("popup-modal").style.display = "none";
+        
+        if (gamePlayers[dynamicActiveTurnIndex].cell === 42) return;
+
+        dynamicActiveTurnIndex = (dynamicActiveTurnIndex + 1) % gamePlayers.length;
+        updateActiveTurnInterfaceDisplay();
+    }
+
+    function addLogEntry(textString) {
+        const logBox = document.getElementById("log-card");
+        logBox.innerHTML += `<div class="log-entry">${textString}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    adjustPlayerSetupInputs();
+</script>
+</body>
+</html>

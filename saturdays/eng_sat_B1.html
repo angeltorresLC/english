@@ -596,12 +596,15 @@
             else if (q.type === 'spell') setupSpell(q);
         }
 
-        function playAudio(context) {
-            let utterance = new SpeechSynthesisUtterance(currentAudioWord);
-            utterance.lang = 'en-GB'; 
-            utterance.rate = 0.85; 
-            window.speechSynthesis.speak(utterance);
-        }
+       function playAudio(context) {
+    // Clear any pending/stuck audio from the queue first
+    window.speechSynthesis.cancel(); 
+    
+    let utterance = new SpeechSynthesisUtterance(currentAudioWord);
+    utterance.lang = 'en-GB'; 
+    utterance.rate = 0.85; 
+    window.speechSynthesis.speak(utterance);
+}
 
         function setupMCQ(q) {
             containers.mcq.classList.remove('hidden');

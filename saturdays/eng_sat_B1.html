@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Adventure // Blue & Purple Edition</title>
+    
+    <style>
+        :root {
+            /* Blue, Purple, Grey & Dark Text Palette */
+            --bg-base: #F2F2F7; /* Light grey background */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --glass-hover: rgba(255, 255, 255, 1);
+            
+            --primary-blue: #007AFF;
+            --primary-purple: #5856D6;
+            --light-blue: #E5F1FF;
+            --light-purple: #EFEFFB;
+            --ui-grey: #E5E5EA;
+            --dark-grey: #8E8E93;
+            
+            --text-main: #1C1C1E; /* Dark font color */
+            --text-muted: #636366; /* Grey font color */
+            
+            --correct-bg: #E4F8EB;
+            --correct-text: #248A3D;
+            --error-bg: #FFECEB;
+            --error-text: #C93400;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            margin: 0;
+            padding: 20px;
+            /* Subtle Blue to Purple gradient background */
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Glassmorphic Container */
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 40px;
+            width: 100%;
+            max-width: 720px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2 { 
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        h1 { 
+            font-size: 2.5em; 
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        h2 { font-size: 1.8em; }
+        
+        /* Dashboard/Widgets Header */
+        .header-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: var(--ui-grey);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: center;
+        }
+
+        .badge-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-value {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .badge.score { background: var(--light-blue); }
+        .badge.score .badge-value { color: var(--primary-blue); }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary-blue);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 24px;
+            padding: 16px 24px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 16px rgba(0, 122, 255, 0.2);
+        }
+        
+        .btn:hover:not(:disabled) { background: #0062CC; transform: translateY(-2px); }
+        .btn:active:not(:disabled) { transform: scale(0.97); }
+        .btn:disabled { background: var(--ui-grey); color: var(--dark-grey); cursor: not-allowed; box-shadow: none; }
+        
+        .btn.audio { 
+            background: var(--primary-purple); 
+            box-shadow: 0 8px 16px rgba(88, 86, 214, 0.2);
+            width: auto; margin: 0; border-radius: 20px; padding: 12px 20px; font-size: 1em;
+        }
+        .btn.audio:hover { background: #4644AB; }
+
+        .hidden { display: none !important; }
+
+        /* Question Formats */
+        .question-text { 
+            font-size: 1.5em; 
+            font-weight: 600;
+            margin-bottom: 30px; 
+            line-height: 1.4; 
+            text-align: center;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+        
+        /* MCQ List */
+        .mcq-grid { display: flex; flex-direction: column; gap: 12px; }
+        .mcq-btn {
+            background: var(--bg-base);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            color: var(--text-main);
+            padding: 18px 24px;
+            cursor: pointer; 
+            font-size: 1.1em; 
+            font-family: inherit;
+            font-weight: 500;
+            text-align: left; 
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .mcq-btn:hover:not(:disabled) { background: var(--light-blue); color: var(--primary-blue); }
+        .mcq-btn:active:not(:disabled) { transform: scale(0.98); }
+        .mcq-btn.correct { background: var(--correct-bg); border-color: var(--correct-text); color: var(--correct-text); }
+        .mcq-btn.incorrect { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+
+        /* Text Inputs */
+        .input-container { 
+            display: flex; 
+            align-items: stretch; 
+            gap: 12px; 
+            margin-bottom: 15px; 
+        }
+        .input-container input, .puzzle-box input {
+            padding: 16px 20px; 
+            font-size: 1.2em; 
+            background: var(--bg-base);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-family: inherit;
+            color: var(--text-main);
+            width: 100%; 
+            outline: none;
+            flex-grow: 1;
+            transition: all 0.2s;
+        }
+        .input-container input:focus, .puzzle-box input:focus { 
+            border-color: var(--primary-blue); 
+            background: #FFFFFF; 
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.1);
+        }
+        .input-container .btn { margin-top: 0; width: auto; padding: 0 30px; }
+
+        .spell-box {
+            background: var(--light-purple); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 24px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        /* Sort Sentences */
+        .sort-area {
+            min-height: 70px; 
+            border: 2px dashed var(--dark-grey); 
+            background: var(--bg-base);
+            border-radius: 24px;
+            padding: 15px; margin-bottom: 20px; 
+            display: flex; flex-wrap: wrap; gap: 10px; 
+        }
+        .sort-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;}
+        .sort-word {
+            background: #FFFFFF; 
+            color: var(--primary-blue); 
+            border: 1px solid var(--ui-grey);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            padding: 10px 18px; cursor: pointer; user-select: none; 
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            font-size: 1.1em; font-weight: 600;
+        }
+        .sort-word:hover { background: var(--light-blue); transform: translateY(-2px); }
+        .sort-word:active { transform: scale(0.95); }
+
+        /* Matching Columns */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
+        .match-col { display: flex; flex-direction: column; gap: 12px; }
+        .match-btn {
+            padding: 16px; 
+            background: var(--bg-base); 
+            border: 2px solid transparent;
+            border-radius: 20px;
+            color: var(--text-main); font-family: inherit; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; font-size: 1em; text-align: left;
+            line-height: 1.3;
+        }
+        .match-btn:hover { background: var(--ui-grey); }
+        .match-btn.selected { background: var(--light-blue); border-color: var(--primary-blue); color: var(--primary-blue); transform: scale(0.98); font-weight: 600;}
+        .match-btn.matched { background: var(--correct-bg); border-color: var(--correct-text); color: var(--correct-text); cursor: default; opacity: 0.6; }
+
+        /* Feedback Popups */
+        #feedback { 
+            margin-top: 30px; 
+            padding: 20px; 
+            border-radius: 24px;
+            text-align: center;
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feedback-correct { background: var(--correct-bg); border: 1px solid var(--correct-text); color: var(--correct-text); }
+        .feedback-incorrect { background: var(--error-bg); border: 1px solid var(--error-text); color: var(--error-text); }
+        
+        #feedback-text { font-size: 1.2em; font-weight: 700; margin-bottom: 8px;}
+        .grammar-hint { font-size: 0.9em; font-weight: 600; opacity: 0.8; }
+
+        /* Puzzle Screen */
+        .puzzle-box { text-align: center; }
+        .puzzle-icon { font-size: 4em; margin-bottom: 10px; }
+        .puzzle-text { font-size: 1.3em; font-weight: 600; margin: 20px 0; color: var(--primary-purple); }
+        .puzzle-hint { font-size: 0.85em; font-weight: 700; color: var(--dark-grey); text-transform: uppercase; margin-bottom: 15px;}
+
+        /* Info Card */
+        .infobox {
+            background: var(--light-blue);
+            border-radius: 24px;
+            padding: 24px; margin-bottom: 30px; font-size: 1em; font-weight: 500;
+            color: var(--text-main);
+        }
+        
+        p { line-height: 1.5; margin-top: 0;}
+        ul { padding-left: 20px; margin-bottom: 0;}
+        li { margin-bottom: 10px; }
+        
+        @media (max-width: 600px) {
+            .match-grid { grid-template-columns: 1fr; }
+            .header-info { grid-template-columns: 1fr 1fr; }
+            .input-container { flex-direction: column; }
+            .input-container .btn { width: 100%; }
+            .container { padding: 24px; border-radius: 30px;}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="start-screen">
+        <div style="text-align: center; margin-bottom: 10px;">
+            <span style="font-size: 4em;">🎓</span>
+        </div>
+        <h1>English Pro<br><span style="font-size: 0.5em; font-weight: 600; color: var(--dark-grey); -webkit-text-fill-color: var(--dark-grey);">B1+ Mastery</span></h1>
+        
+        <div class="infobox">
+            <p style="font-weight: 700; color: var(--primary-blue); margin-bottom: 10px;">System Overview:</p>
+            <ul>
+                <li>Focus: Grammar, Vocabulary, Phrasal Verbs & Spelling</li>
+                <li>Module Length: 30 Randomized Questions</li>
+                <li>Security Protocols: Boss checks every 6 questions</li>
+            </ul>
+        </div>
+        
+        <div style="background: var(--bg-base); border-radius: 20px; padding: 20px; margin-bottom: 30px; text-align: center;">
+            <p style="margin:0; font-weight: 700; color: var(--text-main); margin-bottom: 10px;">Scoring Mechanics</p>
+            <p style="margin:0; font-size: 0.95em; color: var(--text-muted);">
+                <span style="color:var(--primary-blue); font-weight: 700;">+10 Points</span> for correct inputs.<br>
+                <span style="color:var(--primary-purple); font-weight: 700;">-5 Points</span> for errors.
+            </p>
+        </div>
+        
+        <button class="btn" onclick="startGame()">Start Session</button>
+    </div>
+
+    <div class="container hidden" id="game-screen">
+        <div class="header-info">
+            <div class="badge">
+                <span class="badge-label">Level</span>
+                <span class="badge-value" id="ui-level">01</span>
+            </div>
+            <div class="badge">
+                <span class="badge-label">Topic</span>
+                <span class="badge-value" id="ui-topic" style="font-size: 1.1em; margin-top: 6px;">--</span>
+            </div>
+            <div class="badge">
+                <span class="badge-label">Progress</span>
+                <span class="badge-value"><span id="ui-progress">1</span><span style="font-size:0.6em; color:var(--dark-grey)">/30</span></span>
+            </div>
+            <div class="badge score">
+                <span class="badge-label" style="color: var(--primary-blue);">Score</span>
+                <span class="badge-value" id="ui-points">0</span>
+            </div>
+        </div>
+
+        <div class="question-text" id="ui-question">QUESTION.DATA</div>
+        
+        <div id="container-mcq" class="mcq-grid hidden"></div>
+        
+        <div id="container-fitb" class="hidden">
+            <div class="input-container">
+                <input type="text" id="fitb-input" placeholder="Type your answer..." autocomplete="off">
+                <button class="btn" onclick="checkFitb()">Verify</button>
+            </div>
+        </div>
+
+        <div id="container-spell" class="hidden">
+            <div class="spell-box">
+                <span style="font-weight: 600; color: var(--primary-purple);">Listen & spell correctly:</span>
+                <button class="btn audio" onclick="playAudio('spell')">Play Audio</button>
+            </div>
+            <div class="input-container">
+                <input type="text" id="spell-input" placeholder="Enter spelling..." autocomplete="off">
+                <button class="btn" onclick="checkSpell()">Verify</button>
+            </div>
+        </div>
+
+        <div id="container-sort" class="hidden">
+            <p style="font-size: 0.85em; font-weight: 600; color: var(--dark-grey); text-align: center; margin-bottom: 15px;">Tap blocks to arrange the sentence.</p>
+            <div class="sort-area" id="sort-answer"></div>
+            <div class="sort-bank" id="sort-bank"></div>
+            <button class="btn" onclick="checkSort()">Confirm Order</button>
+        </div>
+
+        <div id="container-match" class="hidden">
+            <p style="font-size: 0.85em; font-weight: 600; color: var(--dark-grey); text-align: center; margin-bottom: 15px;">Tap to connect matching pairs.</p>
+            <div class="match-grid">
+                <div class="match-col" id="match-left"></div>
+                <div class="match-col" id="match-right"></div>
+            </div>
+        </div>
+
+        <div id="feedback" class="hidden">
+            <div id="feedback-text"></div>
+            <div class="grammar-hint" id="ui-grammar"></div>
+        </div>
+        <button class="btn hidden" id="next-btn" style="background: var(--text-main); color: #FFF; box-shadow: 0 8px 16px rgba(0,0,0,0.2);" onclick="nextPhase()">Continue</button>
+    </div>
+
+    <div class="container hidden puzzle-box" id="puzzle-screen">
+        <div class="puzzle-icon">🔒</div>
+        <h2 style="color: var(--primary-blue);">Security Checkpoint</h2>
+        <p class="puzzle-text" id="puzzle-text"></p>
+        
+        <div id="puzzle-audio-box" class="hidden" style="margin-bottom: 25px;">
+            <button class="btn audio" style="margin: 0 auto;" onclick="playAudio('puzzle')">Play Clue</button>
+        </div>
+
+        <p class="puzzle-hint" id="puzzle-hint"></p>
+        <div class="input-container">
+            <input type="text" id="puzzle-input" placeholder="Passcode required...">
+            <button class="btn" style="background: var(--primary-purple);" onclick="checkPuzzle()">Unlock</button>
+        </div>
+        <div id="puzzle-feedback" style="margin-top: 20px; font-weight: 700; font-size: 1.1em;"></div>
+    </div>
+
+    <div class="container hidden" id="end-screen" style="text-align: center;">
+        <div style="font-size: 4em; margin-bottom: 10px;">🏆</div>
+        <h1 style="color: var(--primary-blue); -webkit-text-fill-color: var(--primary-blue); background: none;">Session Complete</h1>
+        <div class="infobox" style="background: var(--light-purple); border: 2px solid var(--primary-purple);">
+            <p style="margin:0; font-size:1.1em; color: var(--primary-purple); font-weight: 700;">Total Score</p>
+            <h2 id="final-score-display" style="margin:10px 0 0 0; font-size: 3.5em; color: var(--text-main);"></h2>
+        </div>
+        <p style="font-weight: 600; font-size: 1.1em; color: var(--text-muted); margin-bottom: 30px;">All 30 modules successfully evaluated.</p>
+        <button class="btn" onclick="location.reload()">Restart System</button>
+    </div>
+
+    <script>
+        // Game State
+        let currentQ = 0;
+        let currentLevel = 1;
+        let score = 0;
+        
+        let activeSortBank = [];
+        let activeSortAnswer = [];
+        let matchLeftSelected = null;
+        let matchRightSelected = null;
+        let matchPairsMatched = 0;
+        let currentAudioWord = ""; 
+        let activeQuestions = [];
+
+        // 60 Questions Database
+        const allQuestions = [
+            { type: 'mcq', topic: 'Money', grammar: '1st Conditional', text: 'If I save enough money, I _____ a new smartphone.', options: ['will buy', 'would buy', 'bought'], ans: 0 },
+            { type: 'fitb', topic: 'Technology', grammar: 'Relative Clauses', text: 'A smartphone is a device _____ allows you to connect to the internet.', ans: 'which' },
+            { type: 'sort', topic: 'Money', grammar: 'Present Perfect', text: 'Organize the sentence:', words: ['I', 'have', 'spent', 'all', 'my', 'money', 'recently.'] },
+            { type: 'match', topic: 'Health', grammar: 'Modal Verbs', text: 'Match the halves of the advice:', pairs: [['You have a headache,', 'you should drink water.'], ['You broke your leg,', 'you must go to the hospital.'], ['You want to be fit,', 'you ought to exercise.']] },
+            { type: 'mcq', topic: 'Money', grammar: 'Past Simple Passive', text: 'The bank _____ robbed yesterday by three masked men.', options: ['has been', 'was', 'is'], ans: 1 },
+            { type: 'fitb', topic: 'Technology', grammar: 'Present Perfect with "yet"', text: 'I haven\'t updated my computer\'s software ____.', ans: 'yet' },
+            { type: 'sort', topic: 'Holidays', grammar: '1st Conditional', text: 'Organize the sentence:', words: ['We', 'will', 'go', 'to', 'the', 'beach', 'if', 'it', 'is', 'sunny.'] },
+            { type: 'spell', topic: 'Holidays', grammar: 'Spelling', text: 'Dictation: A place to stay on holiday.', word: 'accommodation' },
+            { type: 'mcq', topic: 'Health', grammar: 'Gerunds as Subjects', text: '_____ regularly is extremely good for your heart.', options: ['To exercise', 'Exercise', 'Exercising'], ans: 2 },
+            { type: 'fitb', topic: 'Holidays', grammar: 'Present Perfect', text: '_____ you ever been to a tropical island?', ans: 'have' },
+            { type: 'sort', topic: 'Money', grammar: '2nd Conditional', text: 'Organize the sentence:', words: ['If', 'I', 'won', 'the', 'lottery', 'I', 'would', 'travel.'] },
+            { type: 'match', topic: 'Holidays', grammar: 'Used to vs Be used to', text: 'Match the correct structure:', pairs: [['I used to travel', 'when I was younger.'], ['I am used to traveling', 'because I fly every week.'], ['I usually travel', 'during the summer.']] },
+            { type: 'mcq', topic: 'Health', grammar: 'Present Perfect Continuous', text: 'How long have you _____ feeling sick?', options: ['been', 'be', 'being'], ans: 0 },
+            { type: 'fitb', topic: 'Holidays', grammar: 'Past Perfect', text: 'The hotel room _____ been cleaned before we finally arrived.', ans: 'had' },
+            { type: 'sort', topic: 'Health', grammar: 'Present Simple Passive', text: 'Organize the sentence:', words: ['Patients', 'are', 'advised', 'to', 'take', 'their', 'medicine.'] },
+            { type: 'spell', topic: 'Health', grammar: 'Spelling', text: 'Dictation: A physical feeling that indicates you have an illness.', word: 'symptom' },
+            { type: 'mcq', topic: 'Technology', grammar: 'Present Continuous Passive', text: 'A new health app _____ developed by our team right now.', options: ['is', 'is being', 'has been'], ans: 1 },
+            { type: 'fitb', topic: 'Money', grammar: 'Reported Speech', text: 'She said she _____ not borrow any more money.', ans: 'would' },
+            { type: 'sort', topic: 'Holidays', grammar: 'Verbs + Infinitive', text: 'Organize the sentence:', words: ['We', 'decided', 'to', 'rent', 'a', 'car', 'in', 'Italy.'] },
+            { type: 'match', topic: 'Health', grammar: 'Phrasal Verbs', text: 'Match the phrasal verb to its meaning:', pairs: [['Pass out', 'To faint or lose consciousness'], ['Get over', 'To recover from an illness'], ['Work out', 'To exercise at the gym']] },
+            { type: 'mcq', topic: 'Technology', grammar: '2nd Conditional', text: 'What would you do if your laptop suddenly _____?', options: ['breaks', 'broke', 'had broken'], ans: 1 },
+            { type: 'fitb', topic: 'Technology', grammar: 'Past Continuous', text: 'I _____ working on my laptop when it crashed. (Auxiliary verb)', ans: 'was' },
+            { type: 'sort', topic: 'Health', grammar: 'Past Perfect vs Past Simple', text: 'Organize the sentence:', words: ['I', 'had', 'already', 'recovered', 'when', 'I', 'caught', 'a', 'cold.'] },
+            { type: 'spell', topic: 'Money', grammar: 'Spelling', text: 'Dictation: A piece of paper proving payment.', word: 'receipt' },
+            { type: 'mcq', topic: 'Money', grammar: 'Past Perfect Simple', text: 'By the time I got to the bank, it _____.', options: ['had closed', 'closed', 'has closed'], ans: 0 },
+            { type: 'fitb', topic: 'Holidays', grammar: 'Wish', text: 'I wish I _____ on a tropical beach right now.', ans: 'were' }, 
+            { type: 'sort', topic: 'Technology', grammar: 'Future Perfect', text: 'Organize the sentence:', words: ['They', 'will', 'have', 'released', 'the', 'software', 'by', 'December.'] },
+            { type: 'match', topic: 'Money', grammar: 'Modals of Deduction', text: 'Match the deductions:', pairs: [['He bought a Ferrari.', 'He must be rich.'], ['She works 14 hours.', 'She can\'t have free time.'], ['I haven\'t checked my balance.', 'I might be broke.']] },
+            { type: 'mcq', topic: 'Health', grammar: '3rd Conditional', text: 'If he had gone to the doctor sooner, he _____ gotten so ill.', options: ['didn\'t', 'wouldn\'t have', 'hadn\'t'], ans: 1 },
+            { type: 'fitb', topic: 'Technology', grammar: 'Causative', text: 'My screen was broken, so I had it _____ at the store.', ans: 'repaired' },
+            { type: 'sort', topic: 'Holidays', grammar: 'Modals of Deduction', text: 'Organize the sentence:', words: ['They', 'must', 'have', 'returned', 'from', 'a', 'sunny', 'holiday.'] },
+            { type: 'spell', topic: 'Technology', grammar: 'Spelling', text: 'Dictation: Something that is easy, useful, or suitable.', word: 'convenient' },
+            { type: 'mcq', topic: 'Technology', grammar: 'Future Continuous', text: 'By this time next year, millions _____ using this AI software.', options: ['will use', 'are using', 'will be'], ans: 2 },
+            { type: 'fitb', topic: 'Money', grammar: '3rd Conditional', text: 'If she had read the contract, she _____ not have lost her deposit.', ans: 'would' },
+            { type: 'sort', topic: 'Health', grammar: 'Defining Relative Clauses', text: 'Organize the sentence:', words: ['The', 'doctor', 'who', 'treated', 'me', 'was', 'very', 'kind.'] },
+            { type: 'match', topic: 'Technology', grammar: 'Passive Voice Tenses', text: 'Match the passive sentences to their tenses:', pairs: [['The email is being sent.', 'Present Continuous'], ['The email had been sent.', 'Past Perfect'], ['The email will be sent.', 'Future Simple']] },
+            { type: 'mcq', topic: 'Technology', grammar: 'Reported Speech', text: 'They announced that the new servers _____ be installed the following week.', options: ['will', 'would', 'are to'], ans: 1 },
+            { type: 'fitb', topic: 'Money', grammar: 'Modals of Deduction', text: 'It _____ be cheap to stay in a 5-star hotel! (Impossible)', ans: 'can\'t' }, 
+            { type: 'sort', topic: 'Health', grammar: 'Present Perfect Continuous', text: 'Organize the sentence:', words: ['How', 'long', 'have', 'you', 'been', 'waiting', 'for', 'the', 'doctor?'] },
+            { type: 'spell', topic: 'General', grammar: 'Spelling', text: 'Dictation: A situation that makes you feel shy or ashamed.', word: 'embarrassing' },
+            { type: 'spell', topic: 'Technology', grammar: 'Spelling', text: 'Dictation: The physical parts of a computer system.', word: 'hardware' },
+            { type: 'spell', topic: 'Money', grammar: 'Spelling', text: 'Dictation: The system of money used in a particular country.', word: 'currency' },
+            { type: 'spell', topic: 'Health', grammar: 'Spelling', text: 'Dictation: A substance used to treat illnesses.', word: 'medicine' },
+            { type: 'spell', topic: 'Holidays', grammar: 'Spelling', text: 'Dictation: Bags and suitcases you take on a trip.', word: 'luggage' },
+            { type: 'spell', topic: 'General', grammar: 'Spelling', text: 'Dictation: The natural world, including the air, water, and land.', word: 'environment' },
+            { type: 'spell', topic: 'General', grammar: 'Spelling', text: 'Dictation: Absolutely essential; needed.', word: 'necessary' },
+            { type: 'spell', topic: 'General', grammar: 'Spelling', text: 'Dictation: Achieving the results wanted or hoped for.', word: 'successful' },
+            { type: 'spell', topic: 'Technology', grammar: 'Spelling', text: 'Dictation: Transferring data from the internet to your device.', word: 'downloading' },
+            { type: 'spell', topic: 'Health', grammar: 'Spelling', text: 'Dictation: The condition of being physically strong and healthy.', word: 'fitness' },
+            { type: 'spell', topic: 'Holidays', grammar: 'Spelling', text: 'Dictation: An official document allowing you to travel abroad.', word: 'passport' },
+            { type: 'mcq', topic: 'Idioms', grammar: 'Meaning', text: 'What does the idiom "spill the beans" mean?', options: ['Reveal a secret', 'Drop your food', 'Plant a garden'], ans: 0 },
+            { type: 'fitb', topic: 'Phrasal Verbs', grammar: 'Prepositions', text: 'It is getting dark. Can you turn _____ the lights?', ans: 'on' },
+            { type: 'sort', topic: 'Idioms', grammar: 'Word Order', text: 'Organize the sentence:', words: ['It', 'is', 'raining', 'cats', 'and', 'dogs', 'outside.'] },
+            { type: 'match', topic: 'Phrasal Verbs', grammar: 'Meaning', text: 'Match the phrasal verb to its meaning:', pairs: [['Look after', 'Care for someone'], ['Bring up', 'Start talking about a subject'], ['Call off', 'Cancel an event']] },
+            { type: 'spell', topic: 'Idioms', grammar: 'Spelling', text: 'Dictation: "Don\'t judge a book by its _____."', word: 'cover' },
+            { type: 'mcq', topic: 'Idioms', grammar: 'Meaning', text: 'If a car costs "an arm and a leg", it is...', options: ['Very cheap', 'Very expensive', 'Broken'], ans: 1 },
+            { type: 'fitb', topic: 'Phrasal Verbs', grammar: 'Prepositions', text: 'I have been away. I need to catch _____ on the news.', ans: 'up' },
+            { type: 'sort', topic: 'Phrasal Verbs', grammar: 'Word Order', text: 'Organize the sentence:', words: ['She', 'is', 'looking', 'forward', 'to', 'the', 'party.'] },
+            { type: 'match', topic: 'Idioms', grammar: 'Meaning', text: 'Match the idiom to its meaning:', pairs: [['Bite the bullet', 'Face a difficult situation bravely'], ['Hit the sack', 'Go to sleep'], ['Under the weather', 'Feeling slightly ill']] },
+            { type: 'spell', topic: 'Phrasal Verbs', grammar: 'Spelling', text: 'Dictation: Formal synonym for the phrasal verb "put off".', word: 'postpone' }
+        ];
+
+        // Firewall Puzzles
+        const puzzles = [
+            { text: "A secret word or phrase used to gain entry.", hint: "Hint: Guess based on definition.", ans: "password", hasAudio: false },
+            { text: "Listen to the command and spell it.", hint: "Hint: Tap 'Play Clue' to hear the word.", ans: "initiate", hasAudio: true, audioWord: "initiate" },
+            { text: "Riddle: I have a screen but no face. I have keys but no doors. What am I?", hint: "Hint: Logical deduction required.", ans: "computer", hasAudio: false },
+            { text: "Listen to the final protocol and spell it.", hint: "Hint: Tap 'Play Clue' to hear the word.", ans: "authorization", hasAudio: true, audioWord: "authorization" }
+        ];
+
+        const screens = {
+            start: document.getElementById('start-screen'),
+            game: document.getElementById('game-screen'),
+            puzzle: document.getElementById('puzzle-screen'),
+            end: document.getElementById('end-screen')
+        };
+        
+        const containers = {
+            mcq: document.getElementById('container-mcq'),
+            fitb: document.getElementById('container-fitb'),
+            sort: document.getElementById('container-sort'),
+            match: document.getElementById('container-match'),
+            spell: document.getElementById('container-spell')
+        };
+
+        const ui = {
+            level: document.getElementById('ui-level'),
+            topic: document.getElementById('ui-topic'),
+            progress: document.getElementById('ui-progress'),
+            points: document.getElementById('ui-points'),
+            question: document.getElementById('ui-question'),
+            feedback: document.getElementById('feedback'),
+            feedbackText: document.getElementById('feedback-text'),
+            grammar: document.getElementById('ui-grammar'),
+            nextBtn: document.getElementById('next-btn')
+        };
+
+        function hideAllScreens() { Object.values(screens).forEach(s => s.classList.add('hidden')); }
+        function hideAllContainers() { Object.values(containers).forEach(c => c.classList.add('hidden')); }
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startGame() {
+            let shuffled = shuffleArray(allQuestions);
+            activeQuestions = shuffled.slice(0, 30);
+            hideAllScreens();
+            screens.game.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function updateScore(isCorrect) {
+            score += isCorrect ? 10 : -5;
+            ui.points.textContent = score;
+            return isCorrect ? `+10 Points` : `-5 Points`;
+        }
+
+        function showFeedback(isCorrect, grammar, extra = "") {
+            let ptsStr = updateScore(isCorrect);
+            
+            ui.feedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+            ui.feedback.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+            
+            let status = isCorrect ? 'Correct' : 'Incorrect';
+            let extraHTML = extra ? `<div style="font-size:0.9em; margin-top:5px; font-weight:600;">${extra}</div>` : "";
+            
+            ui.feedbackText.innerHTML = `${status} &middot; <span>${ptsStr}</span>${extraHTML}`;
+            ui.grammar.innerHTML = `Topic Focus: ${grammar}`;
+            
+            ui.nextBtn.classList.remove('hidden');
+        }
+
+        function loadQuestion() {
+            hideAllContainers();
+            ui.feedback.classList.add('hidden');
+            ui.feedbackText.innerHTML = "";
+            ui.grammar.innerHTML = "";
+            ui.nextBtn.classList.add('hidden');
+            matchPairsMatched = 0;
+
+            const q = activeQuestions[currentQ];
+            
+            ui.level.textContent = currentLevel.toString().padStart(2, '0');
+            ui.topic.textContent = q.topic;
+            ui.progress.textContent = currentQ + 1;
+            ui.question.innerHTML = q.text;
+
+            if (q.type === 'mcq') setupMCQ(q);
+            else if (q.type === 'fitb') setupFITB(q);
+            else if (q.type === 'sort') setupSort(q);
+            else if (q.type === 'match') setupMatch(q);
+            else if (q.type === 'spell') setupSpell(q);
+        }
+
+        function playAudio(context) {
+            let utterance = new SpeechSynthesisUtterance(currentAudioWord);
+            utterance.lang = 'en-GB'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function setupMCQ(q) {
+            containers.mcq.classList.remove('hidden');
+            containers.mcq.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'mcq-btn';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
+                    if (index === q.ans) {
+                        btn.classList.add('correct');
+                        showFeedback(true, q.grammar);
+                    } else {
+                        btn.classList.add('incorrect');
+                        document.querySelectorAll('.mcq-btn')[q.ans].classList.add('correct');
+                        showFeedback(false, q.grammar, `Correct answer: ${q.options[q.ans]}`);
+                    }
+                };
+                containers.mcq.appendChild(btn);
+            });
+        }
+
+        function setupFITB(q) {
+            containers.fitb.classList.remove('hidden');
+            const input = document.getElementById('fitb-input');
+            input.value = '';
+            input.disabled = false;
+        }
+
+        function checkFitb() {
+            const input = document.getElementById('fitb-input');
+            if (input.value.trim() === '') return;
+            const q = activeQuestions[currentQ];
+            const val = input.value.trim().toLowerCase();
+            const correctAns = q.ans.toLowerCase();
+            const isCorrect = (val === correctAns) || (correctAns === 'which' && val === 'that') || (correctAns === 'were' && val === 'was') || (correctAns === 'can\'t' && (val === 'cannot' || val === 'cant'));
+
+            input.disabled = true;
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct word: ${q.ans}`);
+        }
+
+        function setupSpell(q) {
+            containers.spell.classList.remove('hidden');
+            currentAudioWord = q.word; 
+            const input = document.getElementById('spell-input');
+            input.value = '';
+            input.disabled = false;
+        }
+
+        function checkSpell() {
+            const input = document.getElementById('spell-input');
+            if (input.value.trim() === '') return;
+            
+            const q = activeQuestions[currentQ];
+            const val = input.value.trim().toLowerCase();
+            const isCorrect = (val === q.word.toLowerCase());
+            
+            input.disabled = true;
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct spelling: ${q.word}`);
+        }
+
+        function setupSort(q) {
+            containers.sort.classList.remove('hidden');
+            activeSortBank = [...q.words].sort(() => Math.random() - 0.5);
+            activeSortAnswer = [];
+            renderSort();
+        }
+
+        function renderSort() {
+            const bankDiv = document.getElementById('sort-bank');
+            const ansDiv = document.getElementById('sort-answer');
+            bankDiv.innerHTML = '';
+            ansDiv.innerHTML = '';
+
+            activeSortBank.forEach((w, i) => {
+                const sp = document.createElement('span');
+                sp.className = 'sort-word';
+                sp.textContent = w;
+                sp.onclick = () => { activeSortAnswer.push(w); activeSortBank.splice(i, 1); renderSort(); };
+                bankDiv.appendChild(sp);
+            });
+
+            activeSortAnswer.forEach((w, i) => {
+                const sp = document.createElement('span');
+                sp.className = 'sort-word';
+                sp.textContent = w;
+                sp.onclick = () => { activeSortBank.push(w); activeSortAnswer.splice(i, 1); renderSort(); };
+                ansDiv.appendChild(sp);
+            });
+        }
+
+        function checkSort() {
+            const q = activeQuestions[currentQ];
+            if (activeSortAnswer.length !== q.words.length) return;
+
+            const isCorrect = activeSortAnswer.join(' ') === q.words.join(' ');
+            document.querySelectorAll('.sort-word').forEach(w => w.onclick = null); 
+
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct order: ${q.words.join(' ')}`);
+        }
+
+        function setupMatch(q) {
+            containers.match.classList.remove('hidden');
+            const leftCol = document.getElementById('match-left');
+            const rightCol = document.getElementById('match-right');
+            leftCol.innerHTML = rightCol.innerHTML = '';
+            matchLeftSelected = matchRightSelected = null;
+
+            let leftItems = q.pairs.map((p, i) => ({ text: p[0], id: i })).sort(() => Math.random() - 0.5);
+            let rightItems = q.pairs.map((p, i) => ({ text: p[1], id: i })).sort(() => Math.random() - 0.5);
+
+            leftItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'match-btn match-left-btn';
+                btn.textContent = item.text; btn.dataset.id = item.id;
+                btn.onclick = () => selectMatch('left', btn);
+                leftCol.appendChild(btn);
+            });
+
+            rightItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'match-btn match-right-btn';
+                btn.textContent = item.text; btn.dataset.id = item.id;
+                btn.onclick = () => selectMatch('right', btn);
+                rightCol.appendChild(btn);
+            });
+        }
+
+        function selectMatch(side, btn) {
+            if (btn.classList.contains('matched')) return;
+
+            if (side === 'left') {
+                document.querySelectorAll('.match-left-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected'); matchLeftSelected = btn;
+            } else {
+                document.querySelectorAll('.match-right-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected'); matchRightSelected = btn;
+            }
+
+            if (matchLeftSelected && matchRightSelected) {
+                if (matchLeftSelected.dataset.id === matchRightSelected.dataset.id) {
+                    matchLeftSelected.classList.remove('selected'); matchRightSelected.classList.remove('selected');
+                    matchLeftSelected.classList.add('matched'); matchRightSelected.classList.add('matched');
+                    matchPairsMatched++; matchLeftSelected = matchRightSelected = null;
+
+                    if (matchPairsMatched === activeQuestions[currentQ].pairs.length) showFeedback(true, activeQuestions[currentQ].grammar);
+                } else {
+                    let prevLeft = matchLeftSelected, prevRight = matchRightSelected;
+                    matchLeftSelected = matchRightSelected = null;
+                    setTimeout(() => { prevLeft.classList.remove('selected'); prevRight.classList.remove('selected'); }, 500);
+                }
+            }
+        }
+
+        function nextPhase() {
+            currentQ++;
+            if (currentQ % 6 === 0 && currentQ < activeQuestions.length) {
+                currentLevel++;
+                triggerPuzzle((currentQ / 6) - 1);
+            } else if (currentQ >= activeQuestions.length) {
+                hideAllScreens();
+                document.getElementById('final-score-display').textContent = score;
+                screens.end.classList.remove('hidden');
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function triggerPuzzle(puzzleIndex) {
+            hideAllScreens();
+            screens.puzzle.classList.remove('hidden');
+            const p = puzzles[puzzleIndex];
+            document.getElementById('puzzle-text').textContent = p.text;
+            document.getElementById('puzzle-hint').textContent = p.hint;
+            document.getElementById('puzzle-input').value = '';
+            document.getElementById('puzzle-feedback').textContent = '';
+            
+            const audioBox = document.getElementById('puzzle-audio-box');
+            if(p.hasAudio) {
+                audioBox.classList.remove('hidden');
+                currentAudioWord = p.audioWord; 
+            } else {
+                audioBox.classList.add('hidden');
+            }
+
+            screens.puzzle.dataset.ans = p.ans;
+        }
+
+        function checkPuzzle() {
+            const input = document.getElementById('puzzle-input').value.trim().toLowerCase();
+            const correct = screens.puzzle.dataset.ans;
+            const fb = document.getElementById('puzzle-feedback');
+
+            if (input === correct) {
+                fb.style.color = "var(--correct-text)";
+                fb.innerHTML = "Passcode Accepted";
+                setTimeout(() => {
+                    hideAllScreens();
+                    screens.game.classList.remove('hidden');
+                    loadQuestion();
+                }, 1200);
+            } else {
+                fb.style.color = "var(--error-text)";
+                fb.innerHTML = "Incorrect Passcode";
+            }
+        }
+    </script>
+</body>
+</html>

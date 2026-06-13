@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌟 English Adventure // A2 Flyers 🌟</title>
+    
+    <style>
+        :root {
+            --bg-base: #F2F2F7;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --glass-hover: rgba(255, 255, 255, 1);
+            
+            --primary-blue: #007AFF;
+            --primary-purple: #5856D6;
+            --light-blue: #E5F1FF;
+            --light-purple: #EFEFFB;
+            --ui-grey: #E5E5EA;
+            --dark-grey: #8E8E93;
+            
+            --text-main: #1C1C1E;
+            --text-muted: #636366;
+            
+            --correct-bg: #E4F8EB;
+            --correct-text: #248A3D;
+            --error-bg: #FFECEB;
+            --error-text: #C93400;
+        }
+
+        body {
+            /* LARGE FONTS APPLIED HERE */
+            font-size: 22px; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 40px;
+            width: 100%;
+            max-width: 800px; /* Widened slightly to accommodate larger text */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1, h2 { 
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        h1 { 
+            font-size: 3em; /* Increased size */
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            line-height: 1.1;
+        }
+        
+        h2 { font-size: 2.2em; } /* Increased size */
+        
+        .header-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: var(--ui-grey);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .badge-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-value {
+            font-size: 1.8em; /* Increased size */
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .badge.score { background: var(--light-blue); }
+        .badge.score .badge-value { color: var(--primary-blue); }
+
+        .btn {
+            background: var(--primary-blue);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 24px;
+            padding: 20px 30px;
+            font-size: 1.4em; /* Increased size */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 16px rgba(0, 122, 255, 0.2);
+        }
+        
+        .btn:hover:not(:disabled) { background: #0062CC; transform: translateY(-2px); }
+        .btn:active:not(:disabled) { transform: scale(0.97); }
+        .btn:disabled { background: var(--ui-grey); color: var(--dark-grey); cursor: not-allowed; box-shadow: none; }
+        
+        .btn.audio { 
+            background: var(--primary-purple); 
+            box-shadow: 0 8px 16px rgba(88, 86, 214, 0.2);
+            width: auto; margin: 0; border-radius: 20px; padding: 14px 24px; font-size: 1.1em;
+        }
+        .btn.audio:hover { background: #4644AB; }
+
+        .hidden { display: none !important; }
+
+        .question-text { 
+            font-size: 2em; /* Increased size */
+            font-weight: 600;
+            margin-bottom: 35px; 
+            line-height: 1.4; 
+            text-align: center;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+        
+        .mcq-grid { display: flex; flex-direction: column; gap: 16px; }
+        .mcq-btn {
+            background: var(--bg-base);
+            border: 3px solid transparent;
+            border-radius: 20px;
+            color: var(--text-main);
+            padding: 22px 28px;
+            cursor: pointer; 
+            font-size: 1.5em; /* Increased size */
+            font-family: inherit;
+            font-weight: 500;
+            text-align: left; 
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .mcq-btn:hover:not(:disabled) { background: var(--light-blue); color: var(--primary-blue); }
+        .mcq-btn:active:not(:disabled) { transform: scale(0.98); }
+        .mcq-btn.correct { background: var(--correct-bg); border-color: var(--correct-text); color: var(--correct-text); font-weight: 700; }
+        .mcq-btn.incorrect { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); font-weight: 700; }
+
+        .input-container { 
+            display: flex; 
+            align-items: stretch; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+        .input-container input, .puzzle-box input {
+            padding: 20px 24px; 
+            font-size: 1.6em; /* Increased size */
+            background: var(--bg-base);
+            border: 3px solid transparent;
+            border-radius: 20px;
+            font-family: inherit;
+            color: var(--text-main);
+            width: 100%; 
+            outline: none;
+            flex-grow: 1;
+            transition: all 0.2s;
+        }
+        .input-container input:focus, .puzzle-box input:focus { 
+            border-color: var(--primary-blue); 
+            background: #FFFFFF; 
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.1);
+        }
+        .input-container .btn { margin-top: 0; width: auto; padding: 0 35px; }
+
+        .spell-box {
+            background: var(--light-purple); 
+            padding: 24px; 
+            margin-bottom: 24px; 
+            border-radius: 24px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 1.3em;
+        }
+
+        .sort-area {
+            min-height: 90px; 
+            border: 3px dashed var(--dark-grey); 
+            background: var(--bg-base);
+            border-radius: 24px;
+            padding: 20px; margin-bottom: 25px; 
+            display: flex; flex-wrap: wrap; gap: 12px; 
+        }
+        .sort-bank { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 25px; justify-content: center;}
+        .sort-word {
+            background: #FFFFFF; 
+            color: var(--primary-blue); 
+            border: 2px solid var(--ui-grey);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 18px;
+            padding: 14px 22px; cursor: pointer; user-select: none; 
+            transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            font-size: 1.4em; /* Increased size */
+            font-weight: 600;
+        }
+        .sort-word:hover { background: var(--light-blue); transform: translateY(-3px); }
+        .sort-word:active { transform: scale(0.95); }
+
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+        .match-col { display: flex; flex-direction: column; gap: 15px; }
+        .match-btn {
+            padding: 20px; 
+            background: var(--bg-base); 
+            border: 3px solid transparent;
+            border-radius: 20px;
+            color: var(--text-main); font-family: inherit; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; font-size: 1.3em; /* Increased size */
+            text-align: left;
+            line-height: 1.4;
+        }
+        .match-btn:hover { background: var(--ui-grey); }
+        .match-btn.selected { background: var(--light-blue); border-color: var(--primary-blue); color: var(--primary-blue); transform: scale(0.98); font-weight: 700;}
+        .match-btn.matched { background: var(--correct-bg); border-color: var(--correct-text); color: var(--correct-text); cursor: default; opacity: 0.6; font-weight: 700; }
+
+        #feedback { 
+            margin-top: 35px; 
+            padding: 24px; 
+            border-radius: 24px;
+            text-align: center;
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feedback-correct { background: var(--correct-bg); border: 2px solid var(--correct-text); color: var(--correct-text); }
+        .feedback-incorrect { background: var(--error-bg); border: 2px solid var(--error-text); color: var(--error-text); }
+        
+        #feedback-text { font-size: 1.6em; font-weight: 700; margin-bottom: 10px;}
+        .grammar-hint { font-size: 1.1em; font-weight: 600; opacity: 0.9; }
+
+        .puzzle-box { text-align: center; }
+        .puzzle-icon { font-size: 5em; margin-bottom: 15px; }
+        .puzzle-text { font-size: 1.8em; font-weight: 600; margin: 25px 0; color: var(--primary-purple); line-height: 1.4;}
+        .puzzle-hint { font-size: 1.1em; font-weight: 700; color: var(--dark-grey); text-transform: uppercase; margin-bottom: 20px;}
+
+        .infobox {
+            background: var(--light-blue);
+            border-radius: 24px;
+            padding: 30px; margin-bottom: 35px; font-size: 1.2em; font-weight: 500;
+            color: var(--text-main);
+        }
+        
+        p { line-height: 1.6; margin-top: 0;}
+        ul { padding-left: 30px; margin-bottom: 0;}
+        li { margin-bottom: 15px; }
+        
+        @media (max-width: 600px) {
+            .match-grid { grid-template-columns: 1fr; }
+            .header-info { grid-template-columns: 1fr 1fr; }
+            .input-container { flex-direction: column; }
+            .input-container .btn { width: 100%; padding: 20px; }
+            .container { padding: 30px; border-radius: 30px;}
+            body { font-size: 18px; } /* Slightly scale down on mobile but keep relatively large */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="start-screen">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <span style="font-size: 4em;">✈️</span>
+        </div>
+        <h1>English Adventure<br><span style="font-size: 0.5em; font-weight: 600; color: var(--dark-grey); -webkit-text-fill-color: var(--dark-grey);">A2 Flyers 🌍</span></h1>
+        
+        <div class="infobox">
+            <p style="font-weight: 700; color: var(--primary-blue); margin-bottom: 15px; font-size: 1.4em;">🎯 Game Rules:</p>
+            <ul>
+                <li>Learn about Travel 🚆, Hobbies ⚽, and Weather ☀️![cite: 1]</li>
+                <li>Answer 30 fun questions 🎲[cite: 1]</li>
+                <li>Unlock puzzles to keep playing 🧩[cite: 1]</li>
+            </ul>
+        </div>
+        
+        <div style="background: var(--bg-base); border-radius: 20px; padding: 25px; margin-bottom: 35px; text-align: center;">
+            <p style="margin:0; font-weight: 700; color: var(--text-main); margin-bottom: 15px; font-size: 1.4em;">⭐ Points System ⭐</p>
+            <p style="margin:0; font-size: 1.2em; color: var(--text-muted);">
+                <span style="color:var(--primary-blue); font-weight: 700;">+10 Stars</span> for right answers! 🟢<br>
+                <span style="color:var(--primary-purple); font-weight: 700;">-5 Stars</span> for mistakes. 🔴[cite: 1]
+            </p>
+        </div>
+        
+        <button class="btn" onclick="startGame()">🚀 Start Playing!</button>
+    </div>
+
+    <div class="container hidden" id="game-screen">
+        <div class="header-info">
+            <div class="badge">
+                <span class="badge-label">Level 🪜</span>
+                <span class="badge-value" id="ui-level">01</span>
+            </div>
+            <div class="badge">
+                <span class="badge-label">Topic 🏷️</span>
+                <span class="badge-value" id="ui-topic" style="font-size: 0.9em; margin-top: 8px;">--</span>
+            </div>
+            <div class="badge">
+                <span class="badge-label">Progress ⏳</span>
+                <span class="badge-value"><span id="ui-progress">1</span><span style="font-size:0.6em; color:var(--dark-grey)">/30</span></span>
+            </div>
+            <div class="badge score">
+                <span class="badge-label" style="color: var(--primary-blue);">Stars ⭐</span>
+                <span class="badge-value" id="ui-points">0</span>
+            </div>
+        </div>
+
+        <div class="question-text" id="ui-question">QUESTION.DATA</div>
+        
+        <div id="container-mcq" class="mcq-grid hidden"></div>
+        
+        <div id="container-fitb" class="hidden">
+            <div class="input-container">
+                <input type="text" id="fitb-input" placeholder="Type your answer ✍️..." autocomplete="off">
+                <button class="btn" onclick="checkFitb()">Verify ✅</button>
+            </div>
+        </div>
+
+        <div id="container-spell" class="hidden">
+            <div class="spell-box">
+                <span style="font-weight: 600; color: var(--primary-purple);">Listen & spell 👂:</span>
+                <button class="btn audio" onclick="playAudio('spell')">Play Audio 🔊</button>
+            </div>
+            <div class="input-container">
+                <input type="text" id="spell-input" placeholder="Type the word ✍️..." autocomplete="off">
+                <button class="btn" onclick="checkSpell()">Verify ✅</button>
+            </div>
+        </div>
+
+        <div id="container-sort" class="hidden">
+            <p style="font-size: 1em; font-weight: 600; color: var(--dark-grey); text-align: center; margin-bottom: 20px;">Tap blocks to arrange the sentence 🧩.</p>
+            <div class="sort-area" id="sort-answer"></div>
+            <div class="sort-bank" id="sort-bank"></div>
+            <button class="btn" onclick="checkSort()">Confirm Order 📝</button>
+        </div>
+
+        <div id="container-match" class="hidden">
+            <p style="font-size: 1em; font-weight: 600; color: var(--dark-grey); text-align: center; margin-bottom: 20px;">Tap to connect matching pairs 🔗.</p>
+            <div class="match-grid">
+                <div class="match-col" id="match-left"></div>
+                <div class="match-col" id="match-right"></div>
+            </div>
+        </div>
+
+        <div id="feedback" class="hidden">
+            <div id="feedback-text"></div>
+            <div class="grammar-hint" id="ui-grammar"></div>
+        </div>
+        <button class="btn hidden" id="next-btn" style="background: var(--text-main); color: #FFF; box-shadow: 0 8px 16px rgba(0,0,0,0.2);" onclick="nextPhase()">Next Question ➡️</button>
+    </div>
+
+    <div class="container hidden puzzle-box" id="puzzle-screen">
+        <div class="puzzle-icon">🔐</div>
+        <h2 style="color: var(--primary-blue);">Puzzle Time! 🧩</h2>
+        <p class="puzzle-text" id="puzzle-text"></p>
+        
+        <div id="puzzle-audio-box" class="hidden" style="margin-bottom: 30px;">
+            <button class="btn audio" style="margin: 0 auto; font-size: 1.3em; padding: 18px 30px;" onclick="playAudio('puzzle')">Play Clue 🔊</button>
+        </div>
+
+        <p class="puzzle-hint" id="puzzle-hint"></p>
+        <div class="input-container">
+            <input type="text" id="puzzle-input" placeholder="Type answer here ✍️...">
+            <button class="btn" style="background: var(--primary-purple);" onclick="checkPuzzle()">Unlock 🔓</button>
+        </div>
+        <div id="puzzle-feedback" style="margin-top: 25px; font-weight: 700; font-size: 1.4em;"></div>
+    </div>
+
+    <div class="container hidden" id="end-screen" style="text-align: center;">
+        <div style="font-size: 5em; margin-bottom: 15px;">🏆</div>
+        <h1 style="color: var(--primary-blue); -webkit-text-fill-color: var(--primary-blue); background: none;">Great Job! 🎉</h1>
+        <div class="infobox" style="background: var(--light-purple); border: 3px solid var(--primary-purple);">
+            <p style="margin:0; font-size:1.4em; color: var(--primary-purple); font-weight: 700;">Total Stars ⭐</p>
+            <h2 id="final-score-display" style="margin:15px 0 0 0; font-size: 4em; color: var(--text-main);"></h2>
+        </div>
+        <p style="font-weight: 600; font-size: 1.4em; color: var(--text-muted); margin-bottom: 40px;">You answered 30 questions! 🎈</p>
+        <button class="btn" onclick="location.reload()">Play Again 🔄</button>
+    </div>
+
+    <script>
+        let currentQ = 0;
+        let currentLevel = 1;
+        let score = 0;
+        
+        let activeSortBank = [];
+        let activeSortAnswer = [];
+        let matchLeftSelected = null;
+        let matchRightSelected = null;
+        let matchPairsMatched = 0;
+        let currentAudioWord = ""; 
+        let activeQuestions = [];
+
+        // 30 A2 Flyers/Key Questions
+        const allQuestions = [
+            { type: 'mcq', topic: 'Travel 🚆', grammar: 'Past Simple', text: 'I _____ to the cinema yesterday.', options: ['went', 'go', 'going'], ans: 0 },
+            { type: 'fitb', topic: 'Weather ☀️', grammar: 'Past Continuous', text: 'We were playing football _____ it started to rain.', ans: 'when' },
+            { type: 'sort', topic: 'People 🧍', grammar: 'Comparatives', text: 'Organize the sentence:', words: ['She', 'is', 'taller', 'than', 'her', 'brother.'] },
+            { type: 'match', topic: 'Weather ☀️', grammar: 'Vocabulary', text: 'Match the weather to the season:', pairs: [['Hot ☀️', 'Summer 🏖️'], ['Cold ❄️', 'Winter ⛄'], ['Wet 🌧️', 'Rainy Season ☔']] },
+            { type: 'mcq', topic: 'Travel ✈️', grammar: 'Present Perfect', text: 'Have you _____ been to Paris?', options: ['ever', 'never', 'just'], ans: 0 },
+            { type: 'fitb', topic: 'Rules 🛑', grammar: 'Modal Verbs', text: 'You _____ wear a seatbelt in the car.', ans: 'must' },
+            { type: 'sort', topic: 'Plans 📅', grammar: 'Going to', text: 'Organize the sentence:', words: ['I', 'am', 'going', 'to', 'visit', 'grandma.'] },
+            { type: 'spell', topic: 'School 🏫', grammar: 'Spelling', text: 'Dictation: A place where you read and borrow books.', word: 'library' },
+            { type: 'mcq', topic: 'Plans 📅', grammar: 'Future (Will)', text: 'What _____ you do next weekend?', options: ['will', 'do', 'are'], ans: 0 },
+            { type: 'fitb', topic: 'Nature 🌍', grammar: 'Superlatives', text: 'Mount Everest is the _____ mountain in the world.', ans: 'highest' },
+            { type: 'sort', topic: 'School 🏫', grammar: 'Present Perfect', text: 'Organize the sentence:', words: ['He', 'has', 'already', 'finished', 'his', 'homework.'] },
+            { type: 'match', topic: 'Adjectives 🎨', grammar: 'Opposites', text: 'Match the opposites:', pairs: [['Interesting', 'Boring'], ['Expensive', 'Cheap'], ['Dangerous', 'Safe']] },
+            { type: 'mcq', topic: 'Weather ☀️', grammar: '1st Conditional', text: 'If it rains tomorrow, we _____ stay at home.', options: ['will', 'would', 'do'], ans: 0 },
+            { type: 'fitb', topic: 'Shopping 🛍️', grammar: 'Quantifiers', text: 'I don\'t have _____ money in my pocket.', ans: 'any' },
+            { type: 'sort', topic: 'Daily Life ⏰', grammar: 'Past Continuous', text: 'Organize the sentence:', words: ['They', 'were', 'sleeping', 'at', 'ten', 'o\'clock.'] },
+            { type: 'spell', topic: 'Travel ✈️', grammar: 'Spelling', text: 'Dictation: You need this small book to travel to different countries.', word: 'passport' },
+            { type: 'mcq', topic: 'Entertainment 🍿', grammar: 'Comparatives', text: 'This book is _____ than the movie.', options: ['better', 'good', 'best'], ans: 0 },
+            { type: 'fitb', topic: 'Daily Life 🏠', grammar: 'Present Perfect (since/for)', text: 'I have lived in this city _____ 2015.', ans: 'since' },
+            { type: 'sort', topic: 'Health 🍎', grammar: 'Modal Verbs', text: 'Organize the sentence:', words: ['We', 'should', 'eat', 'more', 'vegetables.'] },
+            { type: 'match', topic: 'Hobbies ⚽', grammar: 'Collocations', text: 'Match the verb to the hobby:', pairs: [['Play', 'Tennis 🎾'], ['Ride', 'A bike 🚲'], ['Listen', 'To music 🎧']] },
+            { type: 'mcq', topic: 'Travel 📷', grammar: 'Past Simple', text: 'We didn\'t _____ any photos on holiday.', options: ['take', 'took', 'taking'], ans: 0 },
+            { type: 'fitb', topic: 'Daily Life 🔑', grammar: 'Phrasal Verbs', text: 'I am looking _____ my keys. I lost them.', ans: 'for' },
+            { type: 'sort', topic: 'Places 🏙️', grammar: 'There is/are', text: 'Organize the sentence:', words: ['There', 'are', 'a', 'lot', 'of', 'people.'] },
+            { type: 'spell', topic: 'Time 📅', grammar: 'Spelling', text: 'Dictation: The day after Tuesday.', word: 'Wednesday' },
+            { type: 'mcq', topic: 'Requests 🗣️', grammar: 'Modal Verbs', text: '_____ I open the window? It\'s very hot.', options: ['Shall', 'Will', 'Do'], ans: 0 },
+            { type: 'fitb', topic: 'People 🧍', grammar: 'Present Perfect (since/for)', text: 'I haven\'t seen him _____ three days.', ans: 'for' },
+            { type: 'sort', topic: 'Plans 🎈', grammar: 'Modal Verbs', text: 'Organize the sentence:', words: ['She', 'might', 'go', 'to', 'the', 'party.'] },
+            { type: 'match', topic: 'Transport 🚗', grammar: 'Collocations', text: 'Match the verb to the transport:', pairs: [['Catch', 'A bus 🚌'], ['Drive', 'A car 🚗'], ['Fly', 'A plane ✈️']] },
+            { type: 'mcq', topic: 'School 🏫', grammar: 'Vocabulary', text: 'Which subject do you learn about the past?', options: ['History', 'Science', 'Maths'], ans: 0 },
+            { type: 'spell', topic: 'School ✂️', grammar: 'Spelling', text: 'Dictation: You use these to cut paper.', word: 'scissors' }
+        ];
+
+        // A2 Level Puzzles
+        const puzzles = [
+            { text: "A machine you use to take photos. 📷", hint: "Hint: You use it on holiday.", ans: "camera", hasAudio: false },
+            { text: "Listen to the word and spell it 👂.", hint: "Hint: Tap 'Play Clue' 🔊", ans: "holiday", hasAudio: true, audioWord: "holiday" },
+            { text: "Riddle: You need this paper and coins to buy things in a shop. 💵", hint: "Hint: It pays for things.", ans: "money", hasAudio: false },
+            { text: "Listen to the weather and spell it 🌧️.", hint: "Hint: Tap 'Play Clue' 🔊", ans: "raining", hasAudio: true, audioWord: "raining" }
+        ];
+
+        const screens = {
+            start: document.getElementById('start-screen'),
+            game: document.getElementById('game-screen'),
+            puzzle: document.getElementById('puzzle-screen'),
+            end: document.getElementById('end-screen')
+        };
+        
+        const containers = {
+            mcq: document.getElementById('container-mcq'),
+            fitb: document.getElementById('container-fitb'),
+            sort: document.getElementById('container-sort'),
+            match: document.getElementById('container-match'),
+            spell: document.getElementById('container-spell')
+        };
+
+        const ui = {
+            level: document.getElementById('ui-level'),
+            topic: document.getElementById('ui-topic'),
+            progress: document.getElementById('ui-progress'),
+            points: document.getElementById('ui-points'),
+            question: document.getElementById('ui-question'),
+            feedback: document.getElementById('feedback'),
+            feedbackText: document.getElementById('feedback-text'),
+            grammar: document.getElementById('ui-grammar'),
+            nextBtn: document.getElementById('next-btn')
+        };
+
+        function hideAllScreens() { Object.values(screens).forEach(s => s.classList.add('hidden')); }
+        function hideAllContainers() { Object.values(containers).forEach(c => c.classList.add('hidden')); }
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startGame() {
+            let shuffled = shuffleArray(allQuestions);
+            activeQuestions = shuffled.slice(0, 30);
+            hideAllScreens();
+            screens.game.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function updateScore(isCorrect) {
+            score += isCorrect ? 10 : -5;
+            ui.points.textContent = score;
+            return isCorrect ? `+10 Stars ⭐` : `-5 Stars 🔴`;
+        }
+
+        function showFeedback(isCorrect, grammar, extra = "") {
+            let ptsStr = updateScore(isCorrect);
+            
+            ui.feedback.classList.remove('hidden', 'feedback-correct', 'feedback-incorrect');
+            ui.feedback.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+            
+            let status = isCorrect ? 'Great! ✅' : 'Oops! ❌';
+            let extraHTML = extra ? `<div style="font-size:0.9em; margin-top:8px; font-weight:600;">${extra}</div>` : "";
+            
+            ui.feedbackText.innerHTML = `${status} &middot; <span>${ptsStr}</span>${extraHTML}`;
+            ui.grammar.innerHTML = `Skill Focus: ${grammar} 🧠`;
+            
+            ui.nextBtn.classList.remove('hidden');
+        }
+
+        function loadQuestion() {
+            hideAllContainers();
+            ui.feedback.classList.add('hidden');
+            ui.feedbackText.innerHTML = "";
+            ui.grammar.innerHTML = "";
+            ui.nextBtn.classList.add('hidden');
+            matchPairsMatched = 0;
+
+            const q = activeQuestions[currentQ];
+            
+            ui.level.textContent = currentLevel.toString().padStart(2, '0');
+            ui.topic.textContent = q.topic;
+            ui.progress.textContent = currentQ + 1;
+            ui.question.innerHTML = q.text;
+
+            if (q.type === 'mcq') setupMCQ(q);
+            else if (q.type === 'fitb') setupFITB(q);
+            else if (q.type === 'sort') setupSort(q);
+            else if (q.type === 'match') setupMatch(q);
+            else if (q.type === 'spell') setupSpell(q);
+        }
+
+        function playAudio(context) {
+            let utterance = new SpeechSynthesisUtterance(currentAudioWord);
+            utterance.lang = 'en-GB'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function setupMCQ(q) {
+            containers.mcq.classList.remove('hidden');
+            containers.mcq.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'mcq-btn';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
+                    if (index === q.ans) {
+                        btn.classList.add('correct');
+                        showFeedback(true, q.grammar);
+                    } else {
+                        btn.classList.add('incorrect');
+                        document.querySelectorAll('.mcq-btn')[q.ans].classList.add('correct');
+                        showFeedback(false, q.grammar, `Correct answer: ${q.options[q.ans]}`);
+                    }
+                };
+                containers.mcq.appendChild(btn);
+            });
+        }
+
+        function setupFITB(q) {
+            containers.fitb.classList.remove('hidden');
+            const input = document.getElementById('fitb-input');
+            input.value = '';
+            input.disabled = false;
+        }
+
+        function checkFitb() {
+            const input = document.getElementById('fitb-input');
+            if (input.value.trim() === '') return;
+            const q = activeQuestions[currentQ];
+            const val = input.value.trim().toLowerCase();
+            const correctAns = q.ans.toLowerCase();
+            const isCorrect = (val === correctAns);
+
+            input.disabled = true;
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct word: ${q.ans}`);
+        }
+
+        function setupSpell(q) {
+            containers.spell.classList.remove('hidden');
+            currentAudioWord = q.word; 
+            const input = document.getElementById('spell-input');
+            input.value = '';
+            input.disabled = false;
+        }
+
+        function checkSpell() {
+            const input = document.getElementById('spell-input');
+            if (input.value.trim() === '') return;
+            
+            const q = activeQuestions[currentQ];
+            const val = input.value.trim().toLowerCase();
+            const isCorrect = (val === q.word.toLowerCase());
+            
+            input.disabled = true;
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct spelling: ${q.word}`);
+        }
+
+        function setupSort(q) {
+            containers.sort.classList.remove('hidden');
+            activeSortBank = [...q.words].sort(() => Math.random() - 0.5);
+            activeSortAnswer = [];
+            renderSort();
+        }
+
+        function renderSort() {
+            const bankDiv = document.getElementById('sort-bank');
+            const ansDiv = document.getElementById('sort-answer');
+            bankDiv.innerHTML = '';
+            ansDiv.innerHTML = '';
+
+            activeSortBank.forEach((w, i) => {
+                const sp = document.createElement('span');
+                sp.className = 'sort-word';
+                sp.textContent = w;
+                sp.onclick = () => { activeSortAnswer.push(w); activeSortBank.splice(i, 1); renderSort(); };
+                bankDiv.appendChild(sp);
+            });
+
+            activeSortAnswer.forEach((w, i) => {
+                const sp = document.createElement('span');
+                sp.className = 'sort-word';
+                sp.textContent = w;
+                sp.onclick = () => { activeSortBank.push(w); activeSortAnswer.splice(i, 1); renderSort(); };
+                ansDiv.appendChild(sp);
+            });
+        }
+
+        function checkSort() {
+            const q = activeQuestions[currentQ];
+            if (activeSortAnswer.length !== q.words.length) return;
+
+            const isCorrect = activeSortAnswer.join(' ') === q.words.join(' ');
+            document.querySelectorAll('.sort-word').forEach(w => w.onclick = null); 
+
+            showFeedback(isCorrect, q.grammar, isCorrect ? "" : `Correct order: ${q.words.join(' ')}`);
+        }
+
+        function setupMatch(q) {
+            containers.match.classList.remove('hidden');
+            const leftCol = document.getElementById('match-left');
+            const rightCol = document.getElementById('match-right');
+            leftCol.innerHTML = rightCol.innerHTML = '';
+            matchLeftSelected = matchRightSelected = null;
+
+            let leftItems = q.pairs.map((p, i) => ({ text: p[0], id: i })).sort(() => Math.random() - 0.5);
+            let rightItems = q.pairs.map((p, i) => ({ text: p[1], id: i })).sort(() => Math.random() - 0.5);
+
+            leftItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'match-btn match-left-btn';
+                btn.textContent = item.text; btn.dataset.id = item.id;
+                btn.onclick = () => selectMatch('left', btn);
+                leftCol.appendChild(btn);
+            });
+
+            rightItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'match-btn match-right-btn';
+                btn.textContent = item.text; btn.dataset.id = item.id;
+                btn.onclick = () => selectMatch('right', btn);
+                rightCol.appendChild(btn);
+            });
+        }
+
+        function selectMatch(side, btn) {
+            if (btn.classList.contains('matched')) return;
+
+            if (side === 'left') {
+                document.querySelectorAll('.match-left-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected'); matchLeftSelected = btn;
+            } else {
+                document.querySelectorAll('.match-right-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected'); matchRightSelected = btn;
+            }
+
+            if (matchLeftSelected && matchRightSelected) {
+                if (matchLeftSelected.dataset.id === matchRightSelected.dataset.id) {
+                    matchLeftSelected.classList.remove('selected'); matchRightSelected.classList.remove('selected');
+                    matchLeftSelected.classList.add('matched'); matchRightSelected.classList.add('matched');
+                    matchPairsMatched++; matchLeftSelected = matchRightSelected = null;
+
+                    if (matchPairsMatched === activeQuestions[currentQ].pairs.length) showFeedback(true, activeQuestions[currentQ].grammar);
+                } else {
+                    let prevLeft = matchLeftSelected, prevRight = matchRightSelected;
+                    matchLeftSelected = matchRightSelected = null;
+                    setTimeout(() => { prevLeft.classList.remove('selected'); prevRight.classList.remove('selected'); }, 500);
+                }
+            }
+        }
+
+        function nextPhase() {
+            currentQ++;
+            if (currentQ % 6 === 0 && currentQ < activeQuestions.length) {
+                currentLevel++;
+                triggerPuzzle((currentQ / 6) - 1);
+            } else if (currentQ >= activeQuestions.length) {
+                hideAllScreens();
+                document.getElementById('final-score-display').textContent = score;
+                screens.end.classList.remove('hidden');
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function triggerPuzzle(puzzleIndex) {
+            hideAllScreens();
+            screens.puzzle.classList.remove('hidden');
+            const p = puzzles[puzzleIndex];
+            document.getElementById('puzzle-text').textContent = p.text;
+            document.getElementById('puzzle-hint').textContent = p.hint;
+            document.getElementById('puzzle-input').value = '';
+            document.getElementById('puzzle-feedback').textContent = '';
+            
+            const audioBox = document.getElementById('puzzle-audio-box');
+            if(p.hasAudio) {
+                audioBox.classList.remove('hidden');
+                currentAudioWord = p.audioWord; 
+            } else {
+                audioBox.classList.add('hidden');
+            }
+
+            screens.puzzle.dataset.ans = p.ans;
+        }
+
+        function checkPuzzle() {
+            const input = document.getElementById('puzzle-input').value.trim().toLowerCase();
+            const correct = screens.puzzle.dataset.ans;
+            const fb = document.getElementById('puzzle-feedback');
+
+            if (input === correct) {
+                fb.style.color = "var(--correct-text)";
+                fb.innerHTML = "Passcode Accepted ✅";
+                setTimeout(() => {
+                    hideAllScreens();
+                    screens.game.classList.remove('hidden');
+                    loadQuestion();
+                }, 1200);
+            } else {
+                fb.style.color = "var(--error-text)";
+                fb.innerHTML = "Incorrect Passcode ❌";
+            }
+        }
+    </script>
+</body>
+</html>

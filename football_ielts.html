@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Grammar Soccer - Pro AI Edition</title>
+    
+    <script src="football_ielts.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #1a252f; color: white; text-align: center; margin: 0; padding: 20px; }
+        
+        #game-header { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 10px auto; background: #2c3e50; padding: 10px 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .score { font-size: 24px; font-weight: bold; display: flex; flex-direction: column; align-items: center; }
+        .p1-color { color: #e74c3c; } .p2-color { color: #3498db; }
+        #timer { font-size: 28px; font-family: monospace; font-weight: bold; color: #f1c40f; margin-bottom: 5px; }
+        
+        .sub-btn { background: #556b2f; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-weight: bold; transition: 0.2s; }
+        .sub-btn:hover { background: #6b8e23; }
+        .sub-btn:disabled { background: #333; cursor: not-allowed; color: #777; }
+        
+        .formation-select { background: #34495e; color: #ecf0f1; border: 1px solid #7f8c8d; padding: 5px; border-radius: 4px; font-weight: bold; margin-top: 5px; cursor: pointer; }
+        
+        #match-stats { text-align: center; font-size: 16px; font-weight: bold; color: #ecf0f1; }
+        #pass-counter { color: #f1c40f; font-size: 20px; }
+
+        #action-timer-container { max-width: 1000px; height: 8px; background: #34495e; margin: 0 auto 5px auto; border-radius: 4px; overflow: hidden; }
+        #action-timer-bar { height: 100%; background: #f39c12; width: 100%; transition: width 0.1s linear; }
+
+        #canvas-container { position: relative; width: 1000px; height: 600px; margin: 0 auto; border: 5px solid #ecf0f1; border-radius: 10px; overflow: hidden; background-color: #27ae60; cursor: default; }
+        canvas { display: block; }
+        
+        #tactical-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 20px; font-size: 18px; font-weight: bold; color: #f1c40f; display: none; pointer-events: none; z-index: 5; border: 2px solid #f1c40f; }
+
+        #modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 10; display: none; }
+        #question-modal { background: white; color: #333; padding: 30px; border-radius: 10px; width: 80%; max-width: 550px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; }
+        #turn-indicator { font-size: 16px; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
+        #q-topic { color: #7f8c8d; font-size: 14px; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; }
+        #q-text { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
+        #q-hint { color: #e67e22; font-style: italic; margin-bottom: 15px; display: none; }
+        
+        #q-timer-container { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-bottom: 15px; overflow: hidden; }
+        #q-timer-bar { height: 100%; background: #e74c3c; width: 100%; transition: width 1s linear; }
+        #q-timer-text { font-weight: bold; color: #e74c3c; margin-bottom: 10px; font-size: 18px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        button { padding: 15px; border: none; border-radius: 5px; background: #2c3e50; color: white; font-size: 16px; cursor: pointer; transition: background 0.2s; font-weight: bold; }
+        button:hover { background: #1a252f; }
+        .hint-btn { background: #f39c12; width: 100%; margin-bottom: 15px; } .hint-btn:hover { background: #e67e22; }
+        
+        #message-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 20; }
+        #message-overlay h1 { font-size: 48px; color: #f1c40f; margin-bottom: 20px; }
+
+        .action-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 30; }
+        #goal-overlay { background: rgba(46, 204, 113, 0.95); animation: pulseGreen 0.5s infinite alternate; }
+        #foul-overlay { background: rgba(192, 57, 43, 0.95); animation: pulseRed 0.5s infinite alternate; }
+        .action-overlay h1 { font-size: 72px; color: white; margin: 0; text-shadow: 3px 3px 0px rgba(0,0,0,0.3); }
+        .action-overlay p { font-size: 28px; color: #f1c40f; font-weight: bold; }
+
+        @keyframes pulseGreen { from { background: rgba(46, 204, 113, 0.95); } to { background: rgba(39, 174, 96, 0.95); } }
+        @keyframes pulseRed { from { background: rgba(231, 76, 60, 0.95); } to { background: rgba(192, 57, 43, 0.95); } }
+        
+        audio { width: 100%; margin-bottom: 15px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <audio id="audio-bravo" src="audio/bravo.mp3" preload="auto"></audio>
+
+    <div id="game-header">
+        <div class="score p1-color">
+            Player 1: <span id="p1-score">0</span>
+            <select id="p1-formation" class="formation-select">
+                <option value="4-3-3">Form: 4-3-3</option>
+                <option value="3-5-2">Form: 3-5-2</option>
+                <option value="4-4-2">Form: 4-4-2</option>
+                <option value="4-5-1">Form: 4-5-1</option>
+            </select>
+            <button class="sub-btn" id="btn-sub1" onclick="triggerSubstitution(1)">Subs: 3</button>
+        </div>
+        <div id="match-stats">
+            <div id="timer">25:00</div>
+            <div>Passes: <span id="pass-counter">0</span></div>
+        </div>
+        <div class="score p2-color">
+            Player 2: <span id="p2-score">0</span>
+            <select id="p2-formation" class="formation-select">
+                <option value="4-3-3">Form: 4-3-3</option>
+                <option value="3-5-2">Form: 3-5-2</option>
+                <option value="4-4-2">Form: 4-4-2</option>
+                <option value="4-5-1">Form: 4-5-1</option>
+            </select>
+            <button class="sub-btn" id="btn-sub2" onclick="triggerSubstitution(2)">Subs: 3</button>
+        </div>
+    </div>
+    
+    <div id="action-timer-container"><div id="action-timer-bar"></div></div>
+
+    <div id="canvas-container">
+        <canvas id="field" width="1000" height="600"></canvas>
+        <div id="tactical-hud">PLAYER X: Click a teammate to pass!</div>
+        
+        <div id="modal-overlay">
+            <div id="question-modal">
+                <div id="turn-indicator"></div>
+                <div id="q-timer-text">Time Left: 20s</div>
+                <div id="q-timer-container"><div id="q-timer-bar"></div></div>
+                <div id="q-topic">Topic</div>
+                <div id="q-text">Question goes here...</div>
+                <audio id="interception-audio" controls style="display:none;"></audio>
+                <button class="hint-btn" id="hint-btn" onclick="showHint()">Show Hint</button>
+                <div id="q-hint">Hint goes here...</div>
+                <div class="options-grid" id="q-options"></div>
+            </div>
+        </div>
+
+        <div id="foul-overlay" class="action-overlay">
+            <h1>FOUL!</h1>
+            <p id="foul-text">Player X was tackled!</p>
+            <p style="color: white; font-size: 20px;">Free Kick Awarded - Pass safely without answering!</p>
+            <button onclick="takeFreeKick()" style="font-size: 18px; padding: 10px 30px; background: #2c3e50;">Take Free Kick</button>
+        </div>
+
+        <div id="goal-overlay" class="action-overlay">
+            <h1>GOAL!!!</h1>
+            <p id="goal-congrats">Congratulations!</p>
+            <button onclick="closeGoalModal()" style="font-size: 18px; padding: 10px 30px; background: #2c3e50;">Kick-Off</button>
+        </div>
+
+        <div id="message-overlay">
+            <h1 id="main-message">IELTS Soccer: Turn-Based Edition</h1>
+            <p style="font-size: 18px; max-width: 800px; margin-bottom: 30px;">
+                Game pauses every <strong>10 seconds</strong> for a strategic question phase. <br><br>
+                <strong>Turn-Based Progress:</strong> Footballers do not run automatically. Answering correctly pushes attackers forward and forces defenders deep into their box!<br>
+                <strong>Manual Passing:</strong> Click a teammate OR type their number (1-11) to coordinate a pass.<br>
+                <strong>To Score:</strong> Advance your team into the final penalty zone to unleash a Goal Opportunity question!
+            </p>
+            <button onclick="startGame()" style="font-size: 20px; padding: 15px 40px; background: #27ae60;">Start Match</button>
+        </div>
+    </div>
+
+<script>
+    // --- DATABASE: External Questions Integration ---
+    const externalQuestions = typeof questions !== 'undefined' ? questions : [];
+
+    // --- REVISED UNIFIED SHUFFLE DECK ---
+    // Fixes uneven frequency completely by running a single cycle across all questions
+    let masterQuestionPool = [];
+
+    function getUniqueQuestion(type) {
+        if (externalQuestions.length === 0) {
+            return { type: "Error", q: "Questions missing! Check football_ielts.js.", options: ["OK", "Retry", "Fix", "Help"], ans: "OK", hint: "Ensure JS is correctly linked." };
+        }
+
+        // Refill only when every question in the deck has been asked once
+        if (masterQuestionPool.length === 0) {
+            masterQuestionPool = [...externalQuestions];
+            masterQuestionPool.sort(() => Math.random() - 0.5); 
+        }
+        return masterQuestionPool.pop();
+    }
+
+    // --- SYSTEM VARS ---
+    const canvas = document.getElementById('field');
+    const ctx = canvas.getContext('2d');
+    const hud = document.getElementById('tactical-hud');
+    
+    let isPlaying = false, isHalftime = false, currentHalf = 1;
+    let timerSeconds = 25 * 60; 
+    let p1Score = 0, p2Score = 0, currentTurn = 1, passesCompleted = 0; 
+    
+    let isFrozen = false; 
+    let isPassingMode = false; 
+    let subModeActive = false;
+    let isKickOff = false; 
+    
+    let subTeamId = null;
+    let subsLeft = { 1: 3, 2: 3 };
+    let timeToNextAction = 10.0;
+
+    let currentQuestion = null;
+    let targetPlayer = null;
+    let questionTimeLeft = 20;
+    let questionTimerInterval = null;
+
+    const players = [];
+    let ball = { x: 500, y: 300, attachedTo: null };
+
+    // --- INIT & FORMATIONS ---
+    function parseFormation(formationStr) { return formationStr.split('-').map(Number); }
+
+    function initField(kickoffTeam = 1) {
+        players.length = 0;
+        
+        let p1FormStr = document.getElementById('p1-formation').value || "4-3-3";
+        let p2FormStr = document.getElementById('p2-formation').value || "4-3-3";
+        
+        let t1Side = currentHalf === 1 ? 'left' : 'right';
+        let t2Side = currentHalf === 1 ? 'right' : 'left';
+
+        createTeam(1, parseFormation(p1FormStr), t1Side);
+        createTeam(2, parseFormation(p2FormStr), t2Side);
+        
+        let kickOffPlayers = players.filter(p => p.team === kickoffTeam && p.role === 'FWD');
+        kickOffPlayers.sort((a, b) => Math.abs(300 - a.y) - Math.abs(300 - b.y));
+        let kickTaker = kickOffPlayers[0];
+        
+        let centerOffsetX = kickoffTeam === 1 ? (t1Side === 'left' ? -15 : 15) : (t2Side === 'left' ? -15 : 15);
+        kickTaker.x = 500 + centerOffsetX;
+        kickTaker.y = 300;
+        
+        ball.attachedTo = kickTaker;
+        currentTurn = kickoffTeam;
+        
+        resetPlayState();
+        isKickOff = true; 
+        activatePassingMode(true); 
+    }
+
+    function createTeam(teamId, formation, side) {
+        players.push(createPlayer(teamId, 1, side, 'GK', (side === 'left' ? 30 : 970), 300));
+        
+        let number = 2;
+        let lines = [
+            { count: formation[0], role: 'DEF', xLeft: 150, xRight: 850 },
+            { count: formation[1], role: 'MID', xLeft: 300, xRight: 700 },
+            { count: formation[2], role: 'FWD', xLeft: 430, xRight: 570 }
+        ];
+
+        lines.forEach((line) => {
+            for (let i = 0; i < line.count; i++) {
+                let spacingY = 600 / (line.count + 1);
+                let y = spacingY * (i + 1);
+                let x = side === 'left' ? line.xLeft : line.xRight;
+                players.push(createPlayer(teamId, number++, side, line.role, x, y));
+            }
+        });
+    }
+
+    function createPlayer(team, number, side, role, startX, startY) {
+        return {
+            team: team, number: number, x: startX, y: startY,
+            vx: 0, vy: 0, markTarget: null, role: role,
+            radius: 14, speedBoost: false, isGK: (role === 'GK'),
+            baseTargetX: startX, baseTargetY: startY, 
+            color: team === 1 ? '#e74c3c' : '#3498db'
+        };
+    }
+
+    function updateTeamPositions(teamId) {
+        if (players.length === 0) return;
+        let formStr = document.getElementById(`p${teamId}-formation`).value;
+        let formation = parseFormation(formStr);
+        let side = currentHalf === 1 ? (teamId === 1 ? 'left' : 'right') : (teamId === 1 ? 'right' : 'left');
+        
+        let teamPlayers = players.filter(p => p.team === teamId && !p.isGK).sort((a, b) => a.number - b.number);
+        let lines = [
+            { count: formation[0], role: 'DEF', xLeft: 150, xRight: 850 },
+            { count: formation[1], role: 'MID', xLeft: 300, xRight: 700 },
+            { count: formation[2], role: 'FWD', xLeft: 430, xRight: 570 }
+        ];
+
+        let index = 0;
+        lines.forEach((line) => {
+            for (let i = 0; i < line.count; i++) {
+                if (index < teamPlayers.length) {
+                    let p = teamPlayers[index++];
+                    let spacingY = 600 / (line.count + 1);
+                    p.baseTargetX = side === 'left' ? line.xLeft : line.xRight;
+                    p.baseTargetY = spacingY * (i + 1);
+                    p.role = line.role;
+                }
+            }
+        });
+    }
+
+    function resetPlayState() {
+        passesCompleted = 0;
+        updatePassHUD();
+        timeToNextAction = 10.0;
+        isFrozen = false;
+        isPassingMode = false;
+        subModeActive = false;
+        isKickOff = false;
+    }
+
+    // --- DRAWING ---
+    function drawField() {
+        ctx.fillStyle = '#27ae60'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; ctx.lineWidth = 3;
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath(); ctx.moveTo(500, 0); ctx.lineTo(500, 600); ctx.stroke();
+        ctx.beginPath(); ctx.arc(500, 300, 70, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeRect(0, 150, 60, 300); ctx.strokeRect(940, 150, 60, 300);
+    }
+
+    function updateAndDrawPlayers() {
+        players.forEach(p => {
+            if (isPlaying && !isFrozen && p.isGK) {
+                let t1DefendsLeft = (currentHalf === 1);
+                let boxL = {x1: 0, x2: 60, y1: 150, y2: 450};
+                let boxR = {x1: 940, x2: 1000, y1: 150, y2: 450};
+                let box = p.team === 1 ? (t1DefendsLeft ? boxL : boxR) : (t1DefendsLeft ? boxR : boxL);
+                
+                let targetY = Math.max(box.y1 + p.radius, Math.min(box.y2 - p.radius, ball.y));
+                p.y += (targetY - p.y) * 0.1;
+                p.x = (box.x1 + box.x2) / 2;
+            }
+            
+            if (ball.attachedTo === p) {
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(241, 196, 15, 0.5)'; ctx.fill();
+
+                let time = Date.now() / 150;
+                ctx.strokeStyle = '#f1c40f';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 5; i++) {
+                    let angle = (Math.PI * 2 / 5) * i + time;
+                    let sparkRadius = p.radius + 8 + Math.random() * 8; 
+                    ctx.beginPath();
+                    ctx.moveTo(p.x + Math.cos(angle) * (p.radius + 4), p.y + Math.sin(angle) * (p.radius + 4));
+                    ctx.lineTo(p.x + Math.cos(angle) * sparkRadius, p.y + Math.sin(angle) * sparkRadius);
+                    ctx.stroke();
+                }
+            }
+
+            if (p.speedBoost) {
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; ctx.fill();
+            }
+
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color; ctx.fill();
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+            
+            if (p.isGK) {
+                ctx.fillStyle = '#f1c40f'; ctx.font = 'bold 10px Arial';
+                ctx.fillText('GK', p.x, p.y - p.radius - 6);
+            }
+
+            ctx.fillStyle = '#fff'; ctx.font = '12px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.number, p.x, p.y);
+        });
+    }
+
+    function updateAndDrawBall() {
+        if(ball.attachedTo) { ball.x = ball.attachedTo.x + 12; ball.y = ball.attachedTo.y + 12; }
+        ctx.beginPath(); ctx.arc(ball.x, ball.y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#000'; ctx.stroke();
+    }
+
+    // --- TURN-BASED MOVEMENT ENGINE ---
+    function movePlayersTurnBased(success) {
+        let attackingTeam = currentTurn;
+        let defendingTeam = currentTurn === 1 ? 2 : 1;
+        let t1DefendsLeft = (currentHalf === 1);
+        let attackDir = (attackingTeam === 1) ? (t1DefendsLeft ? 1 : -1) : (t1DefendsLeft ? -1 : 1);
+        
+        if (success) {
+            players.forEach(p => {
+                if (!p.isGK) {
+                    if (p.team === attackingTeam) {
+                        p.x += attackDir * 120;
+                        p.y += (Math.random() - 0.5) * 40;
+                    } else if (p.team === defendingTeam) {
+                        p.x += attackDir * 90;
+                        p.y += (Math.random() - 0.5) * 50;
+                    }
+                    
+                    if (p.x < 70) p.x = 70;
+                    if (p.x > 930) p.x = 930;
+                    if (p.y < 30) p.y = 30;
+                    if (p.y > 570) p.y = 570;
+                }
+            });
+            
+            if (ball.attachedTo) {
+                let carrier = ball.attachedTo;
+                let enemyGoalX = carrier.team === 1 ? (t1DefendsLeft ? 1000 : 0) : (t1DefendsLeft ? 0 : 1000);
+                if (Math.abs(carrier.x - enemyGoalX) <= 180) {
+                    isFrozen = true;
+                    setTimeout(() => { triggerGoalOpportunity(); }, 400);
+                }
+            }
+        } else {
+            players.forEach(p => {
+                if (!p.isGK) {
+                    p.x -= attackDir * 30;
+                    if (p.x < 70) p.x = 70;
+                    if (p.x > 930) p.x = 930;
+                }
+            });
+        }
+    }
+
+    // --- GAME LOOP ---
+    function gameLoop() {
+        drawField();
+        updateAndDrawPlayers();
+        updateAndDrawBall();
+
+        if (isPlaying && !isFrozen && !isPassingMode && !subModeActive) {
+            if (ball.attachedTo) {
+                if (!isKickOff) {
+                    timeToNextAction -= (1/60);
+                    document.getElementById('action-timer-bar').style.width = `${Math.max(0, (timeToNextAction / 10.0) * 100)}%`;
+
+                    if (timeToNextAction <= 0) {
+                        triggerQuestion("Next Phase Challenge!");
+                    }
+                } else {
+                    document.getElementById('action-timer-bar').style.width = '100%';
+                }
+            }
+        }
+        requestAnimationFrame(gameLoop);
+    }
+
+    function triggerFoul(offender, victim) {
+        isFrozen = true;
+        document.getElementById('foul-text').innerText = `Player ${offender.team} committed a hard tackle!`;
+        document.getElementById('foul-overlay').style.display = 'flex';
+    }
+
+    function takeFreeKick() {
+        document.getElementById('foul-overlay').style.display = 'none';
+        activatePassingMode();
+    }
+
+    function triggerGoalOpportunity() {
+        isFrozen = true;
+        currentQuestion = getUniqueQuestion('easy');
+        setupModal(currentTurn, currentQuestion, "Goal Opportunity");
+    }
+
+    function triggerQuestion(reasonText, isManual = false) {
+        isFrozen = true; 
+        currentQuestion = getUniqueQuestion('standard');
+        setupModal(currentTurn, currentQuestion, isManual ? "Manual Pass Question" : "Standard Question", reasonText);
+    }
+
+    function setupModal(playerNum, qObj, type, reasonText = "") {
+        let titleText = type === "Interception Challenge!" ? `DEFENSE: Player ${playerNum} Intercept!` : `ATTACK: Player ${playerNum}'s Turn!`;
+        if (type === "Manual Pass Question") titleText = `MANUAL PASS: Player ${playerNum}`;
+        if (type === "Goal Opportunity") titleText = `GOAL OPPORTUNITY: Player ${playerNum} is 1-on-1!`;
+        if (reasonText) titleText += ` (${reasonText})`;
+        
+        document.getElementById('turn-indicator').innerText = titleText;
+        document.getElementById('turn-indicator').style.color = playerNum === 1 ? '#e74c3c' : '#3498db';
+        document.getElementById('q-topic').innerText = qObj.topic || qObj.type;
+        document.getElementById('q-text').innerText = qObj.q;
+        document.getElementById('q-hint').innerText = "💡 Hint: " + qObj.hint;
+        document.getElementById('q-hint').style.display = 'none'; 
+
+        let audioPlayer = document.getElementById('interception-audio');
+        if (qObj.audioSrc) { audioPlayer.style.display = 'block'; audioPlayer.src = qObj.audioSrc; } 
+        else { audioPlayer.style.display = 'none'; }
+
+        let optionsContainer = document.getElementById('q-options');
+        optionsContainer.innerHTML = '';
+        let shuffled = [...qObj.options].sort(() => Math.random() - 0.5);
+        shuffled.forEach(opt => {
+            let btn = document.createElement('button'); btn.innerText = opt;
+            btn.onclick = () => handleAnswer(opt, qObj.ans, type);
+            optionsContainer.appendChild(btn);
+        });
+
+        document.getElementById('modal-overlay').style.display = 'flex';
+        startQuestionTimer(type);
+    }
+
+    function startQuestionTimer(type) {
+        questionTimeLeft = 20; 
+        let timerBar = document.getElementById('q-timer-bar');
+        let timerText = document.getElementById('q-timer-text');
+        timerBar.style.width = "100%";
+        clearInterval(questionTimerInterval);
+        questionTimerInterval = setInterval(() => {
+            questionTimeLeft--;
+            timerText.innerText = `Time Left: ${questionTimeLeft}s`;
+            timerBar.style.width = `${(questionTimeLeft / 20) * 100}%`;
+            if (questionTimeLeft <= 0) {
+                clearInterval(questionTimerInterval);
+                handleAnswer(null, null, type, true); 
+            }
+        }, 1000);
+    }
+
+    function handleAnswer(selected, correctAns, type, isTimeout = false) {
+        clearInterval(questionTimerInterval);
+        document.getElementById('modal-overlay').style.display = 'none';
+        document.getElementById('interception-audio').pause();
+        
+        const isCorrect = !isTimeout && selected === correctAns;
+
+        if (type === "Standard Question") {
+            if (isCorrect) {
+                movePlayersTurnBased(true);
+                resumePlay();
+            } else {
+                movePlayersTurnBased(false);
+                turnover(`Player ${currentTurn} failed! Ball stolen!`);
+            }
+        }
+        else if (type === "Manual Pass Question") {
+            if (isCorrect) {
+                movePlayersTurnBased(true);
+                checkForInterception();
+            } else {
+                movePlayersTurnBased(false);
+                turnover(`Player ${currentTurn} failed! Ball stolen!`);
+            }
+        }
+        else if (type === "Interception Challenge!") {
+            if (isCorrect) {
+                movePlayersTurnBased(false);
+                turnover(`Player ${currentTurn === 1 ? 2 : 1} intercepted the pass!`);
+            } else {
+                movePlayersTurnBased(true);
+                completePass();
+            }
+        }
+        else if (type === "Goal Opportunity") {
+            if (isCorrect) {
+                scoreGoal();
+            } else {
+                alert("The Goalkeeper makes a spectacular save! Goal kick awarded.");
+                currentTurn = currentTurn === 1 ? 2 : 1;
+                passesCompleted = 0; 
+                updatePassHUD();
+                
+                updateTeamPositions(1);
+                updateTeamPositions(2);
+                players.forEach(p => {
+                    p.x = p.baseTargetX;
+                    p.y = p.baseTargetY;
+                });
+                let opposingGK = players.find(p => p.team === currentTurn && p.isGK);
+                ball.attachedTo = opposingGK;
+                resumePlay();
+            }
+        }
+    }
+
+    function turnover(msg) {
+        alert(msg);
+        currentTurn = currentTurn === 1 ? 2 : 1;
+        passesCompleted = 0; updatePassHUD();
+        let opponents = players.filter(p => p.team === currentTurn && !p.isGK);
+        ball.attachedTo = opponents[Math.floor(Math.random() * opponents.length)];
+        resumePlay();
+    }
+
+    function activatePassingMode(forKickOff = false) {
+        isPassingMode = true;
+        hud.style.display = 'block';
+        hud.style.color = currentTurn === 1 ? '#e74c3c' : '#3498db';
+        if (forKickOff) { hud.innerText = `KICK-OFF: Player ${currentTurn}, click a teammate or type number to pass!`; } 
+        else { hud.innerText = `PLAYER ${currentTurn}: Click a teammate or type number to pass!`; }
+        canvas.style.cursor = 'crosshair';
+    }
+
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        let clickedPlayer = players.find(p => Math.hypot(p.x - mouseX, p.y - mouseY) < p.radius + 15);
+
+        if (subModeActive) {
+            if (clickedPlayer && clickedPlayer.team === subTeamId) {
+                executeSubstitution(clickedPlayer);
+            } else {
+                alert("Substitution cancelled.");
+                resumePlay();
+            }
+            return;
+        }
+
+        if (isPlaying && !isFrozen && !isPassingMode && !subModeActive && ball.attachedTo && ball.attachedTo.team === currentTurn) {
+            if (clickedPlayer && clickedPlayer.team === currentTurn && clickedPlayer !== ball.attachedTo) {
+                targetPlayer = clickedPlayer;
+                triggerQuestion("Manual Pass Attempt", true);
+                return;
+            }
+        }
+
+        if (isPassingMode && clickedPlayer && clickedPlayer.team === currentTurn && clickedPlayer !== ball.attachedTo) {
+            targetPlayer = clickedPlayer;
+            isPassingMode = false;
+            hud.style.display = 'none';
+            canvas.style.cursor = 'default';
+            
+            if (isKickOff) completePass();
+            else checkForInterception();
+        }
+    });
+
+    let keyBuffer = '';
+    let keyTimer = null;
+    window.addEventListener('keydown', (e) => {
+        if (!isPlaying || isFrozen || subModeActive || !ball.attachedTo || ball.attachedTo.team !== currentTurn) return;
+
+        if (e.key >= '0' && e.key <= '9') {
+            keyBuffer += e.key;
+            
+            clearTimeout(keyTimer);
+            keyTimer = setTimeout(() => {
+                let num = parseInt(keyBuffer);
+                keyBuffer = ''; 
+                
+                let clickedPlayer = players.find(p => p.team === currentTurn && p.number === num);
+                
+                if (clickedPlayer && clickedPlayer !== ball.attachedTo) {
+                    targetPlayer = clickedPlayer;
+
+                    if (isPassingMode) {
+                        isPassingMode = false;
+                        hud.style.display = 'none';
+                        canvas.style.cursor = 'default';
+                        if (isKickOff) completePass();
+                        else checkForInterception();
+                    } else {
+                        triggerQuestion("Manual Keyboard Pass", true);
+                    }
+                }
+            }, 300); 
+        }
+    });
+
+    function checkForInterception() {
+        const A = ball.attachedTo, B = targetPlayer;
+        
+        let interceptorFound = players.some(p => {
+            if (p.team === currentTurn || p.isGK) return false;
+
+            let dx = B.x - A.x;
+            let dy = B.y - A.y;
+            let l2 = dx * dx + dy * dy;
+            
+            if (l2 === 0) return false;
+
+            let t = ((p.x - A.x) * dx + (p.y - A.y) * dy) / l2;
+
+            if (t > 0.05 && t < 0.95) {
+                let projX = A.x + t * dx;
+                let projY = A.y + t * dy;
+                let dist = Math.hypot(p.x - projX, p.y - projY);
+                return dist <= 35; 
+            }
+            return false;
+        });
+
+        if (interceptorFound) {
+            let challenge = getUniqueQuestion('interception');
+            setupModal(currentTurn === 1 ? 2 : 1, challenge, "Interception Challenge!");
+        } else {
+            completePass();
+        }
+    }
+
+    function completePass() {
+        ball.attachedTo = targetPlayer; 
+        passesCompleted++; 
+        updatePassHUD();
+        isKickOff = false; 
+        resumePlay(); 
+    }
+
+    function updatePassHUD() {
+        document.getElementById('pass-counter').innerText = `${passesCompleted}`;
+        document.getElementById('pass-counter').style.color = '#f1c40f';
+    }
+
+    function triggerSubstitution(teamId) {
+        if (!isPlaying || isFrozen || subsLeft[teamId] <= 0 || teamId !== currentTurn) return;
+        subModeActive = true; subTeamId = teamId; isFrozen = true;
+        hud.style.display = 'block'; hud.style.color = '#fff';
+        hud.innerText = `TACTICAL SUB: Click a Player ${teamId} to bring in fresh legs!`;
+        canvas.style.cursor = 'crosshair';
+    }
+
+    function executeSubstitution(player) {
+        subsLeft[subTeamId]--;
+        document.getElementById(`btn-sub${subTeamId}`).innerText = `Subs: ${subsLeft[subTeamId]}`;
+        if (subsLeft[subTeamId] === 0) document.getElementById(`btn-sub${subTeamId}`).disabled = true;
+
+        player.speedBoost = true; subModeActive = false;
+        hud.style.display = 'none'; canvas.style.cursor = 'default'; resumePlay();
+    }
+
+    function resumePlay() { isFrozen = false; isPassingMode = false; subModeActive = false; timeToNextAction = 10.0; }
+    
+    function showHint() { document.getElementById('q-hint').style.display = 'block'; }
+
+    function scoreGoal() {
+        if(currentTurn === 1) p1Score++; else p2Score++;
+        document.getElementById('p1-score').innerText = p1Score;
+        document.getElementById('p2-score').innerText = p2Score;
+        
+        document.getElementById('goal-congrats').innerText = `Player ${currentTurn} scores a beautiful team goal!`;
+        document.getElementById('goal-overlay').style.display = 'flex';
+        document.getElementById('audio-bravo').play().catch(e=>console.log("Audio blocked"));
+        
+        let concedingTeam = currentTurn === 1 ? 2 : 1;
+        initField(concedingTeam);
+        isFrozen = true;
+    }
+
+    function closeGoalModal() {
+        document.getElementById('goal-overlay').style.display = 'none';
+        isFrozen = false;
+    }
+
+    setInterval(() => {
+        if(!isPlaying || isHalftime || isFrozen || isKickOff) return; 
+        timerSeconds--;
+        let m = Math.floor(timerSeconds / 60); let s = timerSeconds % 60;
+        document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        if(timerSeconds <= 0) currentHalf === 1 ? triggerHalftime() : endGame();
+    }, 1000); 
+
+    function triggerHalftime() {
+        isHalftime = true; isPlaying = false;
+        document.getElementById('message-overlay').style.display = 'flex';
+        document.getElementById('message-overlay').innerHTML = `
+            <h1>HALFTIME</h1><p style="font-size: 24px; margin-bottom: 30px;">Switching sides!</p>
+            <button onclick="startSecondHalf()" style="font-size: 20px; padding: 15px 40px; background: #27ae60;">Start 2nd Half</button>`;
+    }
+
+    function startSecondHalf() {
+        currentHalf = 2; timerSeconds = 25 * 60; isHalftime = false; isPlaying = true;
+        initField(2); document.getElementById('message-overlay').style.display = 'none';
+    }
+
+    function endGame() {
+        isPlaying = false;
+        document.getElementById('message-overlay').style.display = 'flex';
+        let winnerText = p1Score > p2Score ? "Player 1 Wins!" : (p2Score > p1Score ? "Player 2 Wins!" : "It's a Draw!");
+        document.getElementById('message-overlay').innerHTML = `
+            <h1>FULL TIME</h1><h2>${winnerText}</h2>
+            <p style="font-size: 24px; margin-bottom: 30px;">Final Score: ${p1Score} - ${p2Score}</p>
+            <button onclick="location.reload()" style="font-size: 20px; padding: 15px 40px; background: #27ae60;">Play Again</button>`;
+    }
+
+    function startGame() {
+        document.getElementById('message-overlay').style.display = 'none';
+        initField(1); isPlaying = true;
+    }
+
+    requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Mastery - Advanced</title>
+    <style>
+        :root {
+            /* Upgraded Modern, Vibrant Color Palette */
+            --bg-color: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --accent-orange: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-teal: #06b6d4;
+            --accent-indigo: #6366f1;
+            --font-base: 18px; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Enhanced Animated Background for a more attractive design */
+        body {
+            background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80') center center / cover fixed;
+            
+            font-size: var(--font-base);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 30px 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        
+
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(40px) translateX(20px) scale(1.05); }
+            100% { transform: translateY(80px) translateX(-30px) scale(1.15); }
+        }
+
+        /* Main Container Enhancements */
+        .app-container {
+            width: 100%;
+            max-width: 1300px; 
+            background: var(--glass-bg);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+
+        h1 { font-size: 30px; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 10px; background: linear-gradient(135deg, #1e293b, #07491b47); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.subtitle { color: var(--text-secondary); font-size: 22px; font-weight: 600; }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 25px;
+            background: rgba(255,255,255,0.6);
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            background: rgba(0,0,0,0.04);
+            border: 1px solid transparent;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-btn:hover { background: rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .tab-btn.active {
+            background: white;
+            color: var(--accent-indigo);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 3px solid var(--accent-indigo);
+            transform: translateY(0);
+        }
+
+        /* Content Sections */
+        .tab-content { display: none; padding: 45px; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { font-size: 32px; margin-bottom: 25px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
+        h3 { font-size: 24px; margin: 25px 0 15px; font-weight: 700; }
+        
+        ul { list-style: none; margin-bottom: 25px; }
+        li { margin-bottom: 12px; padding-left: 28px; position: relative; font-size: 19px; }
+        li::before { content: "•"; position: absolute; left: 0; font-size: 20px; top: -1px; color: var(--accent-indigo); }
+        p { margin-bottom: 15px; font-size: 19px; }
+
+        /* Colorful Cards Enhancements */
+        .card { background: white; border-radius: 25px; padding: 35px; margin-bottom: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(0,0,0,0.03); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(0,0,0,0.08); }
+        
+        .card-addition { border-left: 6px solid var(--accent-pink); background: linear-gradient(to right, rgba(236,72,153,0.03), white 40%); }
+        .card-addition h3 { color: var(--accent-pink); }
+        .card-result { border-left: 6px solid var(--accent-purple); background: linear-gradient(to right, rgba(139,92,246,0.03), white 40%); }
+        .card-result h3 { color: var(--accent-purple); }
+        .card-example { border-left: 6px solid var(--accent-orange); background: linear-gradient(to right, rgba(245,158,11,0.03), white 40%); }
+        .card-example h3 { color: var(--accent-orange); }
+        .card-sequence { border-left: 6px solid var(--accent-green); background: linear-gradient(to right, rgba(16,185,129,0.03), white 40%); }
+        .card-sequence h3 { color: var(--accent-green); }
+        .card-condition { border-left: 6px solid var(--accent-blue); background: linear-gradient(to right, rgba(37,99,235,0.03), white 40%); }
+        .card-condition h3 { color: var(--accent-blue); }
+        .card-concession { border-left: 6px solid var(--accent-teal); background: linear-gradient(to right, rgba(6,182,212,0.03), white 40%); }
+        .card-concession h3 { color: var(--accent-teal); }
+        .card-emphasis { border-left: 6px solid var(--accent-red); background: linear-gradient(to right, rgba(239,68,68,0.03), white 40%); }
+        .card-emphasis h3 { color: var(--accent-red); }
+        .card-indigo { border-left: 6px solid var(--accent-indigo); background: linear-gradient(to right, rgba(99,102,241,0.03), white 40%); }
+        .card-indigo h3 { color: var(--accent-indigo); }
+
+        /* Inputs & Buttons */
+        .quiz-item { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 20px rgba(0,0,0,0.03); }
+        .quiz-input { border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; font-size: 18px; font-weight: 700; outline: none; width: 160px; text-align: center; margin: 5px 8px; transition: all 0.3s; color: var(--text-main); background: #f8fafc;}
+        .quiz-input:focus { border-color: var(--accent-indigo); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); background: white;}
+        .quiz-input.correct { border-color: var(--accent-green); background: rgba(16,185,129,0.1); color: #047857; }
+        .quiz-input.wrong { border-color: var(--accent-red); background: rgba(239,68,68,0.1); color: #b91c1c; }
+
+        .single-check-btn { background: var(--accent-indigo); color: white; border: none; padding: 10px 20px; font-size: 16px; font-weight: 700; border-radius: 15px; cursor: pointer; margin-left: 10px; transition: all 0.2s; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); }
+        .single-check-btn:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4); }
+        
+        /* Interactive Toggle Buttons */
+        .toggle-btn { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #047857; font-size: 16px; font-weight: 700; padding: 10px 20px; border-radius: 15px; cursor: pointer; margin-bottom: 15px; transition: all 0.2s; display: inline-block; }
+        .toggle-btn:hover { background: rgba(16,185,129,0.2); transform: scale(0.98); }
+        .toggle-btn.activity-toggle { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); color: var(--accent-indigo); margin-bottom: 20px; width: 100%; font-size: 18px; padding: 14px; }
+        
+        .intro-block { display: none; background: rgba(16,185,129,0.08); border-left: 4px solid var(--accent-green); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 18px; animation: fadeIn 0.3s ease; }
+        .intro-block strong { color: #047857; }
+
+        .hint-btn { background: rgba(99,102,241,0.1); border: none; color: var(--accent-indigo); font-size: 16px; font-weight: 700; padding: 10px 20px; border-radius: 15px; cursor: pointer; margin-left: 10px; transition: all 0.2s; }
+        .hint-btn:hover { background: rgba(99,102,241,0.15); }
+        .hint-text { display: none; font-size: 16px; color: var(--text-secondary); margin-top: 15px; padding: 12px 18px; background: #f8fafc; border-radius: 12px; font-weight: 500; border-left: 4px solid var(--accent-orange); }
+        .hint-icon { font-weight: bold; color: var(--accent-orange); margin-right: 5px; }
+
+        /* Reading Passage Box */
+        .reading-passage { background: rgba(99,102,241,0.04); padding: 30px; border-radius: 20px; border-left: 5px solid var(--accent-indigo); font-size: 19px; line-height: 2.2; margin-bottom: 25px; color: var(--text-main); }
+        .blank-space { display: inline-block; padding: 0 10px; border-bottom: 2px solid var(--text-main); font-weight: 800; color: var(--accent-indigo); min-width: 45px; text-align: center; }
+
+        /* Speaking blockquotes & tags */
+        blockquote { background: rgba(99,102,241,0.04); border-left: 5px solid var(--accent-indigo); padding: 25px; border-radius: 0 20px 20px 0; margin-bottom: 25px; font-size: 19px; color: #334155; font-style: italic; }
+        .vocab-title { font-weight: 800; display: block; margin-bottom: 12px; color: var(--text-main); }
+        .vocab-tags { display: flex; flex-wrap: wrap; gap: 12px; }
+        .tag { background: white; border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: 700; color: var(--accent-indigo); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* Modal Styles */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 45px; border-radius: 35px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.25); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.8) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal-icon { margin-bottom: 20px; display: flex; justify-content: center; }
+        .modal-title { font-size: 28px; font-weight: 800; margin-bottom: 15px; }
+        .modal-text { font-size: 18px; color: var(--text-secondary); margin-bottom: 35px; line-height: 1.5; }
+        .modal-close-btn { background: var(--bg-color); border: none; padding: 16px 32px; font-size: 18px; font-weight: 800; color: white; border-radius: 20px; cursor: pointer; width: 100%; transition: all 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .modal-close-btn:hover { background: #1e293b; transform: translateY(-2px); }
+
+        .action-group { display: inline-flex; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 10px;}
+        
+        .flex-practice-row { margin-bottom: 15px; display:flex; align-items:center; flex-wrap:wrap; font-size:17px; }
+
+        @media (max-width: 600px) { .tab-btn { flex: 1 1 100%; justify-content: center; } }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="openTab('grammar')">Linking Words</button>
+            <button class="tab-btn" onclick="openTab('adv-grammar')">Advanced Grammar</button>
+            <button class="tab-btn" onclick="openTab('speaking')">IELTS Task 2 Simulator</button>
+            <button class="tab-btn" onclick="openTab('daily')">Native Expressions</button>
+            <button class="tab-btn" onclick="openTab('graph-reports')">Graph Reports</button>
+        </div>
+
+        <div id="grammar" class="tab-content active">
+            <h2>Linking words</h2>
+            <p>According to official Coherence and Cohesion band descriptors, securing a high band score requires a flexible and accurate range of cohesive devices. Master these functional categories below.</p>
+            
+            <div class="card card-addition">
+                <h3>1. Addition & Progression</h3>
+                <p>Use these to expand your points logically without relying exclusively on "and".</p>
+                <ul>
+                    <li><strong>Furthermore / Moreover:</strong> Formal, adds a stronger or more important point. <br>
+                        <em>Example:</em> The new architecture of the museum is stunning; <strong>furthermore</strong>, it is completely energy-efficient.
+                    </li>
+                    <li><strong>Additionally / In addition to this:</strong> Standard formal addition.</li>
+                    <li><strong>Not only... but also:</strong> A correlative conjunction that adds surprising or impressive information.</li>
+                    <li><strong>Likewise / Similarly:</strong> Used to show that two things are alike. <br>
+                        <em>Example:</em> The vocabulary module improves writing; <strong>similarly</strong>, it enhances speaking fluency.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-result">
+                <h3>2. Result & Consequence</h3>
+                <p>Essential for showing cause and effect in Task 2 essays or speaking explanations.</p>
+                <ul>
+                    <li><strong>Consequently / As a result:</strong> Formal linking adverbs (often starting a new sentence or following a semicolon).</li>
+                    <li><strong>Therefore / Thus:</strong> Indicates a logical conclusion based on previous evidence.</li>
+                    <li><strong>Hence:</strong> Formal, meaning "for this reason". <br>
+                        <em>Example:</em> The construction site management delayed the delivery of materials; <strong>hence</strong>, the project was pushed back by a week.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-example">
+                <h3>3. Giving Examples & Clarification</h3>
+                <ul>
+                    <li><strong>For instance / For example:</strong> Used to introduce a specific scenario.</li>
+                    <li><strong>Namely:</strong> Used to specifically identify what you are referring to. <br>
+                        <em>Example:</em> The curriculum focuses on three core subjects, <strong>namely</strong> math, science, and literacy.
+                    </li>
+                    <li><strong>To illustrate:</strong> An excellent formal phrase for essays before providing a detailed example.</li>
+                </ul>
+            </div>
+
+            <div class="card card-sequence">
+                <h3>4. Sequencing & Time</h3>
+                <p>Crucial for describing processes, phases, or recounting a series of events smoothly.</p>
+                <ul>
+                    <li><strong>Subsequently:</strong> Happening after something else. <br>
+                        <em>Example:</em> The architects finalized the blueprint; <strong>subsequently</strong>, the excavation crew broke ground.
+                    </li>
+                    <li><strong>Meanwhile / In the meantime:</strong> Happening at the same time as another event. <br>
+                        <em>Example:</em> The mountain biking participants prepared for the Campground Challenge; <strong>meanwhile</strong>, the mechanics performed safety checks on the gear.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-condition">
+                <h3>5. Condition</h3>
+                <p>Used to state that one thing depends on another thing happening.</p>
+                <ul>
+                    <li><strong>Provided that / Providing that:</strong> A more formal way of saying "if". <br>
+                        <em>Example:</em> The alpine mountain biking event will proceed <strong>provided that</strong> the trail conditions remain safe.
+                    </li>
+                    <li><strong>Unless:</strong> Means "if not" or "except if".</li>
+                    <li><strong>Alternatively:</strong> Used to introduce a second possibility or choice.</li>
+                </ul>
+            </div>
+
+            <div class="card card-concession">
+                <h3>6. The Concession Group (Contrast)</h3>
+                <p>It is crucial to know the grammatical difference between words that express contrast.</p>
+                <ul>
+                    <li><strong>Although, Even though, Though:</strong> Followed by a full clause (Subject + Verb). <br>
+                        <em>Example:</em> <strong>Even though</strong> AI <u>is taking over</u> many jobs, new industries are emerging.
+                    </li>
+                    <li><strong>Despite, In spite of:</strong> Followed by a Noun, Pronoun, or a Gerund (Verb+ing). <br>
+                        <em>Example:</em> <strong>Despite</strong> <u>the high inflation</u>, consumers keep buying.
+                    </li>
+                    <li><strong>Nevertheless / Nonetheless:</strong> Used to say something is true in spite of what was just said.</li>
+                </ul>
+            </div>
+
+            <div class="card card-emphasis">
+                <h3>7. Emphasis & Summary</h3>
+                <p>Perfect for concluding paragraphs or emphasizing key facts in evaluations.</p>
+                <ul>
+                    <li><strong>Indeed / Undoubtedly:</strong> Used to emphasize a statement or confirm something is true.</li>
+                    <li><strong>Primarily:</strong> For the most part; mainly.</li>
+                    <li><strong>To sum up / Ultimately:</strong> Excellent for concluding a complex evaluation or an IELTS task 2 essay.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Linking Words Practice (20 Exercises)</h3>
+                <p>Fill in the blank with the appropriate linking word from the lessons above. Answers check automatically when you click outside the box.</p>
+                <div id="linking-practice-container"></div>
+            </div>
+        </div>
+
+        <!-- NEW ADVANCED GRAMMAR TAB -->
+        <div id="adv-grammar" class="tab-content">
+            <h2>Advanced Grammatical Structures</h2>
+            <p>Master these core syntactic structures to demonstrate a higher level of language proficiency and precision in both spoken and written contexts.</p>
+            
+            <div class="card card-indigo">
+                <h3>1. Conditionals (Mixed & Advanced)</h3>
+                <p>Conditionals express the result of a certain condition. Advanced learners must master Third and Mixed Conditionals.</p>
+                <ul>
+                    <li><strong>Zero/First/Second:</strong> General truths (Zero), future possibilities (First), and present/future hypotheticals (Second).</li>
+                    <li><strong>Third Conditional:</strong> Past hypotheticals. <em>If + Past Perfect, would have + Past Participle.</em><br>
+                        (e.g., If I had studied, I would have passed.)</li>
+                    <li><strong>Mixed Conditionals:</strong> Mixing time frames. Past action with a present result. <em>If + Past Perfect, would + bare infinitive.</em><br>
+                        (e.g., If I had won the lottery yesterday, I would be rich today.)</li>
+                </ul>
+                <h4 style="margin: 20px 0 10px;">Practice (12 Questions): Type the correct verb form based on context.</h4>
+                <div id="cond-practice-container"></div>
+            </div>
+
+            <div class="card card-purple">
+                <h3>2. The Passive Voice</h3>
+                <p>Used to shift focus from the "doer" of an action to the action itself or the receiver of the action.</p>
+                <ul>
+                    <li><strong>Structure:</strong> Object + verb "to be" (in the correct tense) + Past Participle.</li>
+                    <li><strong>Impersonal Passives:</strong> Common in formal reports. (e.g., <em>It is believed that...</em> or <em>The data is said to be...</em>)</li>
+                </ul>
+                <h4 style="margin: 20px 0 10px;">Practice (12 Questions): Conjugate the verb in parenthesis into the correct passive form.</h4>
+                <div id="passive-practice-container"></div>
+            </div>
+
+            <div class="card card-pink">
+                <h3>3. Advanced Uncountable Nouns</h3>
+                <p>Uncountable nouns cannot be counted directly and do not take a plural 's'. Advanced English features tricky uncountable concepts.</p>
+                <ul>
+                    <li><strong>Common Traps:</strong> <em>advice, equipment, furniture, luggage, research, evidence, information, knowledge, news, progress, homework, machinery.</em></li>
+                    <li><strong>Rule:</strong> They take a singular verb and cannot follow "a/an" or a number directly (use "a piece of" instead).</li>
+                </ul>
+                <h4 style="margin: 20px 0 10px;">Practice (12 Questions): Type the correct form of the noun.</h4>
+                <div id="unc-practice-container"></div>
+            </div>
+
+            <div class="card card-green">
+                <h3>4. Irregular Advanced Plurals</h3>
+                <p>Many academic and scientific words derived from Latin or Greek have highly irregular plural forms.</p>
+                <ul>
+                    <li><strong>-um to -a:</strong> datum → data, bacterium → bacteria</li>
+                    <li><strong>-on to -a:</strong> criterion → criteria, phenomenon → phenomena</li>
+                    <li><strong>-is to -es:</strong> analysis → analyses, hypothesis → hypotheses, crisis → crises</li>
+                    <li><strong>-us to -i:</strong> stimulus → stimuli, fungus → fungi, syllabus → syllabi</li>
+                </ul>
+                <h4 style="margin: 20px 0 10px;">Practice (12 Questions): Type the correct plural form of the word in parenthesis.</h4>
+                <div id="plur-practice-container"></div>
+            </div>
+
+            <div class="card card-orange">
+                <h3>5. Advanced Comparison Structures</h3>
+                <p>Go beyond simple comparatives to show nuanced relationships between variables.</p>
+                <ul>
+                    <li><strong>Double Comparatives:</strong> <em>The + comparative..., the + comparative...</em> (e.g., The harder you study, the better you perform.)</li>
+                    <li><strong>Modifiers:</strong> Use adverbs to emphasize difference (e.g., <em>significantly</em> better, <em>nowhere near as</em> difficult, <em>by far</em> the most, <em>slightly</em> less).</li>
+                </ul>
+                <h4 style="margin: 20px 0 10px;">Practice (12 Questions): Complete the sentence with the correct comparative word/modifier.</h4>
+                <div id="comp-practice-container"></div>
+            </div>
+
+        </div>
+        <!-- END NEW TAB -->
+
+        <div id="speaking" class="tab-content">
+            <h2>IELTS Part 2 Simulator</h2>
+            <p>You will have 1 minute to prepare and 1-2 minutes to speak on the topics below. Use the toggle buttons to reveal introduction examples that showcase advanced syntactic control through various linking words and compound sentences.</p>
+            <div id="speaking-container"></div>
+        </div>
+
+        <div id="daily" class="tab-content">
+            <h2>Native Daily Expressions</h2>
+            
+            <div class="card" style="background: rgba(99,102,241,0.03); border: 1px solid rgba(99,102,241,0.15);">
+                <h3>Phrasal Verbs & Idioms Reference Guide</h3>
+                <p style="margin-bottom: 20px;">Review this list of expressions, their synonyms, and contextual examples before attempting the exercises below.</p>
+                <ul id="native-reference-list">
+                </ul>
+            </div>
+
+            <p>Complete the exercises below by typing the correct phrasal verb or idiomatic expression into the blank. Use the Hint button if you get stuck, and click Check to verify your answer!</p>
+            
+            <div id="native-expressions-container"></div>
+        </div>
+
+        <div id="graph-reports" class="tab-content">
+            <h2>Writing a Report to Describe a Graph</h2>
+            
+            <div class="card" style="border-left: 6px solid var(--accent-pink);">
+                <h3 style="color: var(--accent-pink);">Describing Trends: Adjectives, Adverbs & Verbs</h3>
+                <p>When describing lines, bar charts, or trends over time, you must vary your sentence structures to achieve a high band score.</p>
+                <ul>
+                    <li><strong>VERBS:</strong> Show the action or change. <br><em>Examples:</em> increased, rose, climbed, decreased, fell, dropped, fluctuated, plateaued.</li>
+                    <li><strong>ADVERBS:</strong> Describe <em>how</em> the action happened (usually ending in -ly). They pair with Verbs.<br>
+                        - <strong>Formula 1:</strong> Subject + Verb + Adverb (e.g., <em>Sales fell dramatically.</em>)
+                    </li>
+                    <li><strong>ADJECTIVES:</strong> Describe the noun (the change itself). They pair with Nouns.<br>
+                        - <strong>Formula 2:</strong> There was a/an + Adjective + Noun + in... (e.g., <em>There was a dramatic fall in sales.</em>)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <button class="toggle-btn activity-toggle" onclick="toggleDisplay('vocab-practice-wrap', this)">Hide Vocabulary Practice</button>
+                <div id="vocab-practice-wrap">
+                    <h3>Vocabulary Practice</h3>
+                    <p>Fill in the blank with the correct form of the word provided in brackets. Answers check automatically when you click outside the box, providing an explanation of the grammar rule.</p>
+                    <div id="vocab-practice-container"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="toggle-btn activity-toggle" onclick="toggleDisplay('graph1-wrap', this)">Hide Practical Activity 1</button>
+                <div id="graph1-wrap">
+                    <h3>Practical Activity 1: Canadian Teenagers Leisure</h3>
+                    <div style="text-align: center;">
+                        <img src="graph1.jpg" alt="Bar chart showing favourite leisure activities of teenagers in Canada" style="max-width:100%; border-radius:15px; margin-bottom:20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    </div>
+                    
+                    <div class="reading-passage">
+                        The bar chart <span class="blank-space">1</span> the percentage of boys and girls in Canada who prefer four different leisure activities. 
+                        <br><br>
+                        <span class="blank-space">2</span>, it is clear that <span class="blank-space">3</span> boys show a strong preference for active or electronic hobbies, girls favor music and are significantly less interested in shopping than boys. 
+                        <br><br>
+                        Looking at the details, shopping is the most popular activity for boys, reaching a peak of approximately <span class="blank-space">4</span>. In stark contrast, only around 7% of girls chose this activity. Conversely, sports are heavily favored by males, with nearly 27% participating, <span class="blank-space">5</span> female participation is much <span class="blank-space">6</span> at just above 10%.
+                        <br><br>
+                        Music is the only activity where participation is <span class="blank-space">7</span> between the two genders, standing at roughly 20% for both. Finally, computer games attract a <span class="blank-space">8</span> higher percentage of boys (around 18%) compared to girls (15%).
+                    </div>
+                    <p style="margin-bottom: 15px;">Fill in the missing words based on the passage above. (Checks automatically on blur):</p>
+                    <div id="graph1-mcq-container" style="display:flex; flex-wrap:wrap; gap: 15px;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="toggle-btn activity-toggle" onclick="toggleDisplay('graph2-wrap', this)">Hide Practical Activity 2</button>
+                <div id="graph2-wrap">
+                    <h3>Practical Activity 2: Fast Food Consumption Trends</h3>
+                    <div style="text-align: center;">
+                        <img src="graph2.jpg" alt="Line graph showing fast food consumption from 1970 to 1990" style="max-width:100%; border-radius:15px; margin-bottom:20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    </div>
+
+                    <div class="reading-passage">
+                        The line graph compares the amount of three different types of fast food consumed by teenagers in Australia between 1970 and 1990. 
+                        <br><br>
+                        Overall, the consumption of fish and chips and hamburgers increased <span class="blank-space">A</span>, while the popularity of pizza experienced a gradual <span class="blank-space">B</span>. 
+                        <br><br>
+                        In 1970, pizza was the most popular fast food, with teenagers eating approximately 300 grams. This figure <span class="blank-space">C</span> slightly but dropped to around 200 grams by 1990. In contrast, the consumption of fish and chips started at nearly 100 grams, rising <span class="blank-space">D</span> to reach a peak of 500 grams in 1990. Hamburger consumption followed a similar upward <span class="blank-space">E</span>, starting as the least popular food at about 30 grams and finishing the period at nearly 300 grams.
+                    </div>
+                    
+                    <p style="margin-bottom: 15px;">Fill in the missing words based on the passage above. (Checks automatically on blur):</p>
+                    <div id="graph2-questions-container" style="display:flex; flex-wrap:wrap; gap: 15px;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="toggle-btn activity-toggle" onclick="toggleDisplay('graph3-wrap', this)">Hide Practical Activity 3</button>
+                <div id="graph3-wrap">
+                    <h3>Practical Activity 3: Technology Device Trends</h3>
+                    <div style="text-align: center;">
+                        <img src="graph3.png" alt="Pie charts showing electronic device proportions in 2009 and 2019" style="max-width:100%; border-radius:15px; margin-bottom:20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    </div>
+
+                    <h4 style="margin-top: 15px; margin-bottom: 10px; color: var(--text-main);">Part A: Report Fill-in-the-Blanks</h4>
+                    <p>Read the 150-word report below and fill in the blanks using the correct vocabulary indicating trends and comparisons.</p>
+                    <div class="reading-passage" id="g3-report-container">
+                        The pie charts <input type="text" class="quiz-input" id="g3_r_1" placeholder="1" onblur="checkGraph3ReportSingle(1)"> the proportion of six different electronic devices owned in 2009 and 2019. 
+                        <br><br>
+                        Overall, it is <input type="text" class="quiz-input" id="g3_r_2" placeholder="2" onblur="checkGraph3ReportSingle(2)"> that mobile phones, tablets, and flat-screen TVs experienced significant <input type="text" class="quiz-input" id="g3_r_3" placeholder="3" onblur="checkGraph3ReportSingle(3)"> in popularity, whereas desktop computers, laptops, and conventional TVs saw a <input type="text" class="quiz-input" id="g3_r_4" placeholder="4" onblur="checkGraph3ReportSingle(4)"> over the decade. 
+                        <br><br>
+                        In 2009, conventional TVs were the most <input type="text" class="quiz-input" id="g3_r_5" placeholder="5" onblur="checkGraph3ReportSingle(5)"> device at 34%, but this figure <input type="text" class="quiz-input" id="g3_r_6" placeholder="6" onblur="checkGraph3ReportSingle(6)"> to a mere 4% by 2019. Conversely, flat-screen TVs <input type="text" class="quiz-input" id="g3_r_7" placeholder="7" onblur="checkGraph3ReportSingle(7)"> from 8% to 27%. Similarly, the share of mobile phones almost <input type="text" class="quiz-input" id="g3_r_8" placeholder="8" onblur="checkGraph3ReportSingle(8)">, rising from 15% to 26%. Furthermore, tablet ownership witnessed a remarkable <input type="text" class="quiz-input" id="g3_r_9" placeholder="9" onblur="checkGraph3ReportSingle(9)">, jumping from just 5% to 19%.
+                        <br><br>
+                        Regarding the remaining devices, laptop ownership <input type="text" class="quiz-input" id="g3_r_10" placeholder="10" onblur="checkGraph3ReportSingle(10)"> from 20% in 2009 to 12% in 2019. Likewise, the <input type="text" class="quiz-input" id="g3_r_11" placeholder="11" onblur="checkGraph3ReportSingle(11)"> of desktop computers <input type="text" class="quiz-input" id="g3_r_12" placeholder="12" onblur="checkGraph3ReportSingle(12)"> from 18% to 12% over the same ten-year period.
+                    </div>
+
+                    <h4 style="margin-top: 30px; margin-bottom: 10px; color: var(--text-main);">Part B: Trend Vocabulary</h4>
+                    <p>Type the correct word from the Word Bank that matches each definition.<br>
+                    Word Bank: <strong>plummeted, surged, conversely, doubled, proportion</strong></p>
+                    <div id="g3-vocab-container" style="display:flex; flex-direction:column; gap: 15px; margin-bottom: 20px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modals using pure SVG instead of emojis for a modern UI -->
+    <div class="modal-overlay" id="explanationModal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon"></div>
+            <div class="modal-title" id="modalTitle">Correct!</div>
+            <div class="modal-text" id="modalText">Explanation goes here.</div>
+            <button class="modal-close-btn" onclick="closeModal()">Got it</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab Logic
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Section Toggle Logic
+        function toggleDisplay(id, btn) {
+            const el = document.getElementById(id);
+            if(el.style.display === 'none') {
+                el.style.display = 'block';
+                btn.innerHTML = btn.innerHTML.replace('Show', 'Hide');
+            } else {
+                el.style.display = 'none';
+                btn.innerHTML = btn.innerHTML.replace('Hide', 'Show');
+            }
+        }
+
+        // Modal Logic (Replaced Emojis with scalable SVGs)
+        const svgCorrect = `<svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        const svgWrong = `<svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+
+        function showModal(isCorrect, explanation) {
+            const modal = document.getElementById('explanationModal');
+            const iconEl = document.getElementById('modalIcon');
+            
+            if(isCorrect) {
+                iconEl.innerHTML = svgCorrect;
+                document.getElementById('modalTitle').innerHTML = 'Correct!';
+                document.getElementById('modalTitle').style.color = 'var(--accent-green)';
+            } else {
+                iconEl.innerHTML = svgWrong;
+                document.getElementById('modalTitle').innerHTML = 'Review Carefully';
+                document.getElementById('modalTitle').style.color = 'var(--accent-red)';
+            }
+            
+            document.getElementById('modalText').innerHTML = explanation;
+            modal.style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('explanationModal').style.display = 'none'; }
+        
+        function toggleHint(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleIntro(id, btn) {
+            const introElement = document.getElementById(id);
+            if (introElement.style.display === 'block') {
+                introElement.style.display = 'none';
+                btn.innerHTML = 'Show How to Start';
+                btn.style.background = 'rgba(16,185,129,0.1)';
+            } else {
+                introElement.style.display = 'block';
+                btn.innerHTML = 'Hide How to Start';
+                btn.style.background = 'rgba(16,185,129,0.2)';
+            }
+        }
+
+        // Generic Auto-Check Blur Function (Core Mechanic Maintained)
+        function handleBlurCheck(inputEl, validAnswers, explanation) {
+            const val = inputEl.value.trim().toLowerCase();
+            if(val === "") {
+                inputEl.classList.remove('correct', 'wrong');
+                return;
+            }
+            
+            let isCorrect = false;
+            let firstValid = Array.isArray(validAnswers) ? validAnswers[0] : validAnswers;
+
+            if (Array.isArray(validAnswers)) {
+                isCorrect = validAnswers.includes(val);
+            } else {
+                isCorrect = (val === validAnswers.toLowerCase());
+            }
+
+            if (isCorrect) {
+                inputEl.classList.add('correct');
+                inputEl.classList.remove('wrong');
+                showModal(true, explanation || "Great job! Your answer is grammatically correct.");
+            } else {
+                inputEl.classList.add('wrong');
+                inputEl.classList.remove('correct');
+                showModal(false, `The correct answer is <strong>${firstValid}</strong>.<br><br>${explanation || "Review the vocabulary rules."}`);
+            }
+        }
+
+        // --- 1. LINKING WORDS PRACTICE ---
+        const linkingData = [
+            { sentence: "The new stadium architecture is stunning; ________, it is 100% powered by solar energy.", ans: "furthermore", expl: "Furthermore adds additional supporting information." },
+            { sentence: "________ the steep, muddy descent, the rider maintained complete control.", ans: "despite", expl: "Despite is followed by a noun phrase, showing contrast." },
+            { sentence: "Footballers cannot score auto-goals in this version; ________, the game logic was completely rewritten.", ans: "consequently", expl: "Consequently shows the result of the previous statement." },
+            { sentence: "Students at Liceo Cervantes Norte study diligently; ________, they consistently achieve high PET and FCE scores.", ans: "therefore", expl: "Therefore introduces the logical result of their diligent study." },
+            { sentence: "The construction site lacked proper materials; ________, the building project was delayed for a month.", ans: "hence", expl: "Hence means 'for this reason' and introduces a consequence." },
+            { sentence: "The Money Mastery Hub teaches vital financial skills; ________, it uses a highly engaging interactive interface.", ans: "moreover", expl: "Moreover adds another strong point in favor of the Hub." },
+            { sentence: "________ the Alpine Odyssey quest was difficult, the players loved navigating it.", ans: "although", expl: "Although introduces a contrasting full clause." },
+            { sentence: "You will earn the Campground Challenge badge ________ you complete the logic puzzles.", ans: "provided that", expl: "Provided that introduces a necessary condition." },
+            { sentence: "________ the intense mountain trails, the biking event went smoothly.", ans: "in spite of", expl: "In spite of functions similarly to despite and precedes a noun phrase." },
+            { sentence: "The trophy room visually tracks achievements; ________, it displays the Descent and Campground badges.", ans: "namely", expl: "Namely is used to specifically identify what was just mentioned." },
+            { sentence: "The stand-up comedy performance highlighted classroom life; ________, it was relatable for students.", ans: "thus", expl: "Thus shows the logical outcome or conclusion." },
+            { sentence: "The essay accurately utilized the official band descriptors. ________, it received a high score.", ans: "indeed", expl: "Indeed emphasizes the truth or confirmation of the statement." },
+            { sentence: "The vocabulary module enhances writing ability; ________, it significantly improves speaking fluency.", ans: "similarly", expl: "Similarly draws a parallel between two positive outcomes." },
+            { sentence: "The students prepared for their IELTS speaking exams; ________, the teacher assessed their audio recordings.", ans: "meanwhile", expl: "Meanwhile shows two events happening at the same time." },
+            { sentence: "We must analyze the honey production process; ________, we can draft the descriptive essay.", ans: "subsequently", expl: "Subsequently shows the next step in a sequence." },
+            { sentence: "You cannot progress to the next level ________ you master the B1 grammar structures.", ans: "unless", expl: "Unless indicates that a condition must be met (if not)." },
+            { sentence: "The interactive bubbles captured the students' attention; ________, the drag-and-drop mechanics kept them engaged.", ans: "additionally", expl: "Additionally adds another piece of supporting information." },
+            { sentence: "We can use multiple-choice questions for the evaluation, or ________, we can use fill-in-the-blanks.", ans: "alternatively", expl: "Alternatively introduces another option or choice." },
+            { sentence: "The curriculum is designed for basic learners; ________, it accommodates advanced C1 students.", ans: "nevertheless", expl: "Nevertheless shows a surprising contrast to the first statement." },
+            { sentence: "The reading passages were challenging. ________, we can confidently say the students are prepared for the FCE.", ans: "to sum up", expl: "To sum up effectively concludes the evaluation." }
+        ];
+
+        function loadLinking() {
+            const container = document.getElementById('linking-practice-container');
+            linkingData.forEach((q, index) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${index + 1}.</strong> &nbsp; ${parts[0]} 
+                        <input type="text" class="quiz-input" id="link_${index}" style="width:150px; font-size:16px; padding: 6px;" 
+                            onblur="checkLinkingBlur(${index})"> 
+                        ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        function checkLinkingBlur(index) {
+            const el = document.getElementById(`link_${index}`);
+            handleBlurCheck(el, linkingData[index].ans, linkingData[index].expl);
+        }
+
+        // --- NEW ADVANCED GRAMMAR DATA & LOADERS ---
+        const condData = [
+            { sentence: "If I (know) ________ you were coming, I would have baked a cake.", ans: "had known", expl: "Third conditional: Past hypothetical. If + past perfect." },
+            { sentence: "If water reaches 100 degrees, it (boil) ________.", ans: "boils", expl: "Zero conditional: Scientific fact. Present simple + present simple." },
+            { sentence: "If I (be) ________ you, I would study harder.", ans: "were", expl: "Second conditional: Present hypothetical. 'were' is used for all pronouns in formal English." },
+            { sentence: "I wouldn't have gone if I (know) ________ it was going to rain.", ans: "had known", expl: "Third conditional: Past hypothetical. If + past perfect." },
+            { sentence: "If she (study) ________ more, she will pass the exam.", ans: "studies", expl: "First conditional: Future possibility. If + present simple, will + base verb." },
+            { sentence: "We would be on the beach now if we (not/miss) ________ our flight yesterday.", ans: ["had not missed", "hadn't missed"], expl: "Mixed conditional: Past action with a present result." },
+            { sentence: "If you freeze water, it (become) ________ solid.", ans: "becomes", expl: "Zero conditional: General truth." },
+            { sentence: "What would you do if you (win) ________ the lottery today?", ans: "won", expl: "Second conditional: Imaginary situation in the present/future." },
+            { sentence: "If he (listen) ________ to my advice last week, he wouldn't be in this mess now.", ans: "had listened", expl: "Mixed conditional: Past action with present result." },
+            { sentence: "I will call you if I (need) ________ help later.", ans: "need", expl: "First conditional: Real possibility in the future." },
+            { sentence: "If they had left earlier, they (arrive) ________ on time.", ans: "would have arrived", expl: "Third conditional: Past hypothetical result." },
+            { sentence: "If it (rain) ________ tomorrow, we will cancel the picnic.", ans: "rains", expl: "First conditional: Future condition." }
+        ];
+        
+        function loadConditionals() {
+            const container = document.getElementById('cond-practice-container');
+            condData.forEach((q, i) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${i + 1}.</strong> &nbsp; ${parts[0]} <input type="text" class="quiz-input" id="cond_${i}" onblur="handleBlurCheck(this, condData[${i}].ans, condData[${i}].expl)"> ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        const passiveData = [
+            { sentence: "The house (build) ________ in 1990.", ans: "was built", expl: "Past Simple Passive: was/were + past participle." },
+            { sentence: "The report (finish) ________ by tomorrow.", ans: "will be finished", expl: "Future Passive: will be + past participle." },
+            { sentence: "My car (repair) ________ right now.", ans: "is being repaired", expl: "Present Continuous Passive: is/are being + past participle." },
+            { sentence: "The Mona Lisa (paint) ________ by Leonardo da Vinci.", ans: "was painted", expl: "Past Simple Passive." },
+            { sentence: "All the tickets (already/sell) ________ before we arrived.", ans: "had already been sold", expl: "Past Perfect Passive: had been + past participle." },
+            { sentence: "This software (use) ________ by millions of people every day.", ans: "is used", expl: "Present Simple Passive." },
+            { sentence: "A new bridge (construct) ________ next year.", ans: "will be constructed", expl: "Future Passive." },
+            { sentence: "The thief (catch) ________ by the police yesterday.", ans: "was caught", expl: "Past Simple Passive." },
+            { sentence: "The letter (should/send) ________ immediately.", ans: "should be sent", expl: "Modal Passive: modal + be + past participle." },
+            { sentence: "It (believe) ________ that the earth is round.", ans: "is believed", expl: "Impersonal Passive in Present Simple." },
+            { sentence: "My wallet (steal) ________ while I was on the bus.", ans: "was stolen", expl: "Past Simple Passive." },
+            { sentence: "The dishes (must/wash) ________ before the guests arrive.", ans: "must be washed", expl: "Modal Passive." }
+        ];
+
+        function loadPassive() {
+            const container = document.getElementById('passive-practice-container');
+            passiveData.forEach((q, i) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${i + 1}.</strong> &nbsp; ${parts[0]} <input type="text" class="quiz-input" id="pass_${i}" onblur="handleBlurCheck(this, passiveData[${i}].ans, passiveData[${i}].expl)"> ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        const uncData = [
+            { sentence: "I need some (information) ________ about the train times.", ans: "information", expl: "'Information' is uncountable and never takes an 's'." },
+            { sentence: "She gave me some excellent (advice) ________.", ans: "advice", expl: "'Advice' is uncountable." },
+            { sentence: "The lab needs new (equipment) ________ for the experiment.", ans: "equipment", expl: "'Equipment' is uncountable." },
+            { sentence: "We have too much (luggage) ________ for this small trunk.", ans: "luggage", expl: "'Luggage' is uncountable." },
+            { sentence: "He has a lot of (knowledge) ________ about history.", ans: "knowledge", expl: "'Knowledge' is uncountable." },
+            { sentence: "The professor published groundbreaking (research) ________ last year.", ans: "research", expl: "'Research' is an uncountable noun." },
+            { sentence: "There is a lack of clear (evidence) ________ in this case.", ans: "evidence", expl: "'Evidence' is uncountable." },
+            { sentence: "I bought some beautiful wooden (furniture) ________ for the living room.", ans: "furniture", expl: "'Furniture' is uncountable." },
+            { sentence: "Have you heard the latest (news) ________?", ans: "news", expl: "'News' looks plural but is singular and uncountable." },
+            { sentence: "Doing your (homework) ________ is essential for passing the class.", ans: "homework", expl: "'Homework' is uncountable." },
+            { sentence: "The teacher praised his steady (progress) ________.", ans: "progress", expl: "'Progress' is uncountable." },
+            { sentence: "Can you buy some (bread) ________ from the bakery?", ans: "bread", expl: "'Bread' is uncountable." }
+        ];
+
+        function loadUncountable() {
+            const container = document.getElementById('unc-practice-container');
+            uncData.forEach((q, i) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${i + 1}.</strong> &nbsp; ${parts[0]} <input type="text" class="quiz-input" id="unc_${i}" onblur="handleBlurCheck(this, uncData[${i}].ans, uncData[${i}].expl)"> ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        const plurData = [
+            { sentence: "The scientist analyzed all the raw (datum) ________.", ans: "data", expl: "'Data' is the plural of 'datum'." },
+            { sentence: "What are the main (criterion) ________ for this job?", ans: "criteria", expl: "'Criteria' is the plural of 'criterion'." },
+            { sentence: "There are many unexplained (phenomenon) ________ in the universe.", ans: "phenomena", expl: "'Phenomena' is the plural of 'phenomenon'." },
+            { sentence: "He wrote three separate (analysis) ________ of the poem.", ans: "analyses", expl: "'Analyses' is the plural of 'analysis'." },
+            { sentence: "The doctor studied the (bacterium) ________ under the microscope.", ans: "bacteria", expl: "'Bacteria' is the plural of 'bacterium'." },
+            { sentence: "The plant responds to various environmental (stimulus) ________.", ans: "stimuli", expl: "'Stimuli' is the plural of 'stimulus'." },
+            { sentence: "The book discusses several historical (crisis) ________.", ans: "crises", expl: "'Crises' is the plural of 'crisis'." },
+            { sentence: "We need to revise the university (syllabus) ________.", ans: ["syllabi", "syllabuses"], expl: "'Syllabi' is the irregular plural form." },
+            { sentence: "The researcher interviewed the university (alumnus) ________.", ans: "alumni", expl: "'Alumni' is the plural of 'alumnus'." },
+            { sentence: "They discovered fossilized (fungus) ________ in the cave.", ans: "fungi", expl: "'Fungi' is the plural of 'fungus'." },
+            { sentence: "The geometric shapes had different (radius) ________.", ans: "radii", expl: "'Radii' is the plural of 'radius'." },
+            { sentence: "She proposed multiple (hypothesis) ________ for the experiment.", ans: "hypotheses", expl: "'Hypotheses' is the plural of 'hypothesis'." }
+        ];
+
+        function loadPlurals() {
+            const container = document.getElementById('plur-practice-container');
+            plurData.forEach((q, i) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${i + 1}.</strong> &nbsp; ${parts[0]} <input type="text" class="quiz-input" id="plur_${i}" onblur="handleBlurCheck(this, plurData[${i}].ans, plurData[${i}].expl)"> ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        const compData = [
+            { sentence: "The more you practice, the (good) ________ you become.", ans: "better", expl: "Double comparative using 'better'." },
+            { sentence: "This car is (significant) ________ more expensive than the other one.", ans: "significantly", expl: "Use the adverb 'significantly' to modify the comparison." },
+            { sentence: "It is nowhere (near) ________ as difficult as I thought.", ans: "near", expl: "'Nowhere near as' means 'not at all as'." },
+            { sentence: "The harder you work, the (much) ________ you achieve.", ans: "more", expl: "Double comparative using 'more'." },
+            { sentence: "He is by (far) ________ the most intelligent student in the class.", ans: "far", expl: "'By far' emphasizes a superlative." },
+            { sentence: "This is (easily) ________ the best movie I've seen this year.", ans: "easily", expl: "'Easily' can modify superlatives for emphasis." },
+            { sentence: "The (fast) ________ we leave, the sooner we arrive.", ans: "faster", expl: "Double comparative using 'faster'." },
+            { sentence: "Her performance was (considerable) ________ better than yesterday.", ans: "considerably", expl: "Adverb modifier 'considerably'." },
+            { sentence: "The older I get, the (little) ________ I care about what others think.", ans: "less", expl: "Double comparative using 'less'." },
+            { sentence: "It’s not (quite) ________ as simple as it looks.", ans: "quite", expl: "'Not quite as' means slightly less than." },
+            { sentence: "The (long) ________ you wait, the harder it becomes.", ans: "longer", expl: "Double comparative using 'longer'." },
+            { sentence: "This book is slightly (little) ________ interesting than the previous one.", ans: "less", expl: "Comparative meaning a smaller amount is 'less'." }
+        ];
+
+        function loadComparisons() {
+            const container = document.getElementById('comp-practice-container');
+            compData.forEach((q, i) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${i + 1}.</strong> &nbsp; ${parts[0]} <input type="text" class="quiz-input" id="comp_${i}" onblur="handleBlurCheck(this, compData[${i}].ans, compData[${i}].expl)"> ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        // --- 2. SPEAKING SIMULATOR DATA ---
+        const speakingData = [
+            { 
+                title: "A Challenging Adventure", 
+                prompt: "Describe a time when you experienced a challenging outdoor adventure.<br><br>You should say:<br>• where you were and what the activity was<br>• who you were with<br>• what difficulties you faced<br><br>and explain how you felt after completing the adventure.",
+                intro: "I would like to share an experience about a truly grueling hike; <strong>moreover</strong>, it pushed me completely out of my comfort zone. I had just taken up mountaineering; <strong>consequently</strong>, I was eager to test my newly acquired skills. The trail was incredibly steep; <strong>nevertheless</strong>, I was determined to reach the summit.",
+                tags: ["Set off", "Push through", "Navigate", "Adrenaline rush"] 
+            },
+            { 
+                title: "Modern Architecture", 
+                prompt: "Describe an impressive modern structure or building you have visited.<br><br>You should say:<br>• where it is located<br>• what it is used for<br>• what it looks like<br><br>and explain why you find its design impressive.",
+                intro: "A piece of modern architecture that left a lasting impression on me is a unique place I visited recently. I had been meaning to visit it for months; <strong>as a result</strong>, I finally booked a ticket last weekend. <strong>Although</strong> the exterior was entirely made of glass, the interior felt incredibly warm and welcoming.",
+                tags: ["Stand out", "Put up (build)", "Blueprint", "Look around"] 
+            },
+            { 
+                title: "A Complex Problem Solved", 
+                prompt: "Describe a time when you solved a complex technical or logical problem.<br><br>You should say:<br>• what the problem was<br>• how you discovered it<br>• what steps you took to solve it<br><br>and explain how you felt when it was resolved.",
+                intro: "I am going to describe a time I had to fix the logic of a football-themed game project to prevent auto-goals. The mechanics were quite complex; <strong>therefore</strong>, it took a considerable amount of time to debug. Players were mistakenly scoring in their own arch; <strong>however</strong>, I managed to adjust the positioning successfully.",
+                tags: ["Figure out", "Debug", "Adjust", "Ensure"] 
+            },
+            { 
+                title: "An Educational Tool", 
+                prompt: "Describe an educational tool or app that you find very useful.<br><br>You should say:<br>• what the tool is<br>• how you use it<br>• who it is designed for<br><br>and explain why it is effective for learning.",
+                intro: "I would like to talk about an interactive educational web app known as the Money Mastery Hub. It was designed to teach financial concepts; <strong>additionally</strong>, it utilizes engaging mechanics to keep users interested. It can be challenging to grasp economics; <strong>despite this</strong>, this tool makes it highly accessible.",
+                tags: ["Interactive", "Engage", "Grasp", "Accessible"] 
+            },
+            { 
+                title: "A Thrilling Sports Event", 
+                prompt: "Describe a thrilling sports event you participated in or watched.<br><br>You should say:<br>• what the sport was<br>• where the event took place<br>• what happened during the event<br><br>and explain why it was thrilling.",
+                intro: "Today, I want to talk about an intense mountain biking competition. The terrain was incredibly rugged; <strong>hence</strong>, the riders had to be highly skilled to navigate the descent safely. <strong>Even though</strong> it was nerve-wracking to watch, the sheer athleticism on display was inspiring.",
+                tags: ["Terrain", "Descent", "Navigate", "Skilled"] 
+            },
+            { 
+                title: "A Memorable Performance", 
+                prompt: "Describe a memorable performance or show you have planned or watched.<br><br>You should say:<br>• what kind of performance it was<br>• who the audience was<br>• what it was about<br><br>and explain why it was memorable.",
+                intro: "I am going to talk about a stand-up comedy performance designed specifically for students to address relatable aspects of classroom life. Humor is a fantastic way to connect; <strong>subsequently</strong>, I wanted to create an experience that would relieve academic stress. Writing the jokes took time; <strong>nonetheless</strong>, the laughter made it worthwhile.",
+                tags: ["Relatable", "Connect", "Address", "Worthwhile"] 
+            },
+            { 
+                title: "A Nature Project", 
+                prompt: "Describe a project related to nature or the outdoors that you worked on.<br><br>You should say:<br>• what the project was<br>• what your role was<br>• what you created or achieved<br><br>and explain what you learned from it.",
+                intro: "I want to share details about a mountain-themed adventure game titled Alpine Odyssey. The project required logic-driven mechanics; <strong>likewise</strong>, we designed a virtual trophy room to display achievement badges. <strong>In spite of</strong> the fact that developing the Campground Challenge was tricky, the final result looked spectacular.",
+                tags: ["Logic-driven", "Achievement", "Tricky", "Spectacular"] 
+            },
+            { 
+                title: "A Construction or Renovation", 
+                prompt: "Describe a construction or renovation project you witnessed or managed.<br><br>You should say:<br>• what was being built or renovated<br>• what the site looked like<br>• how long it took<br><br>and explain what the most difficult part was.",
+                intro: "I am going to describe a large-scale construction site management project. Coordinating the delivery of materials was chaotic; <strong>thus</strong>, precise scheduling was absolutely essential. Delays were frequent; <strong>nevertheless</strong>, the management team found creative ways to keep things moving.",
+                tags: ["Coordinate", "Chaotic", "Schedule", "Keep moving"] 
+            },
+            { 
+                title: "A New Language", 
+                prompt: "Describe a time when you learned a new language.<br><br>You should say:<br>• what language it was<br>• how you learned it<br>• what challenges you faced<br><br>and explain how you felt when you could finally communicate.",
+                intro: "I would like to discuss my journey of learning French; <strong>undoubtedly</strong>, it was a challenging but rewarding endeavor. The pronunciation rules were quite complex; <strong>as a result</strong>, I spent hours practicing daily. <strong>Provided that</strong> I maintained my discipline, I knew I would eventually become fluent.",
+                tags: ["Endeavor", "Complex", "Discipline", "Fluent"] 
+            },
+            { 
+                title: "A Memorable Journey", 
+                prompt: "Describe a memorable journey you have taken.<br><br>You should say:<br>• where you went<br>• how you traveled<br>• what you did on the journey<br><br>and explain why you remember it so well.",
+                intro: "Today, I want to recount a memorable cross-country train trip. The scenery was stunning; <strong>in addition to this</strong>, the slow pace allowed me to truly relax. The train experienced a few mechanical delays; <strong>despite</strong> the setbacks, the overall experience was profoundly peaceful.",
+                tags: ["Recount", "Cross-country", "Pace", "Setbacks"] 
+            }
+        ];
+
+        function loadSpeaking() {
+            const container = document.getElementById('speaking-container');
+            speakingData.forEach((item, index) => {
+                let tagsHtml = item.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                container.innerHTML += `
+                    <div class="card">
+                        <h4 style="margin-bottom:10px; font-size:20px; color: var(--text-main);">${item.title}</h4>
+                        <blockquote>${item.prompt}</blockquote>
+                        <button class="toggle-btn" onclick="toggleIntro('intro_speak_${index}', this)">Show How to Start</button>
+                        <div class="intro-block" id="intro_speak_${index}">
+                            <strong>Linking Words Intro Model:</strong><br>
+                            <p style="margin-top:10px; font-size: 18px; color: #1f2937;"><em>${item.intro}</em></p>
+                        </div>
+                        <span class="vocab-title" style="margin-top:15px;">Useful Vocabulary:</span>
+                        <div class="vocab-tags">${tagsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- 3. NATIVE EXPRESSIONS ---
+        const nativeData = [
+            { word: "Call off", def: "To cancel an event or agreement.", syn: "scrap, abort", ex: "The match was called off because of the heavy rain.", pre: "The outdoor concert was ", ans: "called off", post: " due to the heavy thunderstorm.", hint: "Phrasal verb meaning to cancel an event.", expl: "<strong>Call off</strong> means to cancel." },
+            { word: "Figure out", def: "To solve a problem or discover the answer.", syn: "resolve, decipher", ex: "The developer had to figure out how to stop the football players from scoring auto-goals.", pre: "I need some time to ", ans: "figure out", post: " the solution to this complex math problem.", hint: "Phrasal verb meaning to solve or understand.", expl: "<strong>Figure out</strong> means to solve." },
+            { word: "Give up", def: "To stop trying or surrender.", syn: "quit, yield", ex: "Learning to code can be tough, but don't give up!", pre: "Even when things get tough, you should never ", ans: "give up", post: " on your goals.", hint: "Phrasal verb meaning to quit.", expl: "<strong>Give up</strong> means to quit." },
+            { word: "Wrap up", def: "To conclude or finish something.", syn: "conclude, terminate", ex: "Let's wrap up this meeting so we can all go home.", pre: "Let's ", ans: "wrap up", post: " this meeting so we can all go home.", hint: "Phrasal verb meaning to conclude or finish.", expl: "<strong>Wrap up</strong> means to conclude." },
+            { word: "Show up", def: "To arrive or appear at a place.", syn: "arrive, turn up", ex: "He didn't show up until the presentation was almost over.", pre: "Please make sure you ", ans: "show up", post: " on time for the IELTS speaking exam.", hint: "Phrasal verb meaning to arrive.", expl: "<strong>Show up</strong> means to arrive." },
+            { word: "Cut back on", def: "To consume less of something.", syn: "reduce, decrease", ex: "You should cut back on caffeine if you want to sleep better.", pre: "To save money for the project, we need to ", ans: "cut back on", post: " unnecessary expenses.", hint: "Phrasal verb meaning to reduce.", expl: "<strong>Cut back on</strong> means to reduce." },
+            { word: "Look into", def: "To investigate or research a matter.", syn: "investigate, explore", ex: "The IT department will look into the server issues.", pre: "The management promised to ", ans: "look into", post: " the construction site delays immediately.", hint: "Phrasal verb meaning to investigate.", expl: "<strong>Look into</strong> means to investigate." },
+            { word: "Piece of cake", def: "Something that is very easy to do.", syn: "a breeze, simple", ex: "The vocabulary quiz was a piece of cake.", pre: "Because they studied hard, the B1 evaluation was a ", ans: "piece of cake", post: ".", hint: "Idiom meaning very easy.", expl: "<strong>Piece of cake</strong> means something very easy." },
+            { word: "Rule of thumb", def: "A broadly accurate guide or principle.", syn: "guideline, standard", ex: "As a rule of thumb, you should save 20% of your income.", pre: "As a ", ans: "rule of thumb", post: ", always double-check your code before deploying.", hint: "Idiom meaning a general guideline.", expl: "<strong>Rule of thumb</strong> means a general guideline." },
+            { word: "Break down", def: "To stop functioning (machinery) or divide into parts.", syn: "collapse, analyze", ex: "Let's break down the IELTS band descriptors.", pre: "We need to ", ans: "break down", post: " the essay criteria so students understand exactly what is required.", hint: "Phrasal verb meaning to divide into parts or explain.", expl: "<strong>Break down</strong> means to analyze or separate into parts." },
+            { word: "Look forward to", def: "To feel pleased and excited about something that is going to happen.", syn: "anticipate", ex: "I am looking forward to the mountain biking competition.", pre: "The students are really ", ans: "looking forward to", post: " the stand-up comedy performance.", hint: "Phrasal verb meaning to be excited about the future.", expl: "<strong>Look forward to</strong> means to anticipate with pleasure." },
+            { word: "Put off", def: "To delay or postpone.", syn: "postpone, defer", ex: "They decided to put off the construction project.", pre: "Do not ", ans: "put off", post: " studying for your FCE exam until the night before.", hint: "Phrasal verb meaning to postpone.", expl: "<strong>Put off</strong> means to delay." },
+            { word: "Turn out", def: "To happen in a particular way or have a particular result.", syn: "result, unfold", ex: "The stand-up comedy performance turned out to be hilarious.", pre: "The new drag-and-drop bubbles mechanic ", ans: "turned out", post: " to be very engaging for the users.", hint: "Phrasal verb meaning to result or happen.", expl: "<strong>Turn out</strong> means to result in a certain way." },
+            { word: "Catch up", def: "To do something you did not have time to do earlier.", syn: "make up for lost time", ex: "I need to catch up on grading the essays about honey production.", pre: "After being sick for a week, she had to work hard to ", ans: "catch up", post: " on the lessons.", hint: "Phrasal verb meaning to do past due work.", expl: "<strong>Catch up</strong> means to get up to date with work." }
+        ];
+
+        function loadNative() {
+            const refList = document.getElementById('native-reference-list');
+            const container = document.getElementById('native-expressions-container');
+            
+            nativeData.forEach((q, index) => {
+                refList.innerHTML += `<li><strong>${q.word}</strong>: ${q.def} (Synonyms: ${q.syn}). <br><em>Example: ${q.ex}</em></li>`;
+                
+                container.innerHTML += `
+                    <div class="quiz-item">
+                        <p style="margin-bottom: 12px; font-size:18px;">
+                            <strong>${index + 1}.</strong> ${q.pre} 
+                            <input type="text" class="quiz-input" id="nat_${index}" placeholder="type here..."> 
+                            ${q.post}
+                        </p>
+                        <div class="action-group">
+                            <button class="single-check-btn" onclick="checkNative(${index})">Check</button>
+                            <button class="hint-btn" onclick="toggleHint('hint_nat_${index}')">Hint</button>
+                        </div>
+                        <div class="hint-text" id="hint_nat_${index}"><span class="hint-icon">[Hint]</span> ${q.hint}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkNative(index) {
+            const inputEl = document.getElementById(`nat_${index}`);
+            const val = inputEl.value.trim().toLowerCase();
+            const q = nativeData[index];
+            
+            if (val === q.ans.toLowerCase()) {
+                inputEl.classList.add('correct'); inputEl.classList.remove('wrong');
+                showModal(true, `Excellent! ${q.expl}`);
+            } else {
+                inputEl.classList.add('wrong'); inputEl.classList.remove('correct');
+                showModal(false, `The missing expression is <strong>${q.ans}</strong>.<br><br>${q.expl}`);
+            }
+        }
+
+        // --- 4. ADJECTIVE / ADVERB / VERB PRACTICE ---
+        const vocabPracticeData = [
+            { sentence: "The number of tourists [Verb: to rise] ________ dramatically in July.", ans: "rose", expl: "The past tense of the verb 'rise' is 'rose'." },
+            { sentence: "There was a [Adjective: drama] ________ rise in the number of tourists.", ans: "dramatic", expl: "We use the adjective 'dramatic' to describe the noun 'rise'." },
+            { sentence: "Sales [Verb: to fall] ________ gradually over the winter months.", ans: "fell", expl: "The past tense of the verb 'fall' is 'fell'." },
+            { sentence: "The company experienced a [Adjective: gradual] ________ fall in sales.", ans: "gradual", expl: "We use the adjective 'gradual' to describe the noun 'fall'." },
+            { sentence: "The number of mountain biking participants [Verb: to surge] ________ in the summer.", ans: "surged", expl: "The past tense of 'surge' is 'surged', meaning increased suddenly and powerfully." },
+            { sentence: "There was a [Adjective: steep] ________ decline in construction site delays.", ans: "steep", expl: "Use the adjective 'steep' to describe a sharp or significant decline." },
+            { sentence: "Student enrollment [Verb: to fluctuate] ________ throughout the year.", ans: "fluctuated", expl: "The past tense is 'fluctuated', meaning it went up and down without a clear pattern." },
+            { sentence: "The cost of building materials increased [Adverb: sharp] ________.", ans: "sharply", expl: "Use the adverb 'sharply' to modify the verb 'increased'." },
+            { sentence: "The profits [Verb: to plateau] ________ after the initial boom.", ans: "plateaued", expl: "The past tense of 'plateau' is 'plateaued', indicating a flattening or leveling off out after a rise." },
+            { sentence: "There was a [Adjective: marginal] ________ difference between the two groups.", ans: "marginal", expl: "We use the adjective 'marginal' to describe a very small or slight difference." },
+            { sentence: "The temperature dropped [Adverb: steady] ________ over the evening.", ans: "steadily", expl: "Use the adverb 'steadily' to modify the verb 'dropped', showing a constant change." },
+            { sentence: "The proportion of remote workers [Verb: to double] ________ in just two years.", ans: "doubled", expl: "The past tense is 'doubled', meaning it increased by 100%." }
+        ];
+
+        function loadVocabPractice() {
+            const container = document.getElementById('vocab-practice-container');
+            vocabPracticeData.forEach((q, index) => {
+                let parts = q.sentence.split('________');
+                container.innerHTML += `
+                    <div class="flex-practice-row">
+                        <strong>${index + 1}.</strong> &nbsp; ${parts[0]} 
+                        <input type="text" class="quiz-input" id="vp_${index}" style="width:140px; font-size:16px; padding: 6px;" 
+                            onblur="checkVocabBlur(${index})"> 
+                        ${parts[1]}
+                    </div>
+                `;
+            });
+        }
+
+        function checkVocabBlur(index) {
+            const el = document.getElementById(`vp_${index}`);
+            handleBlurCheck(el, vocabPracticeData[index].ans, vocabPracticeData[index].expl);
+        }
+
+        // --- GRAPH 1 DATA ---
+        const g1DataFill = [
+            { id: 1, ans: ["illustrates", "shows", "compares", "represents"], expl: "Verbs like 'illustrates', 'shows', or 'compares' are accurately used to introduce the chart." },
+            { id: 2, ans: ["overall"], expl: "'Overall' is the standard transition to introduce the main trends of the graph." },
+            { id: 3, ans: ["while", "whereas"], expl: "'While' or 'whereas' are perfect for contrasting the boys' and girls' preferences." },
+            { id: 4, ans: ["35%"], expl: "The chart data for boys' shopping reaches the 35% mark." },
+            { id: 5, ans: ["whereas", "while"], expl: "A contrasting linker like 'whereas' or 'while' is needed here." },
+            { id: 6, ans: ["lower"], expl: "The comparative adjective 'lower' correctly compares the 10% to the 27%." },
+            { id: 7, ans: ["equal", "similar"], expl: "Since both are at approximately 20%, they are 'equal' or 'similar'." },
+            { id: 8, ans: ["slightly"], expl: "The difference between 18% and 15% is small, so 'slightly' is the correct adverb." }
+        ];
+
+        function loadGraph1() {
+            const container = document.getElementById('graph1-mcq-container');
+            g1DataFill.forEach((q) => {
+                container.innerHTML += `
+                    <div style="display:flex; align-items:center; flex-direction:column; background: #fff; padding:15px; border-radius:15px; border:1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                        <strong>Blank ${q.id}</strong> 
+                        <input type="text" class="quiz-input" id="g1_fill_${q.id}" placeholder="Type word..." onblur="checkGraph1Blur(${q.id})">
+                    </div>
+                `;
+            });
+        }
+
+        function checkGraph1Blur(id) {
+            const el = document.getElementById(`g1_fill_${id}`);
+            const qData = g1DataFill.find(item => item.id === id);
+            handleBlurCheck(el, qData.ans, qData.expl);
+        }
+
+        // --- GRAPH 2 DATA ---
+        const g2Data = [
+            { id: 'A', ans: 'significantly', hint: 'Adverb: a lot / dramatically', expl: "The adverb 'significantly' correctly describes the major increase shown in the graph." },
+            { id: 'B', ans: 'decline', hint: 'Noun: a decrease or drop', expl: "The noun 'decline' or 'decrease' fits here to describe the downward trend of pizza." },
+            { id: 'C', ans: 'fluctuated', hint: 'Verb: went up and down', expl: "The verb 'fluctuated' means it went up and down before dropping." },
+            { id: 'D', ans: 'sharply', hint: 'Adverb: quickly/steeply', expl: "The adverb 'sharply' modifies the verb 'rising' to show a steep increase." },
+            { id: 'E', ans: 'trend', hint: 'Noun: general direction', expl: "A 'trend' is the general direction in which something is developing or changing." }
+        ];
+
+        function loadGraph2() {
+            const container = document.getElementById('graph2-questions-container');
+            g2Data.forEach((q) => {
+                container.innerHTML += `
+                    <div style="display:flex; align-items:center; flex-direction:column; background: #fff; padding:15px; border-radius:15px; border:1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                        <strong>Blank ${q.id}</strong> 
+                        <input type="text" class="quiz-input" id="g2_fill_${q.id}" placeholder="Type word..." onblur="checkGraph2Blur('${q.id}')">
+                        <span style="font-size: 14px; color: var(--text-secondary); margin-top:5px; font-weight: 500;">(${q.hint})</span>
+                    </div>
+                `;
+            });
+        }
+
+        function checkGraph2Blur(id) {
+            const el = document.getElementById(`g2_fill_${id}`);
+            const qData = g2Data.find(item => item.id === id);
+            handleBlurCheck(el, qData.ans, qData.expl);
+        }
+
+        // --- GRAPH 3 DATA ---
+        const g3ReportAnswers = [
+            { id: 1, ans: ['compare', 'illustrate', 'show'], expl: "The charts compare data from two different years." },
+            { id: 2, ans: ['clear', 'evident'], expl: "'It is clear that' is a common phrase to introduce the overview." },
+            { id: 3, ans: ['increases', 'growth', 'rise'], expl: "Mobile phones, tablets, and flat-screen TVs all went up in percentage." },
+            { id: 4, ans: ['decline', 'decrease', 'drop'], expl: "These three devices lost percentage points, marking a decline." },
+            { id: 5, ans: ['popular', 'common', 'prevalent'], expl: "At 34%, it was the most popular device chosen." },
+            { id: 6, ans: ['plummeted', 'dropped', 'fell', 'decreased'], expl: "Going from 34% to 4% is a severe drop, often described as plummeting." },
+            { id: 7, ans: ['surged', 'increased', 'rose', 'climbed'], expl: "They climbed significantly from 8% to 27%." },
+            { id: 8, ans: ['doubled'], expl: "Moving from 15% to 26% is almost a 100% increase, which means it almost doubled." },
+            { id: 9, ans: ['jump', 'increase', 'rise'], expl: "Going from 5% to 19% is a remarkable jump." },
+            { id: 10, ans: ['dropped', 'decreased', 'fell', 'declined'], expl: "Laptop ownership dropped from 20% down to 12%." },
+            { id: 11, ans: ['proportion', 'percentage', 'share'], expl: "We are discussing parts of a pie chart, referred to as a proportion or percentage." },
+            { id: 12, ans: ['fell', 'dropped', 'decreased', 'declined'], expl: "The figure fell from 18% to 12%." }
+        ];
+
+        function checkGraph3ReportSingle(id) {
+            const el = document.getElementById(`g3_r_${id}`);
+            const qData = g3ReportAnswers.find(item => item.id === id);
+            handleBlurCheck(el, qData.ans, qData.expl);
+        }
+
+        const g3VocabData = [
+            { id: 1, def: "Decreased significantly and rapidly", ans: "plummeted", expl: "'Plummeted' represents a very fast and steep decrease." },
+            { id: 2, def: "Increased dramatically and forcefully", ans: "surged", expl: "'Surged' describes a sudden and powerful upward movement." },
+            { id: 3, def: "In contrast; on the other hand", ans: "conversely", expl: "'Conversely' is an excellent formal linker to introduce an opposite trend." },
+            { id: 4, def: "A part, share, or percentage of a whole", ans: "proportion", expl: "A 'proportion' is especially useful when describing pie chart segments." },
+            { id: 5, def: "Increased by 100% / multiplied by two", ans: "doubled", expl: "Using 'doubled' (or 'halved') shows strong mathematical comprehension of the data." }
+        ];
+
+        function loadGraph3Vocab() {
+            const container = document.getElementById('g3-vocab-container');
+            g3VocabData.forEach(q => {
+                container.innerHTML += `
+                    <div style="background: #fff; padding:18px 25px; border-radius:15px; border:1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+                        <span style="font-size: 18px;"><strong>${q.id}.</strong> ${q.def}</span>
+                        <input type="text" class="quiz-input" id="g3_v_${q.id}" placeholder="Type word..." onblur="checkGraph3VocabBlur(${q.id})">
+                    </div>
+                `;
+            });
+        }
+
+        function checkGraph3VocabBlur(id) {
+            const el = document.getElementById(`g3_v_${id}`);
+            const qData = g3VocabData.find(item => item.id === id);
+            handleBlurCheck(el, qData.ans, qData.expl);
+        }
+
+        // Initialization
+        window.onload = () => {
+            loadLinking();
+            loadConditionals();
+            loadPassive();
+            loadUncountable();
+            loadPlurals();
+            loadComparisons();
+            loadSpeaking();
+            loadNative();
+            loadVocabPractice();
+            loadGraph1();
+            loadGraph2();
+            loadGraph3Vocab();
+        };
+    </script>
+</body>
+</html>

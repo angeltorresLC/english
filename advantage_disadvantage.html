@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Essay Mastery - Advantages & Disadvantages</title>
+    <style>
+        :root {
+            /* Modern, Vibrant Color Palette */
+            --bg-color: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --accent-orange: #f59e0b;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-teal: #06b6d4;
+            --accent-indigo: #6366f1;
+            --font-base: 18px; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-size: var(--font-base);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* General Title Container */
+        .general-title-container {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .general-title-container h1 {
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 0;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 100%;
+            max-width: 1300px; 
+            background: var(--glass-bg);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        /* SVG Icon Alignment */
+        h2 svg, h3 svg, .first-letter-hint svg, .general-text-hint svg, .feedback svg {
+            vertical-align: middle;
+            margin-right: 8px;
+            margin-bottom: 4px;
+        }
+
+        h1 { font-size: 30px; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 10px; color: var(--text-main); }
+        h2 { font-size: 32px; margin-bottom: 25px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center;}
+        h3 { font-size: 24px; margin: 25px 0 15px; font-weight: 700; display: flex; align-items: center;}
+        
+        ul { list-style: none; margin-bottom: 25px; }
+        li { margin-bottom: 12px; padding-left: 28px; position: relative; font-size: 19px; }
+        li::before { content: "•"; position: absolute; left: 0; font-size: 20px; top: -1px; color: var(--accent-indigo); }
+        p { margin-bottom: 15px; font-size: 19px; }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 25px;
+            background: rgba(255,255,255,0.6);
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            background: rgba(0,0,0,0.04);
+            border: 1px solid transparent;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tab-btn:hover { 
+            background: rgba(0,0,0,0.08); 
+            transform: translateY(-4px) scale(1.02); 
+        }
+        .tab-btn.active {
+            background: white;
+            color: var(--accent-indigo);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            border: 2px solid var(--accent-indigo);
+            border-bottom: 4px solid var(--accent-indigo);
+            transform: translateY(-2px);
+        }
+
+        /* Content Sections */
+        .tab-content { display: none; padding: 45px; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Cards */
+        .card { background: white; border-radius: 25px; padding: 35px; margin-bottom: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.03); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
+        
+        .card-blue { border-left: 6px solid var(--accent-blue); background: linear-gradient(to right, rgba(59,130,246,0.05), white 40%); }
+        .card-blue h3 { color: var(--accent-blue); }
+        .card-green { border-left: 6px solid var(--accent-green); background: linear-gradient(to right, rgba(16,185,129,0.05), white 40%); }
+        .card-green h3 { color: var(--accent-green); }
+        .card-orange { border-left: 6px solid var(--accent-orange); background: linear-gradient(to right, rgba(245,158,11,0.05), white 40%); }
+        .card-orange h3 { color: var(--accent-orange); }
+        .card-red { border-left: 6px solid var(--accent-red); background: linear-gradient(to right, rgba(244,63,94,0.05), white 40%); }
+        .card-red h3 { color: var(--accent-red); }
+        .card-purple { border-left: 6px solid var(--accent-purple); background: linear-gradient(to right, rgba(139,92,246,0.05), white 40%); }
+        .card-purple h3 { color: var(--accent-purple); }
+        .card-teal { border-left: 6px solid var(--accent-teal); background: linear-gradient(to right, rgba(6,182,212,0.05), white 40%); }
+        .card-teal h3 { color: var(--accent-teal); }
+        .card-pink { border-left: 6px solid var(--accent-pink); background: linear-gradient(to right, rgba(236,72,153,0.05), white 40%); }
+        .card-pink h3 { color: var(--accent-pink); }
+
+        /* Quiz Inputs */
+        .quiz-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #fff; padding: 15px 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; gap: 15px; transition: 0.3s;}
+        .quiz-row:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .quiz-input { border: 2px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; font-size: 16px; font-weight: 700; outline: none; width: 180px; text-align: center; color: var(--text-main); background: #f8fafc; transition: 0.3s; }
+        .quiz-input:focus { border-color: var(--accent-indigo); background: white; box-shadow: 0 0 10px rgba(99, 102, 241, 0.3); }
+        .quiz-input.correct { border-color: var(--accent-green); background: rgba(16,185,129,0.1); color: #047857; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+        .quiz-input.wrong { border-color: var(--accent-red); background: rgba(239,68,68,0.1); color: #b91c1c; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+        
+        .feedback { font-size: 16px; font-weight: 700; margin-left: 10px; display: none; align-items: center; }
+        .feedback.correct { color: var(--accent-green); display: inline-flex; }
+        .feedback.wrong { color: var(--accent-red); display: inline-flex; }
+
+        .banner-img { width: 100%; height: 200px; object-fit: cover; border-radius: 20px; margin-bottom: 20px; }
+        
+        .method-box { background: rgba(99,102,241,0.05); padding: 20px; border-radius: 15px; border-left: 4px solid var(--accent-indigo); margin-bottom: 15px; font-size: 18px; }
+        .method-box strong { color: var(--accent-indigo); display: inline-block; width: 120px; }
+
+        /* Hints Styling */
+        .first-letter-hint {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.15);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .general-text-hint {
+            font-size: 15px;
+            color: var(--text-secondary);
+            background: #fffbeb;
+            border-left: 4px solid var(--accent-orange);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Footer text styling */
+        .footer-credit {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-top: 0; 
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+        }
+
+        /* Intro Builder Styles */
+        .intro-quiz-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+        .intro-quiz-box h4 {
+            margin-bottom: 15px;
+            color: var(--accent-indigo);
+            font-size: 20px;
+        }
+        .sort-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
+        .sort-item {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .sort-item:hover {
+            border-color: #cbd5e1;
+            background: #f1f5f9;
+        }
+        .move-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-right: 15px;
+        }
+        .move-btns button {
+            border: none;
+            background: #e2e8f0;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .move-btns button:hover {
+            background: var(--accent-indigo);
+            color: white;
+        }
+        .move-btns button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: #e2e8f0;
+            color: var(--text-secondary);
+        }
+        .check-intro-btn {
+            background: var(--accent-indigo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .check-intro-btn:hover { background: #4f46e5; transform: translateY(-2px); }
+        .intro-actions { display: flex; align-items: center; gap: 15px; margin-top: 20px;}
+
+        @media (max-width: 600px) { .tab-btn { flex: 1 1 100%; justify-content: center; } }
+
+        /* ==========================================
+           New Styles for Drag & Drop features
+           Inspired by design.png
+           ========================================== */
+        
+        .new-design-section {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .new-design-header {
+            background-color: #1c2b4d; /* Dark blue from design image */
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            margin: -40px -40px 30px -40px;
+            text-align: center;
+        }
+        .new-design-header p {
+            margin-bottom: 0;
+            color: #dbeafe;
+        }
+        .blue-card {
+            background-color: #2b8cf5; /* Vibrant blue button/card color from design image */
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 15px rgba(43, 140, 245, 0.2);
+        }
+        .blue-card h4 {
+            color: white !important;
+            font-size: 22px;
+        }
+        .drag-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            min-height: 80px;
+        }
+        .drag-item {
+            cursor: grab;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .drag-item:active { cursor: grabbing; transform: scale(0.95); }
+        .draggable-linking {
+            background: #f59e0b; /* Orange accent for linking words */
+            color: white;
+            border: 2px solid #d97706;
+        }
+        .draggable-sentence {
+            background: white;
+            color: #1e293b;
+            border: 2px solid #e2e8f0;
+        }
+        .drop-zone {
+            min-height: 100px;
+            border: 3px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        .drop-zone.hover {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .check-dd-btn {
+            background-color: #ffffff;
+            color: #2b8cf5;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .check-dd-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Classes to add drag functionality to original items */
+        .sort-item.dragging {
+            opacity: 0.5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="general-title-container">
+        <h1>Advantage and disadvantage essay in IELTS</h1>
+        <div class="footer-credit">
+            Made by Angel Torres
+        </div>
+    </div>
+
+    <!-- ==========================================
+         ADDED: Introduction Section 
+         Giving Essential Characteristics
+         ========================================== -->
+    <div class="intro-characteristics" style="width: 100%; max-width: 1300px; background-color: #1c2b4d; color: white; padding: 40px; border-radius: 30px; margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">
+        <h2 style="color: white; margin-bottom: 15px; font-size: 28px; text-shadow: 0 2px 5px rgba(0,0,0,0.2);">Introduction to Advantage & Disadvantage Essays</h2>
+        <p style="font-size: 18px; color: #dbeafe; margin-bottom: 25px; max-width: 900px;">An advantage and disadvantage essay is a formal piece of academic writing where you are asked to analyze the pros and cons of a specific topic. To succeed and achieve a Band 7 or higher, you must demonstrate critical thinking and a balanced approach.</p>
+        
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 250px; background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border-left: 6px solid var(--accent-blue); backdrop-filter: blur(10px);">
+                <h4 style="color: white; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    1. Objective Analysis
+                </h4>
+                <p style="font-size: 16px; color: #cbd5e1; margin: 0; line-height: 1.5;">Explore both the positive and negative aspects fairly and objectively before drawing a final conclusion in the end.</p>
+            </div>
+            
+            <div style="flex: 1; min-width: 250px; background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border-left: 6px solid var(--accent-orange); backdrop-filter: blur(10px);">
+                <h4 style="color: white; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    2. Clear Transitions
+                </h4>
+                <p style="font-size: 16px; color: #cbd5e1; margin: 0; line-height: 1.5;">Use accurate linking words (e.g., However, Furthermore, On the other hand) to guide the reader through your arguments smoothly.</p>
+            </div>
+            
+            <div style="flex: 1; min-width: 250px; background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border-left: 6px solid var(--accent-green); backdrop-filter: blur(10px);">
+                <h4 style="color: white; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    3. Evidence-Based
+                </h4>
+                <p style="font-size: 16px; color: #cbd5e1; margin: 0; line-height: 1.5;">Support each advantage or disadvantage with specific examples and logical explanations using the P.E.E.L. method.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="openTab('structure')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+                Essay Structure (P.E.E.L)
+            </button>
+            <button class="tab-btn" onclick="openTab('advice')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.45.62 2.84 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
+                IELTS Advice
+            </button>
+            <button class="tab-btn" onclick="openTab('mistakes')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                Common Mistakes
+            </button>
+            <button class="tab-btn" onclick="openTab('grammar')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                Grammar & Syntax
+            </button>
+            <button class="tab-btn" onclick="openTab('intros')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
+                Intro Examples
+            </button>
+        </div>
+
+        <div id="structure" class="tab-content active">
+            <h2>Organizing Your Essay</h2>
+            <p>An IELTS Task 2 Advantages & Disadvantages essay requires a clear, logical structure. Examiners look for well-organized paragraphs that develop one central idea.</p>
+            
+            <div class="card card-blue">
+                <h3>1. The Introductory Paragraph</h3>
+                <ul>
+                    <li><strong>Background Statement:</strong> Paraphrase the prompt. Introduce the topic to the reader using your own words.</li>
+                    <li><strong>Thesis Statement:</strong> Clearly state your position. Will you discuss both sides? Do the advantages outweigh the disadvantages?</li>
+                    <li><strong>Outline Sentence (Optional but helpful):</strong> Briefly mention the main points you will discuss in the body paragraphs.</li>
+                </ul>
+            </div>
+
+            <div class="card card-indigo">
+                <h3>2. Body Paragraphs: The P.E.E.L Method</h3>
+                <p>Use the P.E.E.L method to ensure your arguments are coherent and fully developed.</p>
+                <div class="method-box"><strong>Point:</strong> State the main advantage or disadvantage clearly in the topic sentence.</div>
+                <div class="method-box"><strong>Evidence:</strong> Provide a specific example to support your point.</div>
+                <div class="method-box"><strong>Explanation:</strong> Explain <em>why</em> or <em>how</em> this evidence supports your point. What is the result?</div>
+                <div class="method-box"><strong>Link:</strong> Connect the point back to the essay question or conclude the paragraph's idea.</div>
+            </div>
+
+            <div class="card card-purple">
+                <h3>3. The Concluding Paragraph</h3>
+                <ul>
+                    <li><strong>Summary:</strong> Briefly summarize the main advantages and disadvantages discussed in the body.</li>
+                    <li><strong>Final Thought/Opinion:</strong> Restate your thesis or final position clearly. Do not introduce new ideas here.</li>
+                </ul>
+            </div>
+
+            <div class="card card-teal">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7z"/></svg> 
+                    Bonus: Smooth Transitions Between Paragraphs
+                </h3>
+                <p>To score high in Coherence and Cohesion (Band 7+), your paragraphs shouldn't feel like isolated blocks. You need to connect them! Here are great transition examples:</p>
+                <ul>
+                    <li><strong>Transitioning to the Advantages:</strong> <em>"On the one hand, the primary benefit of [Topic] is..."</em> or <em>"Looking first at the positive aspects..."</em></li>
+                    <li><strong>Transitioning to the Disadvantages:</strong> <em>"On the other hand, it is impossible to ignore the drawbacks..."</em> or <em>"Despite these clear advantages, there are significant negative consequences."</em></li>
+                </ul>
+            </div>
+
+            <div class="card card-blue">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+                    Masterclass: Paragraph Unity
+                </h3>
+                <p>One of the biggest reasons students score a Band 6 instead of a Band 7 in Cohesion is a lack of <strong>Paragraph Unity</strong>. This means every single sentence in your body paragraph must relate to the ONE central idea you introduced in your Topic Sentence (Point).</p>
+                <ul>
+                    <li><strong>The Mistake:</strong> Writing about the "financial benefits of electric cars" and suddenly writing a sentence about how "they also look very modern." This breaks unity.</li>
+                    <li><strong>The Fix:</strong> If you want to talk about modern design, it needs its own paragraph. Stay completely focused on the financial aspect until the paragraph concludes.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Practice: Essay Structure (15 Exercises)</h3>
+                <p>Identify which part of the essay structure the following sentences represent.</p>
+                <div id="structure-practice"></div>
+            </div>
+        </div>
+
+        <div id="advice" class="tab-content">
+            <h2>IELTS Task 2 Top Advice</h2>
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80" alt="Student writing" class="banner-img">
+            
+            <div class="card card-green">
+                <h3>Key Strategies for Band 7+</h3>
+                <ul>
+                    <li><strong>Analyze the Question:</strong> Underline keywords. Ensure you address all parts of the prompt (e.g., if it asks for "advantages", plural, you must provide more than one if you don't use a highly detailed single point).</li>
+                    <li><strong>Plan Before You Write:</strong> Spend 5 minutes planning your P.E.E.L paragraphs. A strong plan prevents getting stuck mid-essay.</li>
+                    <li><strong>Use Academic Vocabulary:</strong> Replace simple words (good, bad, big) with precise academic terms (beneficial, detrimental, substantial).</li>
+                    <li><strong>Manage Your Time:</strong> Aim for 40 minutes total. 5 mins planning, 30 mins writing, 5 mins reviewing for grammar errors.</li>
+                </ul>
+            </div>
+
+            <div class="card card-orange">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    Pro Tip: The "5-Minute Brainstorm" Rule
+                </h3>
+                <p>Never skip the planning phase! Teenagers and students often rush into writing to save time, but this leads to messy essays. Try this 5-minute framework:</p>
+                <ul>
+                    <li><strong>Minute 1:</strong> Read the prompt twice and circle the absolute most important keywords.</li>
+                    <li><strong>Minute 2 & 3:</strong> T-Chart Brainstorming. Jot down 2 Advantages on the left and 2 Disadvantages on the right.</li>
+                    <li><strong>Minute 4 & 5:</strong> Pick your strongest arguments. Decide your thesis (Do the pros outweigh the cons?). Now start writing!</li>
+                </ul>
+            </div>
+
+            <div class="card card-teal">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-indigo)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    Bonus Advice: Managing Word Count Effectively
+                </h3>
+                <p>While the minimum word count is 250 words, aiming for 270–290 words is the "sweet spot" for a high score.</p>
+                <ul>
+                    <li><strong>Writing Too Little (Under 250):</strong> You will lose points for not fully developing your arguments.</li>
+                    <li><strong>Writing Too Much (Over 350):</strong> The more you write, the higher the chance of making grammatical errors. It also means you likely didn't leave enough time to proofread!</li>
+                    <li><strong>Pro Tip:</strong> Know your handwriting. Practice on official IELTS answer sheets so you know exactly what 280 words looks like without having to count every single word on test day.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Practice: Strategic Advice (15 Exercises)</h3>
+                <p>Type the missing word to complete these essential pieces of IELTS advice.</p>
+                <div id="advice-practice"></div>
+            </div>
+        </div>
+
+        <div id="mistakes" class="tab-content">
+            <h2>Common Mistakes to Avoid</h2>
+            <p>Avoiding these frequent errors is just as important as using advanced vocabulary.</p>
+            
+            <div class="card card-red">
+                <h3>Frequent IELTS Traps</h3>
+                <ul>
+                    <li><strong>Informal Language:</strong> Avoid contractions (don't, can't), slang (kids, guys), and overly emotional language.</li>
+                    <li><strong>Overgeneralization:</strong> Avoid words like <em>all, every, always, never</em>. Use hedging language instead: <em>many, frequently, tend to, often</em>.</li>
+                    <li><strong>Lack of Cohesion:</strong> Don't just list ideas. Use cohesive devices (Furthermore, Consequently, However) to connect sentences smoothly.</li>
+                    <li><strong>Memorized Clichés:</strong> Examiners penalize memorized phrases like "Since the dawn of time" or "Every coin has two sides." Be direct.</li>
+                </ul>
+            </div>
+
+            <div class="card card-pink">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    The "Personal Pronoun" Trap
+                </h3>
+                <p>Many students lose points by sounding too conversational. In academic writing, you should limit the use of "I", "You", and "We" unless you are specifically asked for your opinion in the prompt.</p>
+                <ul>
+                    <li><strong>Bad Example (Informal):</strong> <em>"If you look at the internet, you can see we spend too much time on it."</em></li>
+                    <li><strong>Good Example (Academic):</strong> <em>"It is evident that society spends an excessive amount of time on the internet."</em></li>
+                    <li><strong>Rule of Thumb:</strong> Only use "I" in the introduction (Thesis) and the conclusion to state your position. Keep the body paragraphs objective!</li>
+                </ul>
+            </div>
+
+            <div class="card card-purple">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Grammar, Linking, & Organization Blunders
+                </h3>
+                <p>Advanced students often fall into specific traps when trying to show off complex structures. Avoid these at all costs:</p>
+                <ul>
+                    <li><strong>Misusing "On the contrary":</strong> This phrase is used to deny that a statement is true (e.g., "It wasn't a bad movie; on the contrary, it was excellent."). It is <strong>NOT</strong> a substitute for "On the other hand" to introduce a disadvantage!</li>
+                    <li><strong>Robotic Linking Words:</strong> Starting every single sentence with a linker (Firstly, Moreover, Furthermore, Secondly, In conclusion) lowers your Cohesion score because it feels unnatural. Use referencing words like "This," "These," and "Such" to link ideas more smoothly.</li>
+                    <li><strong>Single-Sentence Paragraphs:</strong> A paragraph in Task 2 must contain at least two sentences (preferably 4-5 using the PEEL method). A one-sentence paragraph shows a total lack of development.</li>
+                </ul>
+            </div>
+
+            <div class="card card-orange">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Words to Avoid & Academic Synonyms
+                </h3>
+                <p>To maximize your Lexical Resource score, strictly avoid these basic words. Use their academic synonyms instead:</p>
+                <ul>
+                    <li><strong>Bad</strong> ➔ Detrimental, Adverse, Harmful, Negative</li>
+                    <li><strong>Good</strong> ➔ Beneficial, Advantageous, Favorable, Positive</li>
+                    <li><strong>Big</strong> ➔ Substantial, Significant, Considerable, Vast</li>
+                    <li><strong>Small</strong> ➔ Minuscule, Marginal, Negligible, Insignificant</li>
+                    <li><strong>Very</strong> ➔ Highly, Exceptionally, Exceedingly, Profoundly</li>
+                    <li><strong>A lot of</strong> ➔ A multitude of, A substantial amount of, An abundance of</li>
+                    <li><strong>Get</strong> ➔ Acquire, Obtain, Secure, Gain</li>
+                    <li><strong>Important</strong> ➔ Crucial, Significant, Essential, Vital</li>
+                    <li><strong>Interesting</strong> ➔ Compelling, Engaging, Intriguing, Fascinating</li>
+                    <li><strong>Beautiful</strong> ➔ Aesthetically pleasing, Picturesque, Stunning, Attractive</li>
+                    <li><strong>Many</strong> ➔ A multitude of, Numerous, Countless, A myriad of</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Practice: Fix the Mistake (20 Exercises)</h3>
+                <p>Type the correct, formal, or academic replacement for the capitalized informal/incorrect word in the sentence.</p>
+                <div id="mistakes-practice"></div>
+            </div>
+        </div>
+
+        <div id="grammar" class="tab-content">
+            <h2>Grammar for Advantages & Disadvantages</h2>
+            <p>Showcasing grammatical range and accuracy is vital for your score.</p>
+
+            <div class="card card-orange">
+                <h3>High-Scoring Structures</h3>
+                <ul>
+                    <li><strong>Concession Clauses:</strong> Use these to contrast an advantage with a disadvantage in the same sentence. <br><em>Example: <strong>Although</strong> social media connects people globally, it can lead to isolation.</em></li>
+                    <li><strong>The Passive Voice:</strong> Use the passive voice to maintain an objective, academic tone.<br><em>Example: It <strong>is widely believed</strong> that the disadvantages outweigh the benefits.</em></li>
+                    <li><strong>Noun Phrases:</strong> Turn verbs into nouns to create more formal subjects.<br><em>Example: <strong>The implementation of</strong> this policy (instead of "When they implement this policy") has several benefits.</em></li>
+                </ul>
+            </div>
+
+            <div class="card card-blue">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2"><polygon points="12 2 2 7 12 22 22 7 12 2"/></svg>
+                    Bonus: Level Up with Complex Sentences
+                </h3>
+                <p>Examiners award higher bands for a mix of simple and complex sentences. A great way to do this is using "Relative Clauses" (who, which, that).</p>
+                <ul>
+                    <li><strong>Simple Sentences (Band 5/6):</strong> <em>"Smartphones are very useful. They help people communicate instantly."</em></li>
+                    <li><strong>Complex Sentence (Band 7+):</strong> <em>"Smartphones, <strong>which</strong> have become an essential part of daily life, allow individuals to communicate instantly across the globe."</em></li>
+                    <li><strong>Conditionals (Band 7+):</strong> Use 'If' clauses to explain consequences. <em>"<strong>If</strong> governments invest more in public transport, city pollution will drastically decrease."</em></li>
+                </ul>
+            </div>
+
+            <div class="card card-green">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+                    Masterclass: Punctuation in Complex Sentences
+                </h3>
+                <p>Even if your vocabulary is excellent, missing a comma can lower your grammatical accuracy score. Pay attention to clause structures:</p>
+                <ul>
+                    <li><strong>Conditionals (If):</strong> If you start with "If" or "Although", you MUST use a comma in the middle. <br><em>"If taxes are raised<strong>,</strong> consumption will drop."</em> (Correct) <br><em>"Consumption will drop if taxes are raised."</em> (No comma needed when the condition is at the end).</li>
+                    <li><strong>Non-defining Relative Clauses:</strong> If you add extra, non-essential information using "which", it must be enclosed in commas. <br><em>"Global warming<strong>, which</strong> is accelerating rapidly<strong>,</strong> poses a huge threat."</em></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Practice: Advanced Grammar (15 Exercises)</h3>
+                <p>Conjugate or provide the correct grammatical form to complete the sentences.</p>
+                <div id="grammar-practice"></div>
+            </div>
+        </div>
+
+        <div id="intros" class="tab-content">
+            <h2>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent-pink)" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                Intro Masterclass
+            </h2>
+            <p>Your introduction sets the tone for the entire essay. The formula is simple: <strong>Paraphrase the Prompt + State your Thesis</strong>. Let's see how this works in real life!</p>
+
+            <div class="card card-purple">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Example 1: Gap Years
+                </h3>
+                <p><strong>Prompt:</strong> <em>In some countries, young people are encouraged to work or travel for a year between finishing high school and starting university studies. Discuss the advantages and disadvantages.</em></p>
+                <ul>
+                    <li><strong>Background Statement:</strong> It is becoming increasingly common in various nations for students to take a 'gap year' to gain work experience or travel prior to commencing their tertiary education.</li>
+                    <li><strong>Thesis Statement:</strong> This essay will discuss how this practice offers the significant advantage of broadening a young person's worldview, while also acknowledging the potential disadvantage of losing academic momentum.</li>
+                </ul>
+            </div>
+
+            <div class="card card-teal">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Example 2: Online Shopping
+                </h3>
+                <p><strong>Prompt:</strong> <em>More and more people are shopping online instead of visiting local stores. Do the advantages of this trend outweigh the disadvantages?</em></p>
+                <ul>
+                    <li><strong>Background Statement:</strong> In recent years, there has been a massive shift in consumer behavior, with a growing majority of individuals preferring e-commerce platforms over traditional brick-and-mortar retail shops.</li>
+                    <li><strong>Thesis Statement:</strong> In my opinion, the profound advantages of unparalleled convenience and wider product selection completely outweigh the drawbacks, such as the negative impact on local businesses.</li>
+                </ul>
+            </div>
+
+             <div class="card card-pink">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Example 3: Fast Food
+                </h3>
+                <p><strong>Prompt:</strong> <em>The consumption of fast food is increasing globally. What are the advantages and disadvantages of this?</em></p>
+                <ul>
+                    <li><strong>Background Statement:</strong> Around the world, the popularity and consumption of highly processed, quick-service meals have skyrocketed in recent decades.</li>
+                    <li><strong>Thesis Statement:</strong> While this trend provides undeniable convenience and affordability for busy individuals, it carries severe disadvantages, most notably the alarming rise in public health crises such as obesity and heart disease.</li>
+                </ul>
+            </div>
+
+            <div class="card card-blue">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Example 4: Extreme Sports
+                </h3>
+                <p><strong>Prompt:</strong> <em>Some people think that governments should ban dangerous sports, while others think people should have the freedom to do any sports or activity. Discuss the pros and cons of banning dangerous sports.</em></p>
+                <ul>
+                    <li><strong>Background Statement:</strong> There is an ongoing debate regarding whether authorities should prohibit extreme recreational activities or uphold an individual's right to participate in high-risk sports.</li>
+                    <li><strong>Thesis Statement:</strong> This essay will explore the primary benefit of such a ban, which is the preservation of life and reduction of medical burdens, against the major drawback of infringing upon personal civil liberties.</li>
+                </ul>
+            </div>
+
+            <div class="card card-orange">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Example 5: City Tolls
+                </h3>
+                <p><strong>Prompt:</strong> <em>In many cities, the use of private cars is increasing, leading to worse traffic and pollution. Discuss the advantages and disadvantages of introducing a daily fee for driving in city centers.</em></p>
+                <ul>
+                    <li><strong>Background Statement:</strong> As urban populations grow, the escalating reliance on private vehicles has resulted in severe congestion and deteriorating air quality, prompting many municipalities to consider implementing congestion charges.</li>
+                    <li><strong>Thesis Statement:</strong> Levying a daily fee offers the distinct advantage of discouraging unnecessary driving and raising funds for public transport, although it presents a disadvantage by disproportionately affecting low-income commuters.</li>
+                </ul>
+            </div>
+
+            <!-- Intro Builder Practice Section -->
+            <div class="card">
+                <h3>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    Practice: Build the Introduction (10 Exercises)
+                </h3>
+                <p>Use the Up (▲) and Down (▼) arrows <strong>or drag and drop</strong> to move the sentences and linking words into the correct, logical order to form a strong introduction (Background Statement + Thesis Statement).</p>
+                <div id="intro-builder-practice"></div>
+            </div>
+
+            <!-- ==========================================
+                 Advanced Drag & Drop Interactive Section 
+                 ========================================== -->
+            <div class="new-design-section">
+                <div class="new-design-header">
+                    <h3 style="color:white; margin:0; font-size: 28px;">Advanced Drag & Drop: Linking Words</h3>
+                    <p style="font-size: 16px; margin-top: 5px;">Drag the separated linking words and sentence chunks into the correct structure.</p>
+                </div>
+                <div id="drag-drop-advanced-practice"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation Logic
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Generic check function for inputs
+        function checkAnswer(inputEl, correctAnswers) {
+            const userVal = inputEl.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + inputEl.id);
+            
+            // SVG definitions for feedback
+            const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+
+            if (userVal === "") {
+                inputEl.className = "quiz-input";
+                feedbackEl.style.display = "none";
+                return;
+            }
+
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userVal);
+            
+            if (isCorrect) {
+                inputEl.className = "quiz-input correct";
+                feedbackEl.innerHTML = `${correctIcon} Correct!`;
+                feedbackEl.className = "feedback correct";
+            } else {
+                inputEl.className = "quiz-input wrong";
+                feedbackEl.innerHTML = `${wrongIcon} Try again`;
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+
+        // Data Arrays
+        const structureData = [
+            { id: "s1", text: "1. 'It is argued by some that university education should be free for everyone.'", ans: ["background", "background statement"], hint: "This sentence introduces the topic by rewording the essay prompt." },
+            { id: "s2", text: "2. 'This essay will argue that the drawbacks of this trend significantly outweigh the benefits.'", ans: ["thesis", "thesis statement"], hint: "This clearly states your position and what the essay will prove." },
+            { id: "s3", text: "3. 'One primary advantage of remote work is the reduction in daily commuting time.'", ans: ["point"], hint: "The 'P' in P.E.E.L. It states the main idea of the paragraph." },
+            { id: "s4", text: "4. 'For instance, a recent study showed that employees save an average of two hours per day.'", ans: ["evidence"], hint: "The first 'E' in P.E.E.L. It provides an example or data." },
+            { id: "s5", text: "5. 'This extra time allows workers to rest properly, which ultimately increases their overall productivity.'", ans: ["explanation"], hint: "The second 'E' in P.E.E.L. It shows why the example matters." },
+            { id: "s6", text: "6. 'Therefore, eliminating the commute directly contributes to a healthier, more efficient workforce.'", ans: ["link"], hint: "The 'L' in P.E.E.L. It connects the paragraph back to the thesis." },
+            { id: "s7", text: "7. 'In conclusion, while online learning lacks physical interaction, its flexibility offers unparalleled access to education.'", ans: ["summary"], hint: "This briefly recaps the main ideas discussed in the essay." },
+            { id: "s8", text: "8. 'The main disadvantage of urbanization is the severe strain it places on city infrastructure.'", ans: ["point"], hint: "This is the primary argument or topic sentence of a body paragraph." },
+            { id: "s9", text: "9. 'To illustrate, major cities often suffer from daily traffic congestion and overcrowded public transport.'", ans: ["evidence"], hint: "This provides a specific, real-world example." },
+            { id: "s10", text: "10. 'As a result, citizens experience higher stress levels and increased exposure to air pollution.'", ans: ["explanation"], hint: "This details the consequence or deeper reason behind the evidence." },
+            { id: "s11", text: "11. 'Thus, rapid population growth in cities creates environments that can be harmful to public health.'", ans: ["link"], hint: "This wraps up the paragraph by summarizing its impact on the main topic." },
+            { id: "s12", text: "12. 'Despite the minor drawbacks, I believe that adopting renewable energy is essential for our survival.'", ans: ["final thought", "opinion", "final opinion"], hint: "This is usually the last sentence of the essay stating your ultimate perspective." },
+            { id: "s13", text: "13. 'A significant benefit of learning a second language at a young age is enhanced cognitive development.'", ans: ["point"], hint: "The core argument statement of an advantage paragraph." },
+            { id: "s14", text: "14. 'For example, bilingual children often demonstrate better problem-solving skills than their monolingual peers.'", ans: ["evidence"], hint: "This illustrates the argument with a concrete comparison." },
+            { id: "s15", text: "15. 'The modern world is becoming increasingly reliant on digital technology for daily communication.'", ans: ["background", "background statement"], hint: "A general statement that sets the scene for the essay." }
+        ];
+
+        const adviceData = [
+            { id: "a1", text: "1. Always spend at least 5 minutes to ______ your essay before writing.", ans: ["plan"] },
+            { id: "a2", text: "2. Ensure you underline the key ______ in the prompt to stay on topic.", ans: ["words", "vocabulary"] },
+            { id: "a3", text: "3. You must write a minimum of ______ words for Task 2.", ans: ["250"] },
+            { id: "a4", text: "4. Do not simply copy the prompt; you must ______ the background statement.", ans: ["paraphrase", "rewrite"] },
+            { id: "a5", text: "5. A strong ______ statement tells the examiner your exact position immediately.", ans: ["thesis"] },
+            { id: "a6", text: "6. Try to leave 5 minutes at the end to ______ your work for minor errors.", ans: ["review", "check", "proofread"] },
+            { id: "a7", text: "7. Use specific ______ to support your main points.", ans: ["examples", "evidence"] },
+            { id: "a8", text: "8. Avoid introducing completely new ______ in your conclusion.", ans: ["ideas", "points", "arguments"] },
+            { id: "a9", text: "9. Use ______ devices like 'Furthermore' and 'Consequently' to link sentences.", ans: ["cohesive", "linking"] },
+            { id: "a10", text: "10. Do not use ______ forms like 'don't' or 'can't'.", ans: ["contracted", "contractions", "short"] },
+            { id: "a11", text: "11. Group your ideas into logical ______, typically 4 or 5 in total.", ans: ["paragraphs"] },
+            { id: "a12", text: "12. Ensure your topic ______ clearly states the main idea of the body paragraph.", ans: ["sentence"] },
+            { id: "a13", text: "13. If the prompt asks for 'advantages', you should aim to provide at least ______.", ans: ["two", "2"] },
+            { id: "a14", text: "14. Maintain a formal, ______ tone throughout the essay.", ans: ["academic", "objective"] },
+            { id: "a15", text: "15. Read widely to improve your range of academic ______.", ans: ["vocabulary", "words"] }
+        ];
+
+        const mistakesData = [
+            { id: "m1", text: "1. Replace 'KIDS' with a more formal word: The program helps KIDS learn faster.", ans: ["children", "students", "youth"] },
+            { id: "m2", text: "2. Replace 'BAD' with an academic term: Pollution has a BAD effect on health.", ans: ["detrimental", "negative", "adverse", "harmful"] },
+            { id: "m3", text: "3. Replace 'BIG' with an academic term: There is a BIG difference in price.", ans: ["significant", "substantial", "considerable"] },
+            { id: "m4", text: "4. Replace 'NOWADAYS': NOWADAYS, people use smartphones for everything.", ans: ["currently", "presently", "today", "in contemporary society"] },
+            { id: "m5", text: "5. Replace 'A LOT OF': The government spends A LOT OF money on healthcare.", ans: ["a considerable amount of", "a great deal of", "substantial", "significant"] },
+            { id: "m6", text: "6. Replace 'EVERYONE': EVERYONE believes that crime is increasing.", ans: ["many people", "the majority", "most people"] },
+            { id: "m7", text: "7. Replace 'GOOD': Exercise has many GOOD impacts on the body.", ans: ["beneficial", "positive", "advantageous"] },
+            { id: "m8", text: "8. Remove the cliché: 'EVERY COIN HAS TWO SIDES, and this topic is no different.' (Type 'remove' or 'delete')", ans: ["remove", "delete"] },
+            { id: "m9", text: "9. Replace 'GUYS': The university should help these GUYS find jobs.", ans: ["individuals", "students", "people", "graduates"] },
+            { id: "m10", text: "10. Replace 'COPS': The COPS need more funding to patrol the streets.", ans: ["police", "police officers", "law enforcement"] },
+            { id: "m11", text: "11. Fix the contraction: The data DOESN'T support this claim.", ans: ["does not"] },
+            { id: "m12", text: "12. Replace 'GET': It is difficult to GET a good job without a degree.", ans: ["obtain", "acquire", "secure"] },
+            { id: "m13", text: "13. Replace 'THING': Education is an important THING for development.", ans: ["factor", "element", "aspect", "tool"] },
+            { id: "m14", text: "14. Replace 'ALWAYS': Technology ALWAYS improves our standard of living. (Use hedging)", ans: ["often", "frequently", "generally", "tends to"] },
+            { id: "m15", text: "15. Fix the absolute: Fast food NEVER provides nutritional value.", ans: ["rarely", "seldom", "hardly ever"] },
+            { id: "m16", text: "16. Misused transition: 'On the CONTRARY, the second option is cheaper.'", ans: ["other hand"] },
+            { id: "m17", text: "17. Organization: Never introduce a completely new idea in the ___ paragraph.", ans: ["conclusion", "concluding"] },
+            { id: "m18", text: "18. Grammar: 'The INFORMATIONS provided in the chart...'", ans: ["information"] },
+            { id: "m19", text: "19. Grammar: 'Many PEOPLES believe that...'", ans: ["people", "individuals"] },
+            { id: "m20", text: "20. Organization: Failing to use clear ___ to separate your main ideas will lower your score.", ans: ["paragraphs", "paragraphing"] }
+        ];
+
+        const grammarData = [
+            { id: "g1", text: "1. (Passive) It ___ widely believed that automation will replace manual labor. (be)", ans: ["is"] },
+            { id: "g2", text: "2. (Concession) ___ the high cost, the new transit system is highly efficient.", ans: ["despite", "in spite of"] },
+            { id: "g3", text: "3. (Concession) ___ social media is popular, it has severe privacy risks.", ans: ["although", "even though", "though", "while"] },
+            { id: "g4", text: "4. (Noun Phrase) The ___ of new technologies brings both pros and cons. (implement)", ans: ["implementation"] },
+            { id: "g5", text: "5. (Conditional) If governments ___ more in education, crime rates would fall. (invest)", ans: ["invested"] },
+            { id: "g6", text: "6. (Passive) The curriculum should ___ updated to reflect modern needs. (be)", ans: ["be"] },
+            { id: "g7", text: "7. (Result) Consequently, carbon emissions ___ significantly over the last decade. (increase - present perfect)", ans: ["have increased"] },
+            { id: "g8", text: "8. (Noun Phrase) The ___ of natural resources is a major disadvantage of industrialization. (deplete)", ans: ["depletion"] },
+            { id: "g9", text: "9. (Addition) ___, there are significant economic benefits to tourism.", ans: ["furthermore", "moreover", "additionally"] },
+            { id: "g10", text: "10. (Comparison) City living is considerably ___ expensive than rural living.", ans: ["more"] },
+            { id: "g11", text: "11. (Comparison) This approach is nowhere ___ as effective as the previous one.", ans: ["near"] },
+            { id: "g12", text: "12. (Passive) Strict regulations must ___ enforced by local authorities. (be)", ans: ["be"] },
+            { id: "g13", text: "13. (Result) Traffic congestion leads to delays; ___, productivity decreases.", ans: ["therefore", "thus", "hence", "consequently"] },
+            { id: "g14", text: "14. (Conditional) Unless action is taken, the environmental damage ___ be irreversible. (will)", ans: ["will"] },
+            { id: "g15", text: "15. (Noun Phrase) The ___ of global temperatures is a pressing issue. (rise)", ans: ["rise", "rising"] }
+        ];
+
+        const introBuilderData = [
+            {
+                id: "ib1", title: "1. Remote Work", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c2", "c4", "c1", "c3"],
+                chunks: [
+                    { id: "c1", text: "Nowadays, a growing number of companies allow employees to work from home." },
+                    { id: "c2", text: "This essay will argue that" },
+                    { id: "c3", text: "the flexibility and cost savings of this practice" },
+                    { id: "c4", text: "far outweigh the minor communication challenges." }
+                ]
+            },
+            {
+                id: "ib2", title: "2. Online Shopping", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c3", "c1", "c4", "c2"],
+                chunks: [
+                    { id: "c1", text: "With the rise of the internet, e-commerce has largely replaced traditional shopping." },
+                    { id: "c2", text: "Although this provides consumers with unparalleled convenience," },
+                    { id: "c3", text: "it negatively impacts local businesses" },
+                    { id: "c4", text: "and reduces face-to-face social interactions." }
+                ]
+            },
+            {
+                id: "ib3", title: "3. Public Transport", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c4", "c2", "c1", "c3"],
+                chunks: [
+                    { id: "c1", text: "Many city planners advocate for free public transportation to reduce traffic." },
+                    { id: "c2", text: "I firmly believe that" },
+                    { id: "c3", text: "the environmental benefits and reduced congestion" },
+                    { id: "c4", text: "justify the substantial financial cost to the government." }
+                ]
+            },
+            {
+                id: "ib4", title: "4. Cashless Society", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c2", "c4", "c3", "c1"],
+                chunks: [
+                    { id: "c1", text: "The transition towards a cashless society is accelerating globally." },
+                    { id: "c2", text: "While digital payments offer unprecedented efficiency and security," },
+                    { id: "c3", text: "they also marginalize the elderly" },
+                    { id: "c4", text: "who may struggle with adapting to new technologies." }
+                ]
+            },
+            {
+                id: "ib5", title: "5. Space Exploration", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c3", "c1", "c4", "c2"],
+                chunks: [
+                    { id: "c1", text: "Governments allocate billions of dollars annually to space exploration programs." },
+                    { id: "c2", text: "Despite the technological advancements these programs yield," },
+                    { id: "c3", text: "the enormous financial resources would be better spent" },
+                    { id: "c4", text: "addressing urgent terrestrial issues like poverty." }
+                ]
+            },
+            {
+                id: "ib6", title: "6. Social Media", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c2", "c4", "c1", "c3"],
+                chunks: [
+                    { id: "c1", text: "Social networking sites have fundamentally changed how humans communicate." },
+                    { id: "c2", text: "Even though these platforms connect people across the globe," },
+                    { id: "c3", text: "they are largely responsible for the rise in cyberbullying" },
+                    { id: "c4", text: "and a significant decline in real-world social skills." }
+                ]
+            },
+            {
+                id: "ib7", title: "7. Renewable Energy", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c4", "c1", "c3", "c2"],
+                chunks: [
+                    { id: "c1", text: "The global shift from fossil fuels to renewable energy sources is actively underway." },
+                    { id: "c2", text: "This essay will discuss how" },
+                    { id: "c3", text: "the long-term environmental sustainability of green energy" },
+                    { id: "c4", text: "greatly eclipses the initial setup costs." }
+                ]
+            },
+            {
+                id: "ib8", title: "8. Automation", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c3", "c2", "c4", "c1"],
+                chunks: [
+                    { id: "c1", text: "Artificial intelligence and robotics are increasingly replacing human workers in various industries." },
+                    { id: "c2", text: "Although this shift drastically improves manufacturing efficiency," },
+                    { id: "c3", text: "it inevitably leads to widespread job displacement" },
+                    { id: "c4", text: "and increased economic inequality." }
+                ]
+            },
+            {
+                id: "ib9", title: "9. University Education", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c4", "c1", "c3", "c2"],
+                chunks: [
+                    { id: "c1", text: "There is an ongoing debate regarding whether university education should be completely free." },
+                    { id: "c2", text: "On the one hand, abolishing tuition fees ensures equal opportunities for all students." },
+                    { id: "c3", text: "On the other hand, it places a massive tax burden on the public" },
+                    { id: "c4", text: "and can potentially lower the quality of higher education." }
+                ]
+            },
+            {
+                id: "ib10", title: "10. Electric Vehicles", correct: ["c1", "c2", "c3", "c4"], scrambled: ["c2", "c1", "c4", "c3"],
+                chunks: [
+                    { id: "c1", text: "The adoption of electric vehicles is heavily promoted to combat climate change." },
+                    { id: "c2", text: "In my opinion, the profound advantages of reduced carbon emissions" },
+                    { id: "c3", text: "completely overshadow the current disadvantages," },
+                    { id: "c4", text: "such as a lack of charging infrastructure." }
+                ]
+            }
+        ];
+
+        // Lightbulb SVG Icon for Hints
+        const hintIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.45.62 2.84 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>`;
+
+        // Render Function
+        function renderPractice(containerId, dataArray, hintType = 'first-letter') {
+            const container = document.getElementById(containerId);
+            dataArray.forEach(item => {
+                
+                let hintHTML = '';
+                if (hintType === 'general' && item.hint) {
+                    hintHTML = `<div class="general-text-hint">${hintIcon} Hint: ${item.hint}</div>`;
+                } else if (hintType === 'first-letter') {
+                    const firstLetter = item.ans[0].charAt(0).toUpperCase();
+                    hintHTML = `<span class="first-letter-hint">${hintIcon} Hint: <strong>${firstLetter} ___</strong></span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        <div style="flex: 1; min-width: 250px;">
+                            <span style="display: block;">${item.text}</span>
+                            ${hintType === 'general' ? hintHTML : ''}
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            ${hintType === 'first-letter' ? hintHTML : ''}
+                            <input type="text" class="quiz-input" id="${item.id}" placeholder="Type answer..." 
+                                onblur="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')})">
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Render Intro Builder
+        function renderIntroBuilder() {
+            const container = document.getElementById('intro-builder-practice');
+            introBuilderData.forEach(ex => {
+                let chunksHTML = '';
+                ex.scrambled.forEach(chunkId => {
+                    const chunkText = ex.chunks.find(c => c.id === chunkId).text;
+                    chunksHTML += `
+                        <div class="sort-item" data-id="${chunkId}">
+                            <div class="move-btns">
+                                <button onclick="moveItemUp(this)" title="Move Up">▲</button>
+                                <button onclick="moveItemDown(this)" title="Move Down">▼</button>
+                            </div>
+                            <span>${chunkText}</span>
+                        </div>`;
+                });
+
+                container.innerHTML += `
+                    <div class="intro-quiz-box" id="box-${ex.id}">
+                        <h4>${ex.title}</h4>
+                        <div class="sort-container" id="container-${ex.id}">
+                            ${chunksHTML}
+                        </div>
+                        <div class="intro-actions">
+                            <button class="check-intro-btn" onclick="checkIntroAnswer('${ex.id}')">Check Order</button>
+                            <span id="fb-${ex.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+            updateButtons();
+        }
+
+        // Intro Builder Logic
+        function moveItemUp(btn) {
+            const item = btn.closest('.sort-item');
+            const prev = item.previousElementSibling;
+            if (prev) {
+                item.parentNode.insertBefore(item, prev);
+                updateButtons();
+                resetFeedback(item.closest('.intro-quiz-box').id.replace('box-', ''));
+            }
+        }
+
+        function moveItemDown(btn) {
+            const item = btn.closest('.sort-item');
+            const next = item.nextElementSibling;
+            if (next) {
+                item.parentNode.insertBefore(next.nextSibling, item);
+                updateButtons();
+                resetFeedback(item.closest('.intro-quiz-box').id.replace('box-', ''));
+            }
+        }
+
+        function updateButtons() {
+            document.querySelectorAll('.sort-container').forEach(container => {
+                const items = container.querySelectorAll('.sort-item');
+                items.forEach((item, index) => {
+                    const upBtn = item.querySelector('button[title="Move Up"]');
+                    const downBtn = item.querySelector('button[title="Move Down"]');
+                    upBtn.disabled = index === 0;
+                    downBtn.disabled = index === items.length - 1;
+                });
+            });
+        }
+
+        function resetFeedback(exId) {
+            const feedbackEl = document.getElementById(`fb-${exId}`);
+            const boxEl = document.getElementById(`box-${exId}`);
+            feedbackEl.style.display = "none";
+            boxEl.style.borderColor = "#cbd5e1";
+        }
+
+        function checkIntroAnswer(exId) {
+            const ex = introBuilderData.find(e => e.id === exId);
+            const container = document.getElementById(`container-${exId}`);
+            const currentOrder = Array.from(container.children).map(child => child.getAttribute('data-id'));
+            const feedbackEl = document.getElementById(`fb-${exId}`);
+            const boxEl = document.getElementById(`box-${exId}`);
+            
+            const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+
+            if (JSON.stringify(currentOrder) === JSON.stringify(ex.correct)) {
+                feedbackEl.innerHTML = `${correctIcon} Perfect Introduction!`;
+                feedbackEl.className = "feedback correct";
+                feedbackEl.style.display = "inline-flex";
+                boxEl.style.borderColor = "var(--accent-green)";
+            } else {
+                feedbackEl.innerHTML = `${wrongIcon} Not quite. Try moving the sentences.`;
+                feedbackEl.className = "feedback wrong";
+                feedbackEl.style.display = "inline-flex";
+                boxEl.style.borderColor = "var(--accent-red)";
+            }
+        }
+
+        // Initialization
+        window.onload = () => {
+            renderPractice('structure-practice', structureData, 'general');
+            renderPractice('advice-practice', adviceData, 'first-letter');
+            renderPractice('mistakes-practice', mistakesData, 'first-letter');
+            renderPractice('grammar-practice', grammarData, 'first-letter');
+            renderIntroBuilder(); 
+            
+            // ==========================================
+            // Initialize Drag & Drop Features
+            // ==========================================
+            renderAdvancedDragDrop();
+            makeExistingSortItemsDraggable();
+        };
+
+        // ==========================================
+        // ADDED CODE: Advanced Drag & Drop Section 
+        // with 6 exercises total (added 3 new ones)
+        // ==========================================
+
+        const dragDropAdvancedData = [
+            {
+                id: "dd_adv1", title: "1. Global Warming Introduction",
+                items: [
+                    { id: "lw1", text: "Currently,", type: "linking" },
+                    { id: "s1", text: "the acceleration of global warming is an alarming reality.", type: "sentence" },
+                    { id: "s2", text: "some individuals dismiss the severity of this crisis, the undeniable impact of extreme weather necessitates urgent action.", type: "sentence" },
+                    { id: "lw2", text: "While", type: "linking" }
+                ],
+                correct: ["lw1", "s1", "lw2", "s2"]
+            },
+            {
+                id: "dd_adv2", title: "2. Fast Food Industry",
+                items: [
+                    { id: "s1", text: "fast food has become a staple in many diets due to its convenience.", type: "sentence" },
+                    { id: "lw1", text: "Despite", type: "linking" },
+                    { id: "lw2", text: "this convenience, the long-term health consequences completely overshadow any short-term benefits.", type: "linking" },
+                    { id: "s2", text: "In recent years,", type: "sentence" }
+                ],
+                correct: ["s2", "s1", "lw1", "lw2"]
+            },
+            {
+                id: "dd_adv3", title: "3. Tourism & Environment",
+                items: [
+                    { id: "lw1", text: "It is widely acknowledged that", type: "linking" },
+                    { id: "s1", text: "international tourism significantly bolsters local economies.", type: "sentence" },
+                    { id: "lw2", text: "However,", type: "linking" },
+                    { id: "s2", text: "this essay will argue that the severe environmental degradation it causes is a massive drawback.", type: "sentence" }
+                ],
+                correct: ["lw1", "s1", "lw2", "s2"]
+            },
+            {
+                id: "dd_adv4", title: "4. Technology in Education",
+                items: [
+                    { id: "lw1", text: "On the one hand,", type: "linking" },
+                    { id: "s1", text: "smartphones can heavily distract students during lessons.", type: "sentence" },
+                    { id: "lw2", text: "On the other hand,", type: "linking" },
+                    { id: "s2", text: "they provide instant access to infinite educational resources.", type: "sentence" }
+                ],
+                correct: ["lw1", "s1", "lw2", "s2"]
+            },
+            {
+                id: "dd_adv5", title: "5. Urbanization Impacts",
+                items: [
+                    { id: "lw1", text: "Admittedly,", type: "linking" },
+                    { id: "s1", text: "rapid urbanization brings significant economic growth and job opportunities.", type: "sentence" },
+                    { id: "lw2", text: "However,", type: "linking" },
+                    { id: "s2", text: "it concurrently causes severe housing shortages and infrastructure strain.", type: "sentence" }
+                ],
+                correct: ["lw1", "s1", "lw2", "s2"]
+            },
+            {
+                id: "dd_adv6", title: "6. Artificial Intelligence in Work",
+                items: [
+                    { id: "lw1", text: "To begin with,", type: "linking" },
+                    { id: "s1", text: "AI drastically increases productivity across various industries.", type: "sentence" },
+                    { id: "lw2", text: "Conversely,", type: "linking" },
+                    { id: "s2", text: "it poses a major and immediate threat to global job security.", type: "sentence" }
+                ],
+                correct: ["lw1", "s1", "lw2", "s2"]
+            }
+        ];
+
+        function renderAdvancedDragDrop() {
+            const container = document.getElementById('drag-drop-advanced-practice');
+            if (!container) return;
+
+            dragDropAdvancedData.forEach(ex => {
+                let poolHTML = '';
+                // Shuffle items for the drag pool
+                let shuffled = [...ex.items].sort(() => Math.random() - 0.5);
+                
+                shuffled.forEach(item => {
+                    const classType = item.type === 'linking' ? 'draggable-linking' : 'draggable-sentence';
+                    poolHTML += `<div class="drag-item ${classType}" draggable="true" data-id="${item.id}" id="${ex.id}_${item.id}">${item.text}</div>`;
+                });
+
+                container.innerHTML += `
+                    <div class="blue-card" id="adv-box-${ex.id}">
+                        <h4>${ex.title}</h4>
+                        <div class="drag-pool" id="pool-${ex.id}">
+                            ${poolHTML}
+                        </div>
+                        <div class="drop-zone" id="drop-${ex.id}" data-correct='${JSON.stringify(ex.correct)}'>
+                            <span class="drop-placeholder" style="color: rgba(255, 255, 255, 0.7); text-align: center; font-style: italic;">Drag and drop linking words and sentences here in order...</span>
+                        </div>
+                        <div class="intro-actions" style="margin-top: 15px;">
+                            <button class="check-dd-btn" onclick="checkDDAnswer('${ex.id}')">Check Order</button>
+                            <span id="dd-fb-${ex.id}" class="feedback" style="color: white; font-size: 18px;"></span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            setupAdvancedDragAndDropEvents();
+        }
+
+        function setupAdvancedDragAndDropEvents() {
+            let draggedAdvItem = null;
+
+            document.querySelectorAll('.drag-item').forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    draggedAdvItem = this;
+                    setTimeout(() => this.style.opacity = '0.5', 0);
+                });
+                item.addEventListener('dragend', function() {
+                    setTimeout(() => {
+                        this.style.opacity = '1';
+                        draggedAdvItem = null;
+                    }, 0);
+                });
+            });
+
+            document.querySelectorAll('.drop-zone, .drag-pool').forEach(zone => {
+                zone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('hover');
+                });
+                zone.addEventListener('dragleave', function() {
+                    this.classList.remove('hover');
+                });
+                zone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('hover');
+                    if (draggedAdvItem) {
+                        this.appendChild(draggedAdvItem);
+                        const placeholder = this.querySelector('.drop-placeholder');
+                        if (placeholder && this.classList.contains('drop-zone')) {
+                            placeholder.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        }
+
+        function checkDDAnswer(exId) {
+            const dropZone = document.getElementById(`drop-${exId}`);
+            const correctOrder = JSON.parse(dropZone.getAttribute('data-correct'));
+            const currentItems = Array.from(dropZone.querySelectorAll('.drag-item')).map(item => item.getAttribute('data-id'));
+            const feedbackEl = document.getElementById(`dd-fb-${exId}`);
+
+            const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+            const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+
+            if (currentItems.length !== correctOrder.length) {
+                feedbackEl.innerHTML = "Drag all items first.";
+                feedbackEl.style.display = "inline-flex";
+                feedbackEl.style.color = "#fef08a"; // Warning Yellow
+                return;
+            }
+
+            if (JSON.stringify(currentItems) === JSON.stringify(correctOrder)) {
+                feedbackEl.innerHTML = `${correctIcon} Great structure!`;
+                feedbackEl.style.display = "inline-flex";
+                feedbackEl.style.color = "#a7f3d0"; // Success Green
+                dropZone.style.borderColor = "#a7f3d0";
+            } else {
+                feedbackEl.innerHTML = `${wrongIcon} Not quite right.`;
+                feedbackEl.style.display = "inline-flex";
+                feedbackEl.style.color = "#fecdd3"; // Error Pink
+                dropZone.style.borderColor = "#fecdd3";
+            }
+        }
+
+        // Give existing Intro Builder elements drag and drop functionality dynamically
+        function makeExistingSortItemsDraggable() {
+            document.querySelectorAll('.sort-item').forEach(item => {
+                item.setAttribute('draggable', 'true');
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.getAttribute('data-id'));
+                    this.classList.add('dragging');
+                });
+                item.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
+            });
+
+            document.querySelectorAll('.sort-container').forEach(container => {
+                container.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    const dragging = document.querySelector('.dragging');
+                    if (dragging) {
+                        const afterElement = getDragAfterElement(container, e.clientY);
+                        if (afterElement == null) {
+                            container.appendChild(dragging);
+                        } else {
+                            container.insertBefore(dragging, afterElement);
+                        }
+                    }
+                });
+                container.addEventListener('drop', function(e) {
+                    updateButtons(); 
+                    const exId = container.id.replace('container-', '');
+                    resetFeedback(exId); 
+                });
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.sort-item:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+    </script>
+</body>
+</html>

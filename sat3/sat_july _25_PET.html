@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 PET Exam Mastery - Interactive Workbook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern, Soft Educational Palette */
+            --bg-color: #f0f4f8; /* Soft blue-grey background */
+            --text-main: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+            
+            /* Tab & UI Colors */
+            --vocab-color: #f43f5e; /* Rose */
+            --grammar-color: #8b5cf6; /* Violet */
+            --reading-color: #10b981; /* Emerald */
+            --english-color: #0ea5e9; /* Sky Blue */
+            
+            --border-radius: 20px;
+            --soft-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: 18px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .header-title {
+            text-align: center;
+            background: var(--white);
+            padding: 20px 50px;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--text-main);
+            border-radius: var(--border-radius);
+            box-shadow: var(--soft-shadow);
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px;
+            letter-spacing: 1px;
+            border-bottom: 4px solid #cbd5e1;
+        }
+
+        /* NEW LAYOUT: Horizontal flex container for Sidebar + Content */
+        .app-container {
+            width: 100%;
+            max-width: 1200px; 
+            display: flex;
+            flex-direction: row; /* Changed to row for sidebar */
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* NEW LAYOUT: Vertical Sidebar Tabs */
+        .nav-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            background: var(--white);
+            border: 2px solid transparent;
+            padding: 18px 25px; 
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-light);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--soft-shadow);
+            text-align: left;
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        
+        /* Active Tab Mechanics (Vertical) */
+        .tab-btn.active { 
+            transform: translateX(10px); /* Pop out to the right */
+            color: var(--white);
+        }
+
+        .tab-btn[data-target="vocab"].active { background: var(--vocab-color); border-color: var(--vocab-color); box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3);}
+        .tab-btn[data-target="grammar"].active { background: var(--grammar-color); border-color: var(--grammar-color); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);}
+        .tab-btn[data-target="reading"].active { background: var(--reading-color); border-color: var(--reading-color); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);}
+        .tab-btn[data-target="english"].active { background: var(--english-color); border-color: var(--english-color); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);}
+        
+        .tab-btn svg { width: 28px; height: 28px; }
+        .tab-btn.active svg { stroke: var(--white); }
+
+        /* Main Content Area */
+        .window-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--soft-shadow);
+            flex: 1; /* Takes up remaining space */
+            min-height: 600px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tab-content { 
+            display: none; 
+            padding: 40px; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Headers inside content */
+        h2 { font-size: 32px; margin-bottom: 25px; font-weight: 900; letter-spacing: -0.5px;}
+        h3 { font-size: 22px; margin: 30px 0 15px; font-weight: 800; color: var(--text-main);}
+        h4 { font-size: 19px; margin: 20px 0 10px; font-weight: 800; color: var(--text-light); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; display: inline-block;}
+        p { margin-bottom: 15px; font-size: 18px; color: var(--text-light); }
+
+        /* Specific Header Colors based on active tab */
+        #vocab.active h2 { color: var(--vocab-color); }
+        #grammar.active h2 { color: var(--grammar-color); }
+        #reading.active h2 { color: var(--reading-color); }
+        #english.active h2 { color: var(--english-color); }
+
+        /* Exercise Cards */
+        .card { 
+            background: #f8fafc; 
+            border-radius: 16px; 
+            padding: 30px; 
+            margin-bottom: 30px; 
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Reading Specific Boxes */
+        .reading-box {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--reading-color);
+            margin-bottom: 20px;
+            font-size: 17px;
+            line-height: 1.8;
+            font-weight: 600;
+            color: var(--text-main);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        
+        .sign-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            color: #b45309;
+            padding: 15px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 20px;
+            margin: 10px auto 25px;
+            width: 85%;
+            border-radius: 10px;
+        }
+
+        /* Quiz Mechanics */
+        .quiz-row { 
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; 
+            background: var(--white); padding: 18px 20px; border-radius: 12px; 
+            border: 1px solid #cbd5e1; margin-bottom: 15px; gap: 15px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        
+        .quiz-row:hover { border-color: #94a3b8; transform: translateY(-1px); }
+        
+        .quiz-input { 
+            border: 2px solid #cbd5e1; border-radius: 8px; padding: 10px 15px; 
+            font-size: 16px; font-weight: 700; outline: none; width: 220px; 
+            text-align: center; color: var(--text-main); background: #f8fafc; 
+            transition: var(--transition);
+        }
+        
+        .quiz-input:focus { border-color: var(--text-main); background: var(--white); }
+        .quiz-input.correct { border-color: #10b981; background: #ecfdf5; color: #047857; }
+        .quiz-input.wrong { border-color: #f43f5e; background: #fff1f2; color: #be123c; }
+        
+        .feedback { font-size: 16px; font-weight: 800; margin-left: 10px; display: none; align-items: center; gap: 5px;}
+        .feedback.correct { color: #10b981; display: inline-flex; }
+        .feedback.wrong { color: #f43f5e; display: inline-flex; }
+
+        .first-letter-hint {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-light);
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-text { font-size: 17px; font-weight: 700; color: var(--text-main); }
+
+        .footer-credit {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: var(--white);
+            border-radius: 50px;
+            box-shadow: var(--soft-shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) { 
+            .app-container { flex-direction: column; }
+            .nav-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .tab-btn { flex: 1 1 45%; justify-content: center; }
+            .tab-btn.active { transform: translateY(-5px); }
+        }
+        @media (max-width: 600px) {
+            .quiz-row { flex-direction: column; align-items: stretch; }
+            .quiz-input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">🎓 B1 PET Exam Mastery</div>
+    
+    <div class="app-container">
+        <div class="nav-sidebar">
+            <button class="tab-btn active" data-target="vocab" onclick="openTab('vocab')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                Vocabulary
+            </button>
+            <button class="tab-btn" data-target="grammar" onclick="openTab('grammar')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                Grammar
+            </button>
+            <button class="tab-btn" data-target="reading" onclick="openTab('reading')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Reading
+            </button>
+            <button class="tab-btn" data-target="english" onclick="openTab('english')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                Use of English
+            </button>
+        </div>
+
+        <div class="window-content">
+            
+            <div id="vocab" class="tab-content active">
+                <h2>Vocabulary & Word Formation</h2>
+                <div class="card">
+                    <h3>Part A: Core B1 Vocabulary</h3>
+                    <div id="vocab-practice-1"></div>
+                    
+                    <h3 style="margin-top: 40px;">Part B: Word Formation</h3>
+                    <div id="vocab-practice-2"></div>
+                </div>
+            </div>
+
+            <div id="grammar" class="tab-content">
+                <h2>Grammar & Paraphrasing</h2>
+                <div class="card">
+                    <h3>Part A: General Grammar</h3>
+                    <div id="grammar-practice-1"></div>
+
+                    <h3 style="margin-top: 40px;">Part B: Key Word Transformation</h3>
+                    <div id="grammar-practice-2"></div>
+                </div>
+            </div>
+
+            <div id="reading" class="tab-content">
+                <h2>Reading (All 6 Parts)</h2>
+                
+                <div class="card">
+                    <h4>Part 1: Multiple Choice (Short Texts)</h4>
+                    <p>Read the signs/messages and choose the correct meaning (A, B, or C).</p>
+                    
+                    <div class="sign-box">⚠️ LIBRARY NOTICE ⚠️<br>Students must return all borrowed books before Friday to avoid late fees.</div>
+                    <div id="read-p1-a"></div>
+
+                    <div class="sign-box" style="background:#e0f2fe; border-color: #7dd3fc; color: #0369a1;">FROM: COACH | TO: SWIM TEAM<br>Practice is moved to 5 PM today because the main pool is being cleaned this afternoon.</div>
+                    <div id="read-p1-b"></div>
+
+                    <h4 style="margin-top: 40px;">Part 2: Matching</h4>
+                    <p>Match the people (3-5) to the most suitable short text (A-D).</p>
+                    <div class="reading-box" style="font-size: 16px;">
+                        <strong>A) The Tech Hub:</strong> Perfect for teenagers who want to learn coding and robotics in a team environment. Meets on weekends.<br>
+                        <strong>B) Art World:</strong> A quiet studio space for individuals wanting to improve their painting and drawing skills. Weekday evenings.<br>
+                        <strong>C) Mountain Explorers:</strong> Outdoor adventure group focusing on hiking, survival skills, and physical fitness. Very active.<br>
+                        <strong>D) Local History Club:</strong> Learn about the town's past through guided walks and museum visits. Great for relaxed learning.
+                    </div>
+                    <div id="read-p2"></div>
+
+                    <h4 style="margin-top: 40px;">Part 3: Multiple Choice (Longer Text)</h4>
+                    <div class="reading-box">
+                        <strong>My First Marathon, by Sarah (16)</strong><br>
+                        "I decided to run a marathon because my older brother did one last year. I thought it looked easy when he crossed the finish line. However, the training was incredibly difficult. Waking up at 5 AM in the freezing cold was the worst part. My parents were worried I was pushing myself too hard, but my coach told me I was doing great. During the actual race, I wanted to stop at mile 15, but seeing the crowd cheering kept me going. I didn't win, but finishing was the best feeling ever."
+                    </div>
+                    <div id="read-p3"></div>
+
+                    <h4 style="margin-top: 40px;">Part 4: Gapped Text</h4>
+                    <div class="reading-box">
+                        We went camping in the mountains last weekend. It took three hours to drive there. (4.1 ____). After we finally set up the tent, it started to rain heavily. (4.2 ____). Luckily, we had brought lots of board games, so we played inside the tent all afternoon. By evening, the rain stopped and we made a fire. (4.3 ____). 
+                        <br><br>
+                        <em>Missing Sentences:</em><br>
+                        <strong>A)</strong> We roasted marshmallows and told scary stories.<br>
+                        <strong>B)</strong> We were so frustrated that we almost went home.<br>
+                        <strong>C)</strong> When we arrived, we couldn't find a good place to pitch the tent.
+                    </div>
+                    <div id="read-p4"></div>
+
+                    <h4 style="margin-top: 40px;">Part 5: Multiple-Choice Cloze</h4>
+                    <div class="reading-box">
+                        Dolphins are highly intelligent marine mammals. They live in groups called pods and are known for their playful (5.1) ___. They communicate with each other using a complex system of squeaks and whistles. If a dolphin is sick, the others will (5.2) ___ after it. They are truly fascinating creatures.
+                    </div>
+                    <div id="read-p5"></div>
+
+                    <h4 style="margin-top: 40px;">Part 6: Open Cloze</h4>
+                    <div class="reading-box">
+                        Hi Emma,<br>
+                        Thank you so (6.1) ___ for the birthday present. It was exactly (6.2) ___ I wanted! I am going to use it this weekend when I go to the beach. Are you free (6.3) ___ Saturday? Let me know!
+                    </div>
+                    <div id="read-p6"></div>
+                </div>
+            </div>
+
+            <div id="english" class="tab-content">
+                <h2>Use of English</h2>
+                <div class="card">
+                    <h3>Sentence Completion</h3>
+                    <div id="english-practice"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer-credit">
+        Designed & Made by Angel Torres
+    </div>
+
+    <script>
+        // Tab Navigation Logic
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-btn[data-target="${tabId}"]`).classList.add('active');
+        }
+
+        const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+        function checkAnswer(inputEl, correctAnswers) {
+            const userVal = inputEl.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + inputEl.id);
+            
+            if (userVal === "") {
+                inputEl.className = "quiz-input";
+                feedbackEl.style.display = "none";
+                return;
+            }
+
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userVal);
+            
+            if (isCorrect) {
+                inputEl.className = "quiz-input correct";
+                feedbackEl.innerHTML = `${correctIcon}`;
+                feedbackEl.className = "feedback correct";
+            } else {
+                inputEl.className = "quiz-input wrong";
+                feedbackEl.innerHTML = `${wrongIcon}`;
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+
+        // --- EXERCISE DATA ---
+        
+        // Vocab 
+        const vocabData1 = [
+            { id: "v1", text: "1. The plane will take ___ at 8:00 PM. (Phrasal verb)", ans: ["off"] },
+            { id: "v2", text: "2. I am looking ___ to seeing you next week. (Phrasal verb)", ans: ["forward"] },
+            { id: "v3", text: "3. You must keep the receipt if you want a ___ (money back).", ans: ["refund"] },
+            { id: "v4", text: "4. A person who writes for a newspaper is a ___.", ans: ["journalist", "reporter"] },
+            { id: "v5", text: "5. I have an ___ with the dentist tomorrow at 3 PM.", ans: ["appointment"] },
+            { id: "v6", text: "6. Can you ___ me a favor and close the door?", ans: ["do"] }
+        ];
+        const vocabData2 = [
+            { id: "v7", text: "7. (DANGER) It is too ___ to swim in this river.", ans: ["dangerous"] },
+            { id: "v8", text: "8. (DECIDE) Have you made a ___ about the job yet?", ans: ["decision"] },
+            { id: "v9", text: "9. (CARE) You must drive very ___ when it rains.", ans: ["carefully"] },
+            { id: "v10", text: "10. (SUCCEED) The school play was a great ___.", ans: ["success"] },
+            { id: "v11", text: "11. (COMFORT) This chair is very hard and ___.", ans: ["uncomfortable"] },
+            { id: "v12", text: "12. (FAME) The actor is very ___ all over the world.", ans: ["famous"] }
+        ];
+
+        // Grammar
+        const grammarData1 = [
+            { id: "g1", text: "1. If I ___ you, I would study harder. (Conditionals)", ans: ["were", "was"] },
+            { id: "g2", text: "2. The window was ___ by the strong wind. (Passive)", ans: ["broken"] },
+            { id: "g3", text: "3. I ___ been living here for five years. (Present Perfect Continuous)", ans: ["have"] },
+            { id: "g4", text: "4. He asked me what time it ___. (Reported Speech)", ans: ["was"] },
+            { id: "g5", text: "5. I am not used ___ waking up so early. (Gerund/Infinitive)", ans: ["to"] },
+            { id: "g6", text: "6. By the time we arrived, the train had already ___.", ans: ["left", "gone", "departed"] }
+        ];
+        const grammarData2 = [
+            { id: "g7", text: "7. The coffee was too hot to drink. ➔ The coffee was so hot ___ I couldn't drink it.", ans: ["that"] },
+            { id: "g8", text: "8. I advise you to see a doctor. ➔ You ___ see a doctor.", ans: ["should", "ought to", "must"] },
+            { id: "g9", text: "9. It's the most beautiful painting I've seen. ➔ I have ___ seen a more beautiful painting.", ans: ["never"] },
+            { id: "g10", text: "10. 'Don't open the door,' he said. ➔ He told me ___ open the door.", ans: ["not to"] },
+            { id: "g11", text: "11. Unless you hurry, we will be late. ➔ If you ___ hurry, we will be late.", ans: ["don't", "do not"] },
+            { id: "g12", text: "12. The book was so boring that I fell asleep. ➔ It was ___ a boring book that I fell asleep.", ans: ["such"] }
+        ];
+
+        // Expanded Reading 
+        const readP1a = [
+            { id: "r1", text: "1. What must students do? (A: Pay a fee on Friday. / B: Give books back before Friday. / C: Borrow books on Friday.)", ans: ["B"] }
+        ];
+        const readP1b = [
+            { id: "r2", text: "2. Why is practice at 5 PM? (A: The coach is late. / B: The pool is dirty. / C: The pool is being cleaned.)", ans: ["C"] }
+        ];
+        const readP2 = [
+            { id: "r3", text: "3. Tom likes building things with computers and working with others. (Choose A, B, C, or D)", ans: ["A"] },
+            { id: "r4", text: "4. Jenny wants to get fit and loves being in nature. (Choose A, B, C, or D)", ans: ["C"] },
+            { id: "r5", text: "5. David prefers quiet activities where he can be creative alone. (Choose A, B, C, or D)", ans: ["B"] }
+        ];
+        const readP3 = [
+            { id: "r6", text: "6. Why did Sarah start running? (A: She wanted to beat her brother. / B: She was inspired by her brother. / C: Her parents told her to.)", ans: ["B"] },
+            { id: "r7", text: "7. What was Sarah's attitude towards training? (A: It was easier than expected. / B: She loved waking up early. / C: It was extremely hard.)", ans: ["C"] },
+            { id: "r8", text: "8. How did her parents feel? (A: Angry. / B: Supportive. / C: Concerned.)", ans: ["C"] }
+        ];
+        const readP4 = [
+            { id: "r9", text: "9. Which sentence fits gap 4.1? (Type A, B, or C)", ans: ["C"] },
+            { id: "r10", text: "10. Which sentence fits gap 4.2? (Type A, B, or C)", ans: ["B"] },
+            { id: "r11", text: "11. Which sentence fits gap 4.3? (Type A, B, or C)", ans: ["A"] }
+        ];
+        const readP5 = [
+            { id: "r12", text: "12. Choose for 5.1: (A: behaviour / B: action / C: doing / D: making)", ans: ["A", "behaviour"] },
+            { id: "r13", text: "13. Choose for 5.2: (A: see / B: look / C: care / D: take)", ans: ["B", "look"] }
+        ];
+        const readP6 = [
+            { id: "r14", text: "14. Type the missing word for 6.1", ans: ["much"] },
+            { id: "r15", text: "15. Type the missing word for 6.2", ans: ["what"] },
+            { id: "r16", text: "16. Type the missing word for 6.3", ans: ["on", "this"] }
+        ];
+
+        // English 
+        const englishData = [
+            { id: "e1", text: "1. I am very interested ___ learning new languages.", ans: ["in"] },
+            { id: "e2", text: "2. My brother is responsible ___ cleaning the kitchen.", ans: ["for"] },
+            { id: "e3", text: "3. She apologized ___ arriving late to the meeting.", ans: ["for"] },
+            { id: "e4", text: "4. Do you mind ___ (open) the window?", ans: ["opening"] },
+            { id: "e5", text: "5. I can't afford ___ (buy) a new computer right now.", ans: ["to buy"] },
+            { id: "e6", text: "6. ___ the heavy rain, we went for a walk. (Linking word)", ans: ["despite", "in spite of"] },
+            { id: "e7", text: "7. He didn't study; ___, he failed the exam. (Linking word)", ans: ["therefore", "consequently", "as a result"] },
+            { id: "e8", text: "8. I am good ___ playing tennis.", ans: ["at"] },
+            { id: "e9", text: "9. We will go to the park ___ it stops raining. (Condition)", ans: ["if", "when", "as soon as"] },
+            { id: "e10", text: "10. I am looking forward to ___ (see) you.", ans: ["seeing"] },
+            { id: "e11", text: "11. This car belongs ___ my uncle.", ans: ["to"] },
+            { id: "e12", text: "12. Let me know ___ you need any help. (Condition)", ans: ["if"] }
+        ];
+
+        function renderPractice(containerId, dataArray) {
+            const container = document.getElementById(containerId);
+            dataArray.forEach(item => {
+                let firstLetter = item.ans[0].charAt(0).toUpperCase();
+                if(item.ans[0].length === 1 && /[A-D]/.test(firstLetter)) {
+                    firstLetter = "?";
+                }
+                const hintHTML = `<span class="first-letter-hint">💡 <strong>${firstLetter}</strong></span>`;
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        <div style="flex: 1; min-width: 250px;">
+                            <span class="question-text">${item.text}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: flex-end;">
+                            ${hintHTML}
+                            <input type="text" class="quiz-input" id="${item.id}" placeholder="Type here..." 
+                                onblur="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')})">
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = () => {
+            renderPractice('vocab-practice-1', vocabData1);
+            renderPractice('vocab-practice-2', vocabData2);
+            renderPractice('grammar-practice-1', grammarData1);
+            renderPractice('grammar-practice-2', grammarData2);
+            
+            renderPractice('read-p1-a', readP1a);
+            renderPractice('read-p1-b', readP1b);
+            renderPractice('read-p2', readP2);
+            renderPractice('read-p3', readP3);
+            renderPractice('read-p4', readP4);
+            renderPractice('read-p5', readP5);
+            renderPractice('read-p6', readP6);
+
+            renderPractice('english-practice', englishData);
+        };
+    </script>
+</body>
+</html>

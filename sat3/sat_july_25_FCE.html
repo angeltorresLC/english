@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2 FCE Exam Mastery - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Main Dashboard Colors inspired by design.jpg */
+            --bg-outer: #1e325c; /* Dark blue background */
+            --bg-inner: #ffffff; /* White main container */
+            --sidebar-text: #64748b;
+            --sidebar-active-bg: #f1f5f9;
+            --sidebar-active-text: #0f172a;
+            --border-color: #e2e8f0;
+            
+            /* Section Specific Colors */
+            --color-p1-bg: #fef08a; /* Pastel Yellow */
+            --color-p1-text: #854d0e;
+            --color-p1-main: #ca8a04;
+            
+            --color-p2-bg: #fbcfe8; /* Pastel Pink */
+            --color-p2-text: #831843;
+            --color-p2-main: #db2777;
+            
+            --color-p3-bg: #e2e8f0; /* Light Gray/Blue */
+            --color-p3-text: #1e293b;
+            --color-p3-main: #475569;
+            
+            --color-p4-bg: #f3e8ff; /* Light Purple */
+            --color-p4-text: #581c87;
+            --color-p4-main: #9333ea;
+            
+            --color-p5-bg: #dcfce7; /* Light Green */
+            --color-p5-text: #14532d;
+            --color-p5-main: #16a34a;
+            
+            --color-p6-bg: #1e3a8a; /* Dark Blue */
+            --color-p6-text: #ffffff;
+            --color-p6-main: #1e3a8a;
+            
+            --color-p7-bg: #e0f2fe; /* Light Blue */
+            --color-p7-text: #075985;
+            --color-p7-main: #0284c7;
+
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            --soft-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-outer);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            background-color: var(--bg-inner);
+            width: 100%;
+            max-width: 1400px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--soft-shadow);
+            display: flex;
+            overflow: hidden;
+            min-height: 850px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: #fafbfc;
+            position: relative;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 10px;
+        }
+
+        .brand-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #a3e635, #3b82f6);
+            border-radius: 8px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--sidebar-text);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+        
+        .tab-btn:hover {
+            background-color: #f8fafc;
+            color: var(--sidebar-active-text);
+        }
+        
+        /* Colored Active Tabs */
+        .tab-btn[data-target="part1"].active { background-color: var(--color-p1-main); color: white; }
+        .tab-btn[data-target="part2"].active { background-color: var(--color-p2-main); color: white; }
+        .tab-btn[data-target="part3"].active { background-color: var(--color-p3-main); color: white; }
+        .tab-btn[data-target="part4"].active { background-color: var(--color-p4-main); color: white; }
+        .tab-btn[data-target="part5"].active { background-color: var(--color-p5-main); color: white; }
+        .tab-btn[data-target="part6"].active { background-color: var(--color-p6-main); color: white; }
+        .tab-btn[data-target="part7"].active { background-color: var(--color-p7-main); color: white; }
+
+        .tab-btn svg { width: 20px; height: 20px; flex-shrink: 0; stroke-width: 2.5;}
+
+        .sidebar-img {
+            margin-top: auto;
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            opacity: 0.9;
+            z-index: 1;
+        }
+
+        /* Main Content */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            transition: var(--transition);
+        }
+
+        /* Top Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            border-bottom: 4px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            transition: var(--transition);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 40px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .tab-content { 
+            display: none; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Decorative Images in Sections */
+        .section-img {
+            float: right;
+            margin-left: 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            box-shadow: var(--soft-shadow);
+        }
+
+        .img-materials { max-width: 200px; }
+        .img-bigben { max-width: 120px; box-shadow: none; }
+        .img-shadow { max-width: 100px; box-shadow: none; opacity: 0.8;}
+
+        /* Colored Reading Boxes */
+        .reading-box {
+            padding: 30px;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 30px;
+            font-size: 17px;
+            line-height: 1.8;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+
+        .tab-content h2 { font-size: 26px; margin-bottom: 10px; font-weight: 800;}
+        .instructions { font-size: 16px; font-weight: 600; margin-bottom: 25px; opacity: 0.8; }
+        
+        .gap {
+            display: inline-block;
+            min-width: 40px;
+            border-bottom: 2px solid currentColor;
+            text-align: center;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        /* Section Color Themes */
+        #part1 .reading-box { background: var(--color-p1-bg); color: var(--color-p1-text); border-left: 6px solid var(--color-p1-main); }
+        #part1 h2 { color: var(--color-p1-main); }
+
+        #part2 .reading-box { background: var(--color-p2-bg); color: var(--color-p2-text); border-left: 6px solid var(--color-p2-main); }
+        #part2 h2 { color: var(--color-p2-main); }
+
+        #part3 .reading-box { background: var(--color-p3-bg); color: var(--color-p3-text); border-left: 6px solid var(--color-p3-main); }
+        #part3 h2 { color: var(--color-p3-main); }
+
+        #part4 .reading-box { background: var(--color-p4-bg); color: var(--color-p4-text); border-left: 6px solid var(--color-p4-main); }
+        #part4 h2 { color: var(--color-p4-main); }
+
+        #part5 .reading-box { background: var(--color-p5-bg); color: var(--color-p5-text); border-left: 6px solid var(--color-p5-main); }
+        #part5 h2 { color: var(--color-p5-main); }
+
+        #part6 .reading-box { background: var(--color-p6-bg); color: var(--color-p6-text); border-left: 6px solid var(--color-p6-main); }
+        #part6 h2 { color: var(--color-p6-main); }
+        #part6 .gap { border-bottom-color: white; }
+
+        #part7 .reading-box { background: var(--color-p7-bg); color: var(--color-p7-text); border-left: 6px solid var(--color-p7-main); }
+        #part7 h2 { color: var(--color-p7-main); }
+
+        /* Quiz Mechanics */
+        .quiz-row { 
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; 
+            background: #ffffff; padding: 15px 20px; border-radius: 12px; 
+            border: 1px solid var(--border-color); margin-bottom: 15px; gap: 15px; 
+            transition: var(--transition);
+        }
+        
+        .quiz-row:hover { border-color: #94a3b8; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        
+        .quiz-input { 
+            border: 2px solid var(--border-color); border-radius: 8px; padding: 10px 15px; 
+            font-size: 16px; font-weight: 700; outline: none; width: 220px; 
+            text-align: center; color: #1e293b; background: #f8fafc; 
+            transition: var(--transition);
+        }
+        
+        .quiz-input:focus { border-color: #3b82f6; background: #ffffff; }
+        .quiz-input.correct { border-color: #10b981; background: #ecfdf5; color: #047857; }
+        .quiz-input.wrong { border-color: #f43f5e; background: #fff1f2; color: #be123c; }
+        
+        .feedback { font-size: 16px; font-weight: 800; margin-left: 10px; display: none; align-items: center; gap: 5px;}
+        .feedback.correct { color: #10b981; display: inline-flex; }
+        .feedback.wrong { color: #f43f5e; display: inline-flex; }
+
+        .question-text { font-size: 16px; font-weight: 700; color: #334155; flex: 1; min-width: 250px;}
+
+        /* Responsive */
+        @media (max-width: 1024px) { 
+            .dashboard-container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center;}
+            .nav-menu { flex-direction: row; flex-wrap: wrap; gap: 5px; width: 100%;}
+            .brand { margin-bottom: 15px; width: 100%; }
+            .tab-btn { flex: 1 1 calc(33% - 10px); justify-content: center; font-size: 14px;}
+            .sidebar-img { display: none; }
+        }
+        @media (max-width: 600px) {
+            .quiz-row { flex-direction: column; align-items: stretch; }
+            .quiz-input { width: 100%; }
+            .tab-btn { flex: 1 1 100%; }
+            .top-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .section-img { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-icon"></div>
+                ExamMaster
+            </div>
+            <div class="nav-menu">
+                <button class="tab-btn active" data-target="part1" onclick="openTab('part1', 'Part 1: Multiple-choice cloze', this, 'var(--color-p1-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    Part 1: MC Cloze
+                </button>
+                <button class="tab-btn" data-target="part2" onclick="openTab('part2', 'Part 2: Open cloze', this, 'var(--color-p2-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                    Part 2: Open Cloze
+                </button>
+                <button class="tab-btn" data-target="part3" onclick="openTab('part3', 'Part 3: Word formation', this, 'var(--color-p3-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Part 3: Word Formation
+                </button>
+                <button class="tab-btn" data-target="part4" onclick="openTab('part4', 'Part 4: Key word transformations', this, 'var(--color-p4-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    Part 4: Transformations
+                </button>
+                <button class="tab-btn" data-target="part5" onclick="openTab('part5', 'Part 5: Multiple-choice reading', this, 'var(--color-p5-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Part 5: MC Reading
+                </button>
+                <button class="tab-btn" data-target="part6" onclick="openTab('part6', 'Part 6: Gapped text', this, 'var(--color-p6-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                    Part 6: Gapped Text
+                </button>
+                <button class="tab-btn" data-target="part7" onclick="openTab('part7', 'Part 7: Multiple matching', this, 'var(--color-p7-main)')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    Part 7: Multi Matching
+                </button>
+            </div>
+            <!-- Decorative Sidebar Image -->
+            <img src="girl.webp" alt="Student" class="sidebar-img">
+        </div>
+
+        <!-- Main Dashboard Panel -->
+        <div class="main-panel">
+            <div class="top-header" id="top-header">
+                <div class="header-title" id="current-section-title">Part 1: Multiple-choice cloze</div>
+                <div class="user-profile">
+                    Friday, July 24, 2026
+                    <div class="avatar">AT</div>
+                    Angel Torres
+                </div>
+            </div>
+
+            <div class="content-area">
+                
+                <!-- Part 1 (Yellow Theme) -->
+                <div id="part1" class="tab-content active">
+                    <h2>Multiple-choice cloze</h2>
+                    <div class="instructions">Read the text below and choose the correct word (A, B, C, or D) for each gap (1-8)[cite: 3].</div>
+                    <div class="reading-box">
+                        <img src="materials1.jpg" alt="Study Materials" class="section-img img-materials">
+                        <strong>The History of Chocolate</strong><br><br>
+                        Chocolate is one of the most popular flavours in the world, but it hasn't always been a sweet treat. The history of chocolate began in Mesoamerica[cite: 3]. The Maya civilization was the first to (1) <span class="gap">1</span> cacao trees[cite: 3]. They used the beans to make a bitter drink[cite: 3]. Later, the Aztecs used cacao beans as currency, showing how highly they (2) <span class="gap">2</span> them[cite: 3]. <br><br>
+                        When Spanish explorers arrived in the 16th century, they brought chocolate back to Europe[cite: 3]. At first, it was a luxury only the rich could (3) <span class="gap">3</span>[cite: 3]. Eventually, people started adding sugar and honey to (4) <span class="gap">4</span> the bitter taste[cite: 3]. In the 19th century, the invention of the chocolate press finally made it possible to (5) <span class="gap">5</span> solid chocolate[cite: 3]. Today, millions of people (6) <span class="gap">6</span> chocolate daily, yet few stop to think about the long journey this remarkable food has (7) <span class="gap">7</span>[cite: 3]. From a bitter ancient drink to a modern global industry, chocolate remains an essential (8) <span class="gap">8</span> of our culture[cite: 3].
+                    </div>
+                    <div id="p1-practice"></div>
+                </div>
+
+                <!-- Part 2 (Pink Theme) -->
+                <div id="part2" class="tab-content">
+                    <h2>Open cloze</h2>
+                    <div class="instructions">Read the text below and think of the word which best fits each gap. Use only ONE word in each gap (9-16)[cite: 3].</div>
+                    <div class="reading-box">
+                        <img src="big_ben1.png" alt="Big Ben" class="section-img img-bigben">
+                        <strong>Living in a New City</strong><br><br>
+                        Moving to a new city can be both exciting and terrifying[cite: 3]. When I first moved to London, I didn't know anyone, and I found (9) <span class="gap">9</span> very difficult to navigate the underground system[cite: 3]. However, it wasn't long (10) <span class="gap">10</span> I started to feel at home[cite: 3]. <br><br>
+                        One of the best things (11) <span class="gap">11</span> living in a large metropolis is the sheer variety of activities available[cite: 3]. No (12) <span class="gap">12</span> what your interests are, you can always find something to do[cite: 3]. Of course, the cost of living is much higher (13) <span class="gap">13</span> in my hometown, which means I have to be careful with my money[cite: 3]. I have (14) <span class="gap">14</span> to learn how to cook for myself instead of eating out all the time[cite: 3]. Despite the challenges, (15) <span class="gap">15</span> is no doubt that moving here was the best decision I have (16) <span class="gap">16</span> made[cite: 3].
+                    </div>
+                    <div id="p2-practice"></div>
+                </div>
+
+                <!-- Part 3 (Light Gray/Blue Theme) -->
+                <div id="part3" class="tab-content">
+                    <h2>Word formation</h2>
+                    <div class="instructions">Read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line (17-24)[cite: 3].</div>
+                    <div class="reading-box">
+                        <strong>The Importance of Sleep</strong><br><br>
+                        Getting enough sleep is crucial for our overall health and (17) <span class="gap">17</span>. <strong>(HAPPY)</strong>[cite: 3]<br>
+                        Scientists have proven that a lack of sleep can negatively affect our (18) <span class="gap">18</span> to concentrate. <strong>(ABLE)</strong>[cite: 3]<br>
+                        Furthermore, people who do not sleep enough often suffer from extreme (19) <span class="gap">19</span> during the day. <strong>(TIRED)</strong>[cite: 3]<br>
+                        It is a common (20) <span class="gap">20</span> that teenagers need less sleep than adults; in fact, they need more. <strong>(BELIEVE)</strong>[cite: 3]<br>
+                        Creating a relaxing bedtime routine can be highly (21) <span class="gap">21</span>. <strong>(BENEFIT)</strong>[cite: 3]<br>
+                        Avoid looking at screens, as the blue light can be very (22) <span class="gap">22</span> to your sleep cycle. <strong>(HARM)</strong>[cite: 3]<br>
+                        If you suffer from insomnia, it is advisable to seek (23) <span class="gap">23</span> advice from a doctor. <strong>(MEDICINE)</strong>[cite: 3]<br>
+                        Making small changes to your daily habits can lead to a massive (24) <span class="gap">24</span> in your sleep quality. <strong>(IMPROVE)</strong>[cite: 3]
+                    </div>
+                    <div id="p3-practice"></div>
+                </div>
+
+                <!-- Part 4 (Purple Theme) -->
+                <div id="part4" class="tab-content">
+                    <h2>Key word transformations</h2>
+                    <div class="instructions">Complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given (25-30)[cite: 3].</div>
+                    <br>
+                    <div id="p4-practice"></div>
+                </div>
+
+                <!-- Part 5 (Green Theme) -->
+                <div id="part5" class="tab-content">
+                    <h2>Multiple-choice reading</h2>
+                    <div class="instructions">Read the text and choose the answer (A, B, C or D) which you think fits best according to the text (31-36)[cite: 3].</div>
+                    <div class="reading-box">
+                        <img src="shadow.png" alt="Teenager Silhouette" class="section-img img-shadow">
+                        <strong>A Teenager's Solo Sailing Trip</strong><br><br>
+                        When 16-year-old Laura decided she wanted to sail around the world by herself, most people thought she was crazy[cite: 3]. Her parents, however, were surprisingly supportive[cite: 3]. "She has been sailing since she was four," her father explained[cite: 3]. "I know her capabilities better than the critics do."[cite: 3] <br><br>
+                        The journey was not without its severe challenges[cite: 3]. In the middle of the Pacific Ocean, she encountered a massive storm that damaged her radio equipment[cite: 3]. For three days, she had no contact with the outside world[cite: 3]. "I wasn't terrified," Laura later wrote in her blog[cite: 3]. "I was just incredibly frustrated because I couldn't tell my family I was safe."[cite: 3] <br><br>
+                        Upon returning home two years later, Laura became a national hero[cite: 3]. But for her, the fame was the least important part[cite: 3]. "The ocean taught me patience and self-reliance," she said[cite: 3]. "I didn't do it to get my name in the newspapers; I did it because I needed to know if I could."[cite: 3]
+                    </div>
+                    <div id="p5-practice"></div>
+                </div>
+
+                <!-- Part 6 (Dark Blue Theme) -->
+                <div id="part6" class="tab-content">
+                    <h2>Gapped text</h2>
+                    <div class="instructions">Six sentences have been removed from the article. Choose from the sentences A-G the one which fits each gap (37-42). There is one extra sentence which you do not need to use[cite: 3].</div>
+                    <div class="reading-box">
+                        <strong>Discovering an Ancient City</strong><br><br>
+                        Archaeologists have recently uncovered what they believe is a lost city deep in the Amazon rainforest[cite: 3]. The discovery was made using advanced laser technology called LiDAR, which can 'see' through the thick canopy of trees[cite: 3]. <strong>(37) <span class="gap">37</span></strong> This technology has revolutionized modern archaeology[cite: 3]. <br><br>
+                        The city, estimated to be over 2,000 years old, contains a massive network of roads and canals[cite: 3]. <strong>(38) <span class="gap">38</span></strong> This indicates a highly advanced civilization that understood complex engineering[cite: 3]. Until now, scientists believed the soil in the Amazon was too poor to support such large populations[cite: 3]. <strong>(39) <span class="gap">39</span></strong> They clearly found a way to cultivate crops successfully on a massive scale[cite: 3]. <br><br>
+                        The team plans to start physical excavations next year[cite: 3]. <strong>(40) <span class="gap">40</span></strong> However, the location is incredibly remote, requiring a five-day boat journey just to reach the base camp[cite: 3]. <strong>(41) <span class="gap">41</span></strong> Despite these difficulties, the researchers are incredibly excited[cite: 3]. <strong>(42) <span class="gap">42</span></strong> They believe this is just the beginning of rewriting South American history[cite: 3].
+                        <br><br>
+                        <strong>Sentences:</strong><br>
+                        A) It means they will finally be able to touch the ancient stones[cite: 3].<br>
+                        B) These waterways were likely used for both transport and agriculture[cite: 3].<br>
+                        C) Before this invention, finding ruins in the jungle was mostly a matter of luck[cite: 3].<br>
+                        D) Consequently, bringing heavy equipment will be a logistical nightmare[cite: 3].<br>
+                        E) The weather was too dangerous to continue the expedition[cite: 3].<br>
+                        F) It could take decades to fully uncover the entire settlement[cite: 3].<br>
+                        G) This new evidence completely contradicts that old theory[cite: 3].
+                    </div>
+                    <div id="p6-practice"></div>
+                </div>
+
+                <!-- Part 7 (Light Blue Theme) -->
+                <div id="part7" class="tab-content">
+                    <h2>Multiple matching</h2>
+                    <div class="instructions">You are going to read an article about four people who have their dream jobs. For questions 43-52, choose from the people (A-D). The people may be chosen more than once[cite: 3].</div>
+                    <div class="reading-box">
+                        <strong>A) Mark - Video Game Tester</strong><br>
+                        People think I just play games all day for fun, but it's actually exhausting[cite: 3]. I have to play the same level fifty times in a row to find software bugs[cite: 3]. It requires intense concentration[cite: 3]. Still, seeing my name in the credits of a multi-million dollar game makes the tedious parts worthwhile[cite: 3]. <br><br>
+                        
+                        <strong>B) Sarah - Wildlife Photographer</strong><br>
+                        I spend months away from home, often sleeping in freezing tents waiting for the perfect shot[cite: 3]. It’s physically demanding and sometimes dangerous[cite: 3]. But when I capture an image of a rare snow leopard in its natural habitat, I forget all about the cold[cite: 3]. My goal is to use my photos to promote conservation[cite: 3]. <br><br>
+                        
+                        <strong>C) David - Chocolate Taster</strong><br>
+                        Yes, I get paid to eat chocolate[cite: 3]. I work for a major brand, ensuring every batch tastes exactly right[cite: 3]. I had to train my palate for years[cite: 3]. The downside? I can never just eat chocolate for pleasure anymore; my brain automatically starts analyzing the cocoa percentages and texture[cite: 3]. <br><br>
+                        
+                        <strong>D) Emma - Rollercoaster Designer</strong><br>
+                        I use my engineering degree to create thrilling rides[cite: 3]. The math involved is incredibly complex because safety is our absolute priority[cite: 3]. The best part of my job is standing near the exit of a new ride on opening day and listening to the screams of joy from the passengers[cite: 3]. 
+                    </div>
+                    <div id="p7-practice"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId, title, btnElement, colorVal) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+            
+            const titleEl = document.getElementById('current-section-title');
+            titleEl.innerText = title;
+            titleEl.style.color = colorVal;
+            document.getElementById('top-header').style.borderBottomColor = colorVal;
+        }
+
+        const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+        function checkAnswer(inputEl, correctAnswers) {
+            const userVal = inputEl.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + inputEl.id);
+            
+            if (userVal === "") {
+                inputEl.className = "quiz-input";
+                feedbackEl.style.display = "none";
+                return;
+            }
+
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userVal);
+            
+            if (isCorrect) {
+                inputEl.className = "quiz-input correct";
+                feedbackEl.innerHTML = `${correctIcon}`;
+                feedbackEl.className = "feedback correct";
+            } else {
+                inputEl.className = "quiz-input wrong";
+                feedbackEl.innerHTML = `${wrongIcon}`;
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+
+        function renderPractice(containerId, dataArray) {
+            const container = document.getElementById(containerId);
+            dataArray.forEach(item => {
+                let hintHTML = '';
+                if(item.options) {
+                    hintHTML = `<span style="font-size: 13px; color: #64748b; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">${item.options}</span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        <div class="question-text">${item.text}</div>
+                        <div style="display: flex; align-items: center; gap: 15px; justify-content: flex-end;">
+                            ${hintHTML}
+                            <input type="text" class="quiz-input" id="${item.id}" placeholder="Type answer..." 
+                                onblur="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')})">
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        const p1Data = [
+            { id: "q1", text: "1. A) grow | B) build | C) invent | D) discover", ans: ["A", "grow"], options: "A, B, C or D" },
+            { id: "q2", text: "2. A) estimated | B) valued | C) measured | D) guessed", ans: ["B", "valued"], options: "A, B, C or D" },
+            { id: "q3", text: "3. A) afford | B) pay | C) spend | D) earn", ans: ["A", "afford"], options: "A, B, C or D" },
+            { id: "q4", text: "4. A) cover | B) hide | C) mask | D) disguise", ans: ["B", "hide", "mask"], options: "A, B, C or D" },
+            { id: "q5", text: "5. A) create | B) result | C) cause | D) form", ans: ["A", "create"], options: "A, B, C or D" },
+            { id: "q6", text: "6. A) swallow | B) consume | C) absorb | D) bite", ans: ["B", "consume"], options: "A, B, C or D" },
+            { id: "q7", text: "7. A) taken | B) passed | C) gone | D) travelled", ans: ["A", "taken"], options: "A, B, C or D" },
+            { id: "q8", text: "8. A) piece | B) section | C) part | D) detail", ans: ["C", "part"], options: "A, B, C or D" }
+        ];
+
+        const p2Data = [
+            { id: "q9", text: "9. ...I found ___ very difficult...", ans: ["it"] },
+            { id: "q10", text: "10. ...it wasn't long ___ I started to feel at home.", ans: ["before", "until"] },
+            { id: "q11", text: "11. One of the best things ___ living in a large metropolis...", ans: ["about"] },
+            { id: "q12", text: "12. No ___ what your interests are...", ans: ["matter"] },
+            { id: "q13", text: "13. ...cost of living is much higher ___ in my hometown...", ans: ["than"] },
+            { id: "q14", text: "14. I have ___ to learn how to cook...", ans: ["had"] },
+            { id: "q15", text: "15. ...Despite the challenges, ___ is no doubt...", ans: ["there"] },
+            { id: "q16", text: "16. ...the best decision I have ___ made.", ans: ["ever"] }
+        ];
+
+        const p3Data = [
+            { id: "q17", text: "17. (HAPPY)", ans: ["happiness"] },
+            { id: "q18", text: "18. (ABLE)", ans: ["ability"] },
+            { id: "q19", text: "19. (TIRED)", ans: ["tiredness"] },
+            { id: "q20", text: "20. (BELIEVE)", ans: ["belief"] },
+            { id: "q21", text: "21. (BENEFIT)", ans: ["beneficial"] },
+            { id: "q22", text: "22. (HARM)", ans: ["harmful"] },
+            { id: "q23", text: "23. (MEDICINE)", ans: ["medical"] },
+            { id: "q24", text: "24. (IMPROVE)", ans: ["improvement"] }
+        ];
+
+        const p4Data = [
+            { id: "q25", text: "25. 'Did you buy the tickets?' he asked me. (IF) -> He asked me ____________ the tickets.", ans: ["if I had bought", "if I bought"] },
+            { id: "q26", text: "26. They are fixing my car today. (HAVING) -> I ____________ today.", ans: ["am having my car fixed", "'m having my car fixed"] },
+            { id: "q27", text: "27. I regret not studying harder for the exam. (WISH) -> I ____________ harder for the exam.", ans: ["wish I had studied", "wish I'd studied"] },
+            { id: "q28", text: "28. The film was so boring that I fell asleep. (SUCH) -> It ____________ that I fell asleep.", ans: ["was such a boring film"] },
+            { id: "q29", text: "29. Someone has stolen my bicycle. (BEEN) -> My bicycle ____________.", ans: ["has been stolen", "'s been stolen"] },
+            { id: "q30", text: "30. You ought to see a doctor about that cough. (BETTER) -> You ____________ a doctor about that cough.", ans: ["had better see", "'d better see"] }
+        ];
+
+        const p5Data = [
+            { id: "q31", text: "31. What did Laura's father think of her trip?", ans: ["A", "B", "C", "D"], options: "A) He thought she was crazy. B) He believed in her skills. C) He wanted fame. D) He was terrified." },
+            { id: "q32", text: "32. B is correct. (Type B to pass)", ans: ["B"] },
+            { id: "q33", text: "33. Why was Laura frustrated during the storm?", ans: ["A", "B", "C", "D"], options: "A) She was scared. B) The radio broke. C) She couldn't contact her family. D) She was lost." },
+            { id: "q34", text: "34. C is correct. (Type C to pass)", ans: ["C"] },
+            { id: "q35", text: "35. What did Laura value most about the trip?", ans: ["A", "B", "C", "D"], options: "A) Becoming a hero. B) Getting in newspapers. C) Testing herself. D) Avoiding school." },
+            { id: "q36", text: "36. C is correct. (Type C to pass)", ans: ["C"] }
+        ];
+
+        const p6Data = [
+            { id: "q37", text: "37. Which sentence fits gap 37?", ans: ["C"], options: "A - G" },
+            { id: "q38", text: "38. Which sentence fits gap 38?", ans: ["B"], options: "A - G" },
+            { id: "q39", text: "39. Which sentence fits gap 39?", ans: ["G"], options: "A - G" },
+            { id: "q40", text: "40. Which sentence fits gap 40?", ans: ["A"], options: "A - G" },
+            { id: "q41", text: "41. Which sentence fits gap 41?", ans: ["D"], options: "A - G" },
+            { id: "q42", text: "42. Which sentence fits gap 42?", ans: ["F"], options: "A - G" }
+        ];
+
+        const p7Data = [
+            { id: "q43", text: "43. Who experiences a physical disadvantage in their job?", ans: ["B"], options: "A, B, C, D" },
+            { id: "q44", text: "44. Who mentions losing the ability to enjoy their product naturally?", ans: ["C"], options: "A, B, C, D" },
+            { id: "q45", text: "45. Who uses their job to support a wider environmental cause?", ans: ["B"], options: "A, B, C, D" },
+            { id: "q46", text: "46. Who relies heavily on advanced mathematics?", ans: ["D"], options: "A, B, C, D" },
+            { id: "q47", text: "47. Who finds the repetition of their tasks exhausting?", ans: ["A"], options: "A, B, C, D" },
+            { id: "q48", text: "48. Who enjoys seeing the public's emotional reaction to their work?", ans: ["D"], options: "A, B, C, D" },
+            { id: "q49", text: "49. Who feels the end result justifies the boring parts of the job?", ans: ["A"], options: "A, B, C, D" },
+            { id: "q50", text: "50. Who had to spend a long time physically training a specific sense?", ans: ["C"], options: "A, B, C, D" },
+            { id: "q51", text: "51. Who works far away from civilization?", ans: ["B"], options: "A, B, C, D" },
+            { id: "q52", text: "52. Who must ensure absolute safety above all else?", ans: ["D"], options: "A, B, C, D" }
+        ];
+
+        window.onload = () => {
+            renderPractice('p1-practice', p1Data);
+            renderPractice('p2-practice', p2Data);
+            renderPractice('p3-practice', p3Data);
+            renderPractice('p4-practice', p4Data);
+            renderPractice('p5-practice', p5Data);
+            renderPractice('p6-practice', p6Data);
+            renderPractice('p7-practice', p7Data);
+            
+            // Initialize top header border color for Part 1
+            document.getElementById('top-header').style.borderBottomColor = 'var(--color-p1-main)';
+            document.getElementById('current-section-title').style.color = 'var(--color-p1-main)';
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 Flyers Fun English Class!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Fun, Kid-Friendly Color Palette */
+            --bg-color: #e0f2fe;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            
+            /* Tab & Card Colors */
+            --vocab-color: #f59e0b; /* Bright Orange */
+            --grammar-color: #3b82f6; /* Bright Blue */
+            --reading-color: #10b981; /* Bright Green */
+            --english-color: #ec4899; /* Bright Pink */
+            
+            --border-radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif; /* Soft, readable font for kids */
+        }
+
+        body {
+            background-color: #87CEEB;
+            /* Updated Background with Monkey Image */
+            background-image: url('monkey_bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            
+            color: var(--text-main);
+            font-size: 18px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 15px;
+            min-height: 100vh;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 100%;
+            max-width: 1100px; 
+            background: var(--glass-bg);
+            border: 4px solid #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 40px rgba(0, 100, 200, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            text-align: center;
+            background: #fde047;
+            padding: 20px;
+            font-size: 36px;
+            font-weight: 900;
+            color: #d97706;
+            border-bottom: 4px dashed #fef08a;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h2 { font-size: 28px; margin-bottom: 20px; font-weight: 900; display: flex; align-items: center; gap: 10px;}
+        h3 { font-size: 22px; margin: 20px 0 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;}
+        p { margin-bottom: 15px; font-size: 20px; }
+        
+        .monkey-icon {
+            height: 60px;
+            object-fit: contain;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            padding: 20px;
+            background: #f8fafc;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 3px solid transparent;
+            padding: 12px 20px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .tab-btn:hover { transform: translateY(-3px) scale(1.05); }
+        
+        .tab-btn[data-target="vocab"].active { border-color: var(--vocab-color); color: var(--vocab-color); box-shadow: 0 8px 15px rgba(245, 158, 11, 0.2); }
+        .tab-btn[data-target="grammar"].active { border-color: var(--grammar-color); color: var(--grammar-color); box-shadow: 0 8px 15px rgba(59, 130, 246, 0.2); }
+        .tab-btn[data-target="reading"].active { border-color: var(--reading-color); color: var(--reading-color); box-shadow: 0 8px 15px rgba(16, 185, 129, 0.2); }
+        .tab-btn[data-target="english"].active { border-color: var(--english-color); color: var(--english-color); box-shadow: 0 8px 15px rgba(236, 72, 153, 0.2); }
+
+        /* Content Sections */
+        .tab-content { display: none; padding: 40px; animation: slideIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Learning Cards */
+        .card { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 30px; 
+            margin-bottom: 30px; 
+            border: 3px solid #f1f5f9;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); 
+            transition: transform 0.2s ease; 
+        }
+        .card:hover { transform: translateY(-5px); }
+        
+        .card-vocab { border-left: 8px solid var(--vocab-color); border-top: 3px solid var(--vocab-color); }
+        .card-vocab h3 { color: var(--vocab-color); }
+        
+        .card-grammar { border-left: 8px solid var(--grammar-color); border-top: 3px solid var(--grammar-color); }
+        .card-grammar h3 { color: var(--grammar-color); }
+        
+        .card-reading { border-left: 8px solid var(--reading-color); border-top: 3px solid var(--reading-color); }
+        .card-reading h3 { color: var(--reading-color); }
+        
+        .card-english { border-left: 8px solid var(--english-color); border-top: 3px solid var(--english-color); }
+        .card-english h3 { color: var(--english-color); }
+
+        /* Quiz Inputs */
+        .quiz-row { 
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; 
+            background: #fff; padding: 18px 20px; border-radius: 16px; 
+            border: 2px dashed #cbd5e1; margin-bottom: 15px; gap: 15px; 
+            transition: 0.3s;
+        }
+        .quiz-row:hover { background: #f8fafc; border-color: #94a3b8; }
+        
+        .quiz-input { 
+            border: 3px solid #e2e8f0; border-radius: 12px; padding: 10px 15px; 
+            font-size: 18px; font-weight: 800; outline: none; width: 200px; 
+            text-align: center; color: var(--text-main); background: #f8fafc; 
+            transition: 0.3s; 
+        }
+        .quiz-input:focus { border-color: #cbd5e1; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        .quiz-input.correct { border-color: #10b981; background: #ecfdf5; color: #047857; }
+        .quiz-input.wrong { border-color: #f43f5e; background: #fff1f2; color: #be123c; }
+        
+        .feedback { font-size: 18px; font-weight: 800; margin-left: 10px; display: none; align-items: center; gap: 5px;}
+        .feedback.correct { color: #10b981; display: inline-flex; }
+        .feedback.wrong { color: #f43f5e; display: inline-flex; }
+
+        /* Hints */
+        .first-letter-hint {
+            font-size: 15px;
+            font-weight: 900;
+            color: #6366f1;
+            background: #e0e7ff;
+            padding: 8px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* SVG Icons */
+        svg { vertical-align: middle; }
+
+        @media (max-width: 768px) { .tab-btn { flex: 1 1 45%; justify-content: center; } }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="header-title">🌟 A2 Flyers Exam Practice 🌟</div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-target="vocab" onclick="openTab('vocab')">
+                🦁 Vocabulary
+            </button>
+            <button class="tab-btn" data-target="grammar" onclick="openTab('grammar')">
+                🧩 Grammar
+            </button>
+            <button class="tab-btn" data-target="reading" onclick="openTab('reading')">
+                📚 Reading
+            </button>
+            <button class="tab-btn" data-target="english" onclick="openTab('english')">
+                ✍️ Use of English
+            </button>
+        </div>
+
+        <div id="vocab" class="tab-content active">
+            <h2 style="color: var(--vocab-color);">
+                <img src="monkey_laptop.png" alt="Monkey typing" class="monkey-icon">
+                🦁 Vocabulary Practice
+            </h2>
+            <p>In the A2 Flyers exam, you need to know words about animals, clothes, jobs, food, and the world around us. Read the clues and guess the word!</p>
+            
+            <div class="card card-vocab">
+                <h3>Flyers Part 1: Definitions</h3>
+                <p>Read the sentences carefully. Write the correct word that matches the description. <strong>Remember to check your spelling!</strong></p>
+                <div id="vocab-practice"></div>
+            </div>
+        </div>
+
+        <div id="grammar" class="tab-content">
+            <h2 style="color: var(--grammar-color);">
+                <img src="Monkey_over.webp" alt="Monkey peeking" class="monkey-icon">
+                🧩 Grammar Syntax
+            </h2>
+            <p>Show how good you are at building sentences! We will practice the Past Continuous, Comparatives, and Future tenses.</p>
+            
+            <div class="card card-grammar">
+                <h3>Important Flyers Rules</h3>
+                <ul>
+                    <li><strong>Comparatives:</strong> Use <em>-er</em> or <em>more</em> (e.g., bigger, more beautiful) to compare two things.</li>
+                    <li><strong>Past Continuous:</strong> Use <em>was/were + verb(ing)</em> for long actions in the past (e.g., I was watching TV).</li>
+                    <li><strong>Future Plans:</strong> Use <em>going to</em> for plans you have already made.</li>
+                </ul>
+            </div>
+
+            <div class="card card-grammar">
+                <h3>Grammar Challenge</h3>
+                <p>Type the missing word to complete the grammar rule correctly.</p>
+                <div id="grammar-practice"></div>
+            </div>
+        </div>
+
+        <div id="reading" class="tab-content">
+            <h2 style="color: var(--reading-color);">
+                <img src="monkey_handstand.png" alt="Monkey doing a handstand" class="monkey-icon">
+                📚 Reading & Stories
+            </h2>
+            <p>Let's read some short stories. You will need to choose the best word to fill in the gaps. This helps you with Part 4 of the Flyers exam!</p>
+
+            <div class="card card-reading">
+                <h3>Read and Complete</h3>
+                <p>Read the story about <strong>"A Trip to the Moon"</strong>. Fill in the missing words.</p>
+                <p style="background: #f8fafc; padding: 20px; border-radius: 12px; font-style: italic; margin-bottom: 25px;">
+                    "Yesterday, Betty and her brother David went to the space museum. They saw a giant (1)_____ that goes to the moon. An astronaut was there, and he (2)_____ them how to float in space! After the tour, they were very hungry, so they bought some space (3)_____ from the shop. It tasted like strawberries! It was the (4)_____ day ever."
+                </p>
+                <div id="reading-practice"></div>
+            </div>
+        </div>
+
+        <div id="english" class="tab-content">
+            <h2 style="color: var(--english-color);">
+                <img src="on.png" alt="Monkey on a box" class="monkey-icon">
+                ✍️ Use of English & Punctuation
+            </h2>
+            <p>Punctuation and word order are super important! Make sure you know when to use capital letters, full stops (.), and question marks (?).</p>
+            
+            <div class="card card-english">
+                <h3>Punctuation Rules</h3>
+                <ul>
+                    <li>Always use a <strong>Capital Letter</strong> for the start of a sentence, names of people, and days of the week.</li>
+                    <li>Put a <strong>Question Mark (?)</strong> at the end if you are asking something.</li>
+                    <li>Make sure adjectives come <em>before</em> the noun (e.g., a <em>red</em> apple).</li>
+                </ul>
+            </div>
+
+            <div class="card card-english">
+                <h3>Fix the Mistakes!</h3>
+                <p>Look at the broken sentences below and type the correct word or punctuation mark needed.</p>
+                <div id="english-practice"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Navigation
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-btn[data-target="${tabId}"]`).classList.add('active');
+        }
+
+        // SVG Icons for Feedback
+        const correctIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        const wrongIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+        // Check Answer Logic
+        function checkAnswer(inputEl, correctAnswers) {
+            const userVal = inputEl.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + inputEl.id);
+            
+            if (userVal === "") {
+                inputEl.className = "quiz-input";
+                feedbackEl.style.display = "none";
+                return;
+            }
+
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userVal);
+            
+            if (isCorrect) {
+                inputEl.className = "quiz-input correct";
+                feedbackEl.innerHTML = `${correctIcon} Awesome!`;
+                feedbackEl.className = "feedback correct";
+            } else {
+                inputEl.className = "quiz-input wrong";
+                feedbackEl.innerHTML = `${wrongIcon} Try again!`;
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+
+        // A2 Flyers Data Arrays
+        const vocabData = [
+            { id: "v1", text: "1. You wear this around your neck when it is cold outside.", ans: ["scarf"] },
+            { id: "v2", text: "2. People go to this place to catch a plane and fly on holiday.", ans: ["airport"] },
+            { id: "v3", text: "3. This animal is very tall, yellow and brown, and eats leaves.", ans: ["giraffe"] },
+            { id: "v4", text: "4. You use this to dry your body after you have a shower or swim.", ans: ["towel"] },
+            { id: "v5", text: "5. This is a person who works in a hospital and helps sick people.", ans: ["doctor", "nurse"] },
+            { id: "v6", text: "6. You put letters in this red or yellow box in the street.", ans: ["postbox", "post box"] },
+            { id: "v7", text: "7. This sweet brown food is very popular, especially at Easter.", ans: ["chocolate"] },
+            { id: "v8", text: "8. You look at this to find roads, rivers, and cities when traveling.", ans: ["map"] },
+            { id: "v9", text: "9. This big vehicle takes children to school in the morning.", ans: ["bus", "schoolbus", "school bus"] },
+            { id: "v10", text: "10. You open this to let air and light into your bedroom.", ans: ["window"] }
+        ];
+
+        const grammarData = [
+            { id: "g1", text: "1. An elephant is ___ than a mouse. (Comparative of big)", ans: ["bigger"] },
+            { id: "g2", text: "2. Yesterday at 5 PM, I was ___ my homework. (Past Continuous of do)", ans: ["doing"] },
+            { id: "g3", text: "3. Next weekend, we are ___ to visit my grandmother. (Future Plan)", ans: ["going"] },
+            { id: "g4", text: "4. This is the ___ beautiful dress in the shop! (Superlative)", ans: ["most"] },
+            { id: "g5", text: "5. If it rains tomorrow, we ___ stay at home. (Future of will)", ans: ["will"] },
+            { id: "g6", text: "6. My brother ___ playing football when it started to rain. (Past be-verb)", ans: ["was"] },
+            { id: "g7", text: "7. There are ___ apples on the table. (Plural/Some/Any)", ans: ["some", "many", "two", "three", "four", "five", "six"] },
+            { id: "g8", text: "8. I have ___ to London twice. (Present Perfect of go)", ans: ["been"] },
+            { id: "g9", text: "9. She ___ like eating vegetables when she was a baby. (Past negative of do)", ans: ["didn't", "did not"] },
+            { id: "g10", text: "10. A cheetah is the ___ animal in the world. (Superlative of fast)", ans: ["fastest"] }
+        ];
+
+        const readingData = [
+            { id: "r1", text: "1. (1) They saw a giant _____ that goes to the moon.", ans: ["rocket", "spaceship", "ship"] },
+            { id: "r2", text: "2. (2) An astronaut was there, and he _____ them how to float...", ans: ["taught", "showed"] },
+            { id: "r3", text: "3. (3) ...so they bought some space _____ from the shop.", ans: ["food", "snacks", "candy", "ice cream"] },
+            { id: "r4", text: "4. (4) It was the _____ day ever.", ans: ["best", "greatest"] },
+            { id: "r5", text: "5. Read this sign: 'Do not feed the animals.' Where are you?", ans: ["zoo", "farm"] },
+            { id: "r6", text: "6. Which word means 'very very good'?", ans: ["excellent", "amazing", "fantastic"] },
+            { id: "r7", text: "7. Which of these is a job? (teacher / tired / table)", ans: ["teacher"] },
+            { id: "r8", text: "8. What is the opposite of 'expensive'?", ans: ["cheap"] },
+            { id: "r9", text: "9. Complete the phrase: 'Once upon a ___'", ans: ["time"] },
+            { id: "r10", text: "10. If you are 'thirsty', what do you need?", ans: ["water", "drink", "juice"] }
+        ];
+
+        const englishData = [
+            { id: "e1", text: "1. Write the correct word order: (name / your / is / what / ?)", ans: ["what is your name?", "what is your name"] },
+            { id: "e2", text: "2. Fix the capital letter: 'i like playing tennis.'", ans: ["I"] },
+            { id: "e3", text: "3. Add the missing punctuation: 'Where do you live_'", ans: ["?"] },
+            { id: "e4", text: "4. Fix the spelling mistake: 'The wheather is sunny today.'", ans: ["weather"] },
+            { id: "e5", text: "5. Fix the capital letter: 'we are going to london.'", ans: ["London"] },
+            { id: "e6", text: "6. Which word is correct? 'I (buyed / bought) a new toy.'", ans: ["bought"] },
+            { id: "e7", text: "7. Add the missing punctuation: 'Wow_ That is amazing!'", ans: ["!"] },
+            { id: "e8", text: "8. Write the correct word order: (old / you / how / are / ?)", ans: ["how old are you?", "how old are you"] },
+            { id: "e9", text: "9. Choose the best word: 'I (look / watch) TV every evening.'", ans: ["watch"] },
+            { id: "e10", text: "10. Fix the capital letter: 'my birthday is in august.'", ans: ["August"] }
+        ];
+
+        // Render Function with Kid-Friendly First-Letter Hints
+        function renderPractice(containerId, dataArray) {
+            const container = document.getElementById(containerId);
+            dataArray.forEach(item => {
+                
+                // First letter hint generator
+                let firstLetter = item.ans[0].charAt(0).toUpperCase();
+                // Exception for punctuation questions
+                if(firstLetter === '?' || firstLetter === '!') {
+                   firstLetter = "Punctuation Mark";
+                } else if (item.ans[0].split(' ').length > 1) {
+                   firstLetter = "Sentence"; // Hide first letter if it's a full sentence rearrangement
+                }
+
+                const hintHTML = `<span class="first-letter-hint">💡 Hint: <strong>${firstLetter}</strong></span>`;
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        <div style="flex: 1; min-width: 250px;">
+                            <span class="question-text">${item.text}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: flex-end;">
+                            ${hintHTML}
+                            <input type="text" class="quiz-input" id="${item.id}" placeholder="Type here..." 
+                                onblur="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')})">
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Initialization
+        window.onload = () => {
+            renderPractice('vocab-practice', vocabData);
+            renderPractice('grammar-practice', grammarData);
+            renderPractice('reading-practice', readingData);
+            renderPractice('english-practice', englishData);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movers A2 Fun English Class!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #e0f2fe;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            
+            --vocab-color: #f59e0b; 
+            --vocab-bg: #fffbeb; 
+            
+            --grammar-color: #3b82f6; 
+            --grammar-bg: #eff6ff;
+
+            --reading-color: #10b981; 
+            --reading-bg: #ecfdf5;
+
+            --english-color: #ec4899; 
+            --english-bg: #fdf2f8;
+            
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-main);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* --- TABS NAVIGATION --- */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-link {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: var(--border-radius);
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            color: var(--text-secondary);
+        }
+
+        .tab-link img { width: 32px; height: 32px; }
+        .tab-link:hover { transform: translateY(-2px); }
+
+        .tab-link.active-vocab { border-color: var(--vocab-color); color: var(--vocab-color); background: var(--vocab-bg); }
+        .tab-link.active-grammar { border-color: var(--grammar-color); color: var(--grammar-color); background: var(--grammar-bg); }
+        .tab-link.active-reading { border-color: var(--reading-color); color: var(--reading-color); background: var(--reading-bg); }
+        .tab-link.active-english { border-color: var(--english-color); color: var(--english-color); background: var(--english-bg); }
+
+        /* --- SECTION CONTENT --- */
+        .tab-content {
+            display: none;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #cbd5e1;
+        }
+
+        .section-header h2 { margin: 0; font-size: 2rem; }
+        .score-display { margin-left: auto; font-size: 1.5rem; font-weight: 900; }
+
+        /* --- GRAMMAR EXPLANATION BOX --- */
+        .grammar-guide {
+            background: #e0f2fe;
+            border-left: 6px solid var(--grammar-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .grammar-guide h3 { margin-top: 0; color: var(--grammar-color); }
+        .grammar-guide ul { margin: 0; padding-left: 20px; line-height: 1.6; }
+
+        /* --- READING PASSAGES --- */
+        .reading-passage {
+            background: white;
+            border: 2px solid var(--reading-color);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* --- QUIZ ROWS & QUESTION TYPES --- */
+        .quiz-row {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .question-visual { max-width: 80px; border-radius: 10px; }
+        .question-text { font-size: 1.15rem; flex: 1; min-width: 250px; line-height: 1.4; }
+        
+        .quiz-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .first-letter-hint {
+            font-size: 0.9rem; color: white; background: #94a3b8;
+            padding: 5px 10px; border-radius: 10px; font-weight: bold;
+        }
+
+        /* Inputs & Selects */
+        .quiz-input, .quiz-select {
+            padding: 10px 15px; border: 2px solid #cbd5e1;
+            border-radius: 10px; font-size: 1rem; font-family: inherit;
+            outline: none; transition: border-color 0.2s;
+        }
+        .quiz-input { width: 140px; }
+        .quiz-select { cursor: pointer; background: white; }
+        
+        .quiz-input:focus, .quiz-select:focus { border-color: var(--grammar-color); }
+        .correct-element { 
+            border-color: #10b981 !important; 
+            background-color: #d1fae5 !important; 
+            color: #065f46 !important;
+            font-weight: bold;
+        }
+
+        .feedback { font-weight: bold; font-size: 1.2rem; min-width: 30px; text-align: center; }
+
+        /* --- DRAG AND DROP STYLES --- */
+        .word-bank {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            background: #f1f5f9; padding: 15px; border-radius: 15px;
+            margin-bottom: 20px; justify-content: center;
+        }
+        .draggable-word {
+            background: var(--reading-color); color: white;
+            padding: 8px 15px; border-radius: 20px; font-weight: bold;
+            cursor: grab; user-select: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .draggable-word:active { cursor: grabbing; }
+        
+        .drop-zone {
+            display: inline-block; min-width: 100px; height: 35px;
+            border: 2px dashed #94a3b8; border-radius: 8px;
+            vertical-align: middle; background: #f8fafc;
+            text-align: center; line-height: 35px; font-size: 1rem;
+            color: #94a3b8; transition: all 0.3s ease;
+        }
+        .drop-zone.drag-over { background: #e2e8f0; border-color: var(--reading-color); }
+
+        /* --- PRIZE MODAL --- */
+        #prize-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .prize-content {
+            background: white; padding: 40px; border-radius: var(--border-radius);
+            max-width: 450px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .prize-content img { width: 150px; margin: 20px 0; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        footer { text-align: center; margin-top: 40px; color: var(--text-secondary); font-weight: bold; }
+
+        #vocab-section h2, #vocab-section .score-display { color: var(--vocab-color); }
+        #grammar-section h2, #grammar-section .score-display { color: var(--grammar-color); }
+        #reading-section h2, #reading-section .score-display { color: var(--reading-color); }
+        #english-section h2, #english-section .score-display { color: var(--english-color); }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 A2 Movers Practice!</h1>
+
+    <div class="tabs">
+        <button class="tab-link active-vocab" onclick="openTab(event, 'vocab-section', 'active-vocab')">
+            <img src="applications-2-128x128.png" alt="Vocab"> Vocabulary
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'grammar-section', 'active-grammar')">
+            <img src="help-128x128.png" alt="Grammar"> Grammar
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'reading-section', 'active-reading')">
+            <img src="documents-128x128.png" alt="Reading"> Reading
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'english-section', 'active-english')">
+            <img src="chat-128x128.png" alt="English"> Everyday English
+        </button>
+    </div>
+
+    <div class="tab-content active" id="vocab-section" style="background-color: var(--vocab-bg);">
+        <div class="section-header">
+            <h2>Vocabulary</h2>
+            <div class="score-display" id="score-vocab-practice">0 / 10</div>
+        </div>
+        <div id="vocab-practice"></div>
+    </div>
+
+    <div class="tab-content" id="grammar-section" style="background-color: var(--grammar-bg);">
+        <div class="section-header">
+            <h2>Grammar</h2>
+            <div class="score-display" id="score-grammar-practice">0 / 10</div>
+        </div>
+        
+        <div class="grammar-guide">
+            <h3>📖 Grammar Hints</h3>
+            <ul>
+                <li><strong>Present Simple:</strong> Habits and routines (He <em>goes</em>, She <em>likes</em>).</li>
+                <li><strong>Present Continuous:</strong> Happening right now (is <em>running</em>, are <em>eating</em>).</li>
+                <li><strong>Past Simple:</strong> Finished actions (We <em>played</em>, They <em>were</em>).</li>
+                <li><strong>Comparatives/Superlatives:</strong> Comparing things (tall<em>er</em>, the bigg<em>est</em>).</li>
+                <li><strong>Modals:</strong> Rules (You <em>mustn't</em> shout).</li>
+            </ul>
+        </div>
+
+        <div id="grammar-practice"></div>
+    </div>
+
+    <div class="tab-content" id="reading-section" style="background-color: var(--reading-bg);">
+        <div class="section-header">
+            <h2>Reading Comprehension</h2>
+            <div class="score-display" id="score-reading-practice">0 / 10</div>
+        </div>
+        
+        <div class="reading-passage">
+            <h3 style="margin-top: 0;">📚 Part 1: Lily's Saturday</h3>
+            <p>Last Saturday, Lily went to the town library to find some new reading materials. She loves reading storybooks about different animals. While she was there, she found a very funny book about a smart monkey that could do a handstand!</p>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+                <img src="materials1.jpg" style="height:80px; border-radius:10px;">
+                <img src="monkey_handstand.png" style="height:80px; border-radius:10px;">
+            </div>
+        </div>
+
+        <div class="word-bank" id="word-bank-1">
+            <div class="draggable-word" draggable="true" id="w1" ondragstart="drag(event)">library</div>
+            <div class="draggable-word" draggable="true" id="w2" ondragstart="drag(event)">animals</div>
+            <div class="draggable-word" draggable="true" id="w3" ondragstart="drag(event)">monkey</div>
+            <div class="draggable-word" draggable="true" id="w4" ondragstart="drag(event)">handstand</div>
+        </div>
+
+        <div id="reading-practice-1"></div>
+
+        <hr style="border: 1px dashed #10b981; margin: 30px 0;">
+
+        <div class="reading-passage">
+            <h3 style="margin-top: 0;">🌳 Part 2: A Trip to the Park</h3>
+            <p>Yesterday afternoon, Peter and his brother walked to the big park near their house. They brought a red ball to play football. It was very sunny, so they sat under a big green tree to eat their sandwiches. Peter listened to his favorite music on his headphones.</p>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+                <img src="music-128x128.png" style="height:80px; border-radius:10px;">
+            </div>
+        </div>
+        
+        <div id="reading-practice-2"></div>
+    </div>
+
+    <div class="tab-content" id="english-section" style="background-color: var(--english-bg);">
+        <div class="section-header">
+            <h2>Everyday English</h2>
+            <div class="score-display" id="score-english-practice">0 / 10</div>
+        </div>
+        <div id="english-practice"></div>
+    </div>
+
+    <div id="prize-modal">
+        <div class="prize-content">
+            <h1 style="color: #f59e0b;">🎉 Brilliant Job! 🎉</h1>
+            <p style="font-size: 1.2rem;">You scored over 85% on your exercises! You are an English superstar!</p>
+            <img src="uk_symbol.png" alt="UK Prize">
+            <br>
+            <button onclick="document.getElementById('prize-modal').style.display='none'" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; margin-top: 15px;">Keep Playing</button>
+        </div>
+    </div>
+
+    <footer>
+        Made by Angel Torres
+    </footer>
+
+    <script>
+        // Tab Navigation
+        function openTab(evt, sectionId, activeClass) {
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
+            let links = document.getElementsByClassName("tab-link");
+            for (let i = 0; i < links.length; i++) links[i].className = "tab-link"; 
+            document.getElementById(sectionId).classList.add("active");
+            evt.currentTarget.classList.add(activeClass);
+        }
+
+        // Global State & Security against multiple points
+        const solvedQuestions = new Set(); // Stores IDs of questions answered correctly
+        const state = {
+            totalScore: 0,
+            targetScore: Math.floor(40 * 0.85), // 34 correct answers
+            prizeAwarded: false,
+            sections: {
+                'vocab-practice': { score: 0, total: 10 },
+                'grammar-practice': { score: 0, total: 10 },
+                'reading-practice': { score: 0, total: 10 },
+                'english-practice': { score: 0, total: 10 }
+            }
+        };
+
+        // Standard award score function
+        function awardScore(sectionId, qId) {
+            if (!solvedQuestions.has(qId)) {
+                solvedQuestions.add(qId);
+                state.sections[sectionId].score += 1;
+                state.totalScore += 1;
+                document.getElementById(`score-${sectionId}`).innerText = `${state.sections[sectionId].score} / ${state.sections[sectionId].total}`;
+                if (state.totalScore >= state.targetScore && !state.prizeAwarded) {
+                    state.prizeAwarded = true;
+                    document.getElementById('prize-modal').style.display = 'flex';
+                }
+            }
+        }
+
+        // Questions Data
+        const vocabData = [
+            { id: 'v1', type: 'input', text: 'This animal likes bananas and can climb trees.', ans: ['monkey'], img: 'monkey_handstand.png' },
+            { id: 'v2', type: 'input', text: 'You wear these on your feet inside your shoes.', ans: ['socks'] },
+            { id: 'v3', type: 'input', text: 'This is a place where you can read and borrow books.', ans: ['library'], img: 'documents-128x128.png' },
+            { id: 'v4', type: 'input', text: 'You use this to dry yourself after a bath.', ans: ['towel'] },
+            { id: 'v5', type: 'input', text: 'A sweet food made from cocoa, often eaten as a treat.', ans: ['chocolate'] },
+            { id: 'v6', type: 'input', text: 'The brother of your mother or father is your...', ans: ['uncle'] },
+            { id: 'v7', type: 'input', text: 'You need this to buy things in a shop.', ans: ['money'] },
+            { id: 'v8', type: 'input', text: 'This vehicle has two wheels and you pedal it.', ans: ['bike', 'bicycle'] },
+            { id: 'v9', type: 'input', text: 'You wear this around your neck when it is cold.', ans: ['scarf'] },
+            { id: 'v10', type: 'input', text: 'The room in a house where you cook food.', ans: ['kitchen'] }
+        ];
+
+        const grammarData = [
+            { id: 'g1', type: 'mcq', text: 'He ______ to work every morning at 8 AM.', options: ['go', 'goes', 'going'], ans: ['goes'], img: 'Go-to-Work.png' },
+            { id: 'g2', type: 'mcq', text: 'Yesterday, we ______ football in the park.', options: ['play', 'plays', 'played'], ans: ['played'] },
+            { id: 'g3', type: 'input', text: 'She is ______ (tall) than her brother.', ans: ['taller'] },
+            { id: 'g4', type: 'mcq', text: 'Look! The dog ______ in the garden.', options: ['runs', 'is running', 'ran'], ans: ['is running'] },
+            { id: 'g5', type: 'input', text: 'I didn\'t ______ (see) the movie last night.', ans: ['see'] },
+            { id: 'g6', type: 'input', text: 'This is the ______ (big) house in the street.', ans: ['biggest'] },
+            { id: 'g7', type: 'mcq', text: 'They ______ very happy to see us yesterday.', options: ['is', 'are', 'were'], ans: ['were'] },
+            { id: 'g8', type: 'mcq', text: 'You ______ shout in the library.', options: ['must', "mustn't"], ans: ["mustn't"] },
+            { id: 'g9', type: 'input', text: '______ (Do/Does) she like eating pizza?', ans: ['Does'] },
+            { id: 'g10', type: 'mcq', text: 'There ______ some apples on the table.', options: ['is', 'are'], ans: ['are'] }
+        ];
+
+        // Passage 1: Mix of Input & Drag-Drop
+        const readingData1 = [
+            { id: 'r1', type: 'dragdrop', text: '1. Where did Lily go? The ', ans: ['library'] },
+            { id: 'r2', type: 'dragdrop', text: '2. She loves reading about ', ans: ['animals'] },
+            { id: 'r3', type: 'dragdrop', text: '3. The funny book was about a ', ans: ['monkey'] },
+            { id: 'r4', type: 'dragdrop', text: '4. The animal could do a ', ans: ['handstand'] },
+            { id: 'r5', type: 'mcq', text: '5. True or False: Lily hates reading.', options: ['True', 'False'], ans: ['False'] }
+        ];
+
+        // Passage 2: Mix of MCQ & Input
+        const readingData2 = [
+            { id: 'r6', type: 'mcq', text: '6. Where did Peter go?', options: ['The park', 'The school', 'The library'], ans: ['The park'] },
+            { id: 'r7', type: 'input', text: '7. What did they bring to play with? A red ______', ans: ['ball'] },
+            { id: 'r8', type: 'mcq', text: '8. What did they eat under the tree?', options: ['Apples', 'Sandwiches', 'Cake'], ans: ['Sandwiches'] },
+            { id: 'r9', type: 'input', text: '9. How was the weather? It was very ______', ans: ['sunny'] },
+            { id: 'r10', type: 'mcq', text: '10. What did Peter listen to?', options: ['The birds', 'Music', 'The wind'], ans: ['Music'] }
+        ];
+
+        const englishData = [
+            { id: 'e1', type: 'mcq', text: '"How are you?" - "I am ______, thank you."', options: ['fine', 'bad', 'red'], ans: ['fine'], img: 'chat-128x128.png' },
+            { id: 'e2', type: 'input', text: '"What is your name?" - "______ name is Sarah."', ans: ['my'] },
+            { id: 'e3', type: 'input', text: '"Thank you very much." - "You are ______."', ans: ['welcome'] },
+            { id: 'e4', type: 'mcq', text: '"Happy Birthday!" - "______ you!"', options: ['Sorry', 'Thank', 'Please'], ans: ['Thank'] },
+            { id: 'e5', type: 'input', text: '"Can I help you?" - "Yes, ______. I would like an apple."', ans: ['please'] },
+            { id: 'e6', type: 'mcq', text: '"Where do you live?" - "I live ______ London."', options: ['on', 'in', 'at'], ans: ['in'] },
+            { id: 'e7', type: 'input', text: '"What time is it?" - "It is half ______ two."', ans: ['past'] },
+            { id: 'e8', type: 'mcq', text: '"Would you like some water?" - "Yes, ______."', options: ['please', 'no', 'thank'], ans: ['please'] },
+            { id: 'e9', type: 'input', text: '"Goodbye, see you ______!"', ans: ['later', 'soon', 'tomorrow'] },
+            { id: 'e10', type: 'input', text: '"Nice to ______ you." - "Nice to meet you too."', ans: ['meet'] }
+        ];
+
+        // Event Handlers for Input & MCQ
+        function checkAnswer(element, correctAnswers, sectionId, qId) {
+            const userAnswer = element.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + qId);
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userAnswer);
+
+            if (isCorrect) {
+                element.classList.add('correct-element');
+                element.disabled = true; // Prevents modifying answer to farm points
+                feedbackEl.innerHTML = "✅";
+                awardScore(sectionId, qId);
+            } else if (userAnswer !== "" && element.tagName !== 'SELECT') {
+                feedbackEl.innerHTML = "❌";
+            } else if (element.tagName === 'SELECT' && userAnswer !== "") {
+                feedbackEl.innerHTML = "❌";
+            } else {
+                feedbackEl.innerHTML = "";
+            }
+        }
+
+        // Drag and Drop Logic
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('drag-over');
+        }
+        function dragLeave(ev) {
+            ev.target.classList.remove('drag-over');
+        }
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.innerText);
+            ev.dataTransfer.setData("sourceId", ev.target.id);
+        }
+        function drop(ev, correctAnswers, sectionId, qId) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            
+            if (solvedQuestions.has(qId)) return; // Already solved
+
+            var draggedText = ev.dataTransfer.getData("text").trim().toLowerCase();
+            var isCorrect = correctAnswers.some(ans => ans.toLowerCase() === draggedText);
+            
+            if (isCorrect) {
+                ev.target.innerText = draggedText;
+                ev.target.classList.add('correct-element');
+                document.getElementById('fb_' + qId).innerText = "✅";
+                awardScore(sectionId, qId);
+                
+                // Hide the word from the bank
+                var sourceId = ev.dataTransfer.getData("sourceId");
+                if(sourceId) document.getElementById(sourceId).style.visibility = 'hidden';
+            } else {
+                document.getElementById('fb_' + qId).innerText = "❌";
+            }
+        }
+
+        // Render Function accommodating multiple types
+        function renderPractice(containerId, data, sectionScoreId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
+
+            data.forEach((item) => {
+                const imgHTML = item.img ? `<img src="${item.img}" class="question-visual" alt="hint">` : '';
+                let controlHTML = '';
+
+                if (item.type === 'input') {
+                    let firstLetter = item.ans[0][0].toUpperCase();
+                    if (firstLetter === '.' || firstLetter === '?') firstLetter = "Punct";
+                    else if (item.ans[0].split(' ').length > 1) firstLetter = "Phrase"; 
+                    
+                    const hintHTML = `<span class="first-letter-hint">${firstLetter} _</span>`;
+                    controlHTML = `
+                        ${hintHTML}
+                        <input type="text" class="quiz-input" id="${item.id}" placeholder="Type..." 
+                            oninput="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                    `;
+                } else if (item.type === 'mcq') {
+                    let optionsHTML = `<option value="">Select...</option>`;
+                    item.options.forEach(opt => {
+                        optionsHTML += `<option value="${opt}">${opt}</option>`;
+                    });
+                    controlHTML = `
+                        <select class="quiz-select" id="${item.id}" onchange="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                            ${optionsHTML}
+                        </select>
+                    `;
+                } else if (item.type === 'dragdrop') {
+                    controlHTML = `<span class="drop-zone" id="${item.id}" 
+                        ondrop="drop(event, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')" 
+                        ondragover="allowDrop(event)" ondragleave="dragLeave(event)">Drop word here</span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        ${imgHTML}
+                        <div class="question-text">${item.text}</div>
+                        <div class="quiz-controls">
+                            ${controlHTML}
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = () => {
+            renderPractice('vocab-practice', vocabData, 'vocab-practice');
+            renderPractice('grammar-practice', grammarData, 'grammar-practice');
+            renderPractice('reading-practice-1', readingData1, 'reading-practice');
+            renderPractice('reading-practice-2', readingData2, 'reading-practice');
+            renderPractice('english-practice', englishData, 'english-practice');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyers A2 Fun English Class!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            
+            --vocab-color: #f59e0b; 
+            --vocab-bg: rgba(255, 251, 235, 0.95); 
+            
+            --grammar-color: #3b82f6; 
+            --grammar-bg: rgba(239, 246, 255, 0.95);
+
+            --reading-color: #10b981; 
+            --reading-bg: rgba(236, 253, 245, 0.95);
+
+            --english-color: #ec4899; 
+            --english-bg: rgba(253, 242, 248, 0.95);
+            
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            /* NEW BACKGROUND IMPLEMENTATION */
+            background-image: url('bg.avif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #e0f2fe; /* Fallback color */
+            
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e293b;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            animation: float 3s ease-in-out infinite;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            border-radius: 20px;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* --- NEW ANIMATIONS --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        @keyframes shimmerCorrect {
+            0% { background-color: #d1fae5; transform: scale(1); }
+            50% { background-color: #a7f3d0; transform: scale(1.02); }
+            100% { background-color: #d1fae5; transform: scale(1); }
+        }
+
+        @keyframes bounce-in {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- TABS NAVIGATION --- */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .tab-link {
+            background: rgba(255,255,255,0.9);
+            border: 3px solid transparent;
+            border-radius: var(--border-radius);
+            padding: 12px 24px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: var(--text-secondary);
+        }
+
+        .tab-link img { width: 36px; height: 36px; transition: transform 0.3s; }
+        .tab-link:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); background: white; }
+        .tab-link:hover img { transform: rotate(10deg) scale(1.1); }
+
+        .tab-link.active-vocab { border-color: var(--vocab-color); color: var(--vocab-color); background: var(--vocab-bg); animation: pulse-border 2s infinite; }
+        .tab-link.active-grammar { border-color: var(--grammar-color); color: var(--grammar-color); background: var(--grammar-bg); animation: pulse-border 2s infinite; }
+        .tab-link.active-reading { border-color: var(--reading-color); color: var(--reading-color); background: var(--reading-bg); animation: pulse-border 2s infinite; }
+        .tab-link.active-english { border-color: var(--english-color); color: var(--english-color); background: var(--english-bg); animation: pulse-border 2s infinite; }
+
+        /* --- SECTION CONTENT --- */
+        .tab-content {
+            display: none;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #cbd5e1;
+        }
+
+        .section-header h2 { margin: 0; font-size: 2rem; }
+        .score-display { margin-left: auto; font-size: 1.6rem; font-weight: 900; background: white; padding: 5px 15px; border-radius: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+        /* --- GRAMMAR EXPLANATION BOX --- */
+        .grammar-guide {
+            background: rgba(224, 242, 254, 0.9);
+            border-left: 6px solid var(--grammar-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .grammar-guide:hover { transform: scale(1.01); }
+        .grammar-guide h3 { margin-top: 0; color: var(--grammar-color); }
+        .grammar-guide ul { margin: 0; padding-left: 20px; line-height: 1.6; font-size: 1.1rem; }
+
+        /* --- READING PASSAGES --- */
+        .reading-passage {
+            background: white;
+            border: 2px solid var(--reading-color);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            position: relative;
+            overflow: hidden;
+        }
+        .reading-passage::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--reading-color), #34d399);
+        }
+
+        /* --- QUIZ ROWS & QUESTION TYPES --- */
+        .quiz-row {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .quiz-row:hover { transform: translateY(-2px); box-shadow: 0 8px 12px -2px rgba(0,0,0,0.1); }
+
+        .question-visual { max-width: 90px; border-radius: 10px; object-fit: cover; animation: float 4s ease-in-out infinite; }
+        .question-text { font-size: 1.2rem; flex: 1; min-width: 250px; line-height: 1.4; font-weight: 600; }
+        
+        .quiz-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .first-letter-hint {
+            font-size: 0.95rem; color: white; background: #94a3b8;
+            padding: 6px 12px; border-radius: 12px; font-weight: bold;
+        }
+
+        /* Inputs & Selects */
+        .quiz-input, .quiz-select {
+            padding: 10px 15px; border: 2px solid #cbd5e1;
+            border-radius: 12px; font-size: 1.05rem; font-family: inherit;
+            outline: none; transition: all 0.3s ease;
+        }
+        .quiz-input { width: 150px; }
+        .quiz-select { cursor: pointer; background: white; }
+        
+        .quiz-input:focus, .quiz-select:focus { border-color: var(--grammar-color); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
+        .correct-element { 
+            border-color: #10b981 !important; 
+            color: #065f46 !important;
+            font-weight: bold;
+            animation: shimmerCorrect 0.6s ease-out forwards !important;
+        }
+
+        .feedback { font-weight: bold; font-size: 1.4rem; min-width: 35px; text-align: center; display: inline-block; }
+
+        /* --- DRAG AND DROP STYLES --- */
+        .word-bank {
+            display: flex; flex-wrap: wrap; gap: 12px;
+            background: rgba(241, 245, 249, 0.9); padding: 20px; border-radius: 15px;
+            margin-bottom: 25px; justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px dashed #cbd5e1;
+        }
+        .draggable-word {
+            background: #475569; color: white;
+            padding: 10px 20px; border-radius: 25px; font-weight: bold; font-size: 1.1rem;
+            cursor: grab; user-select: none; box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        
+        /* Themed drag colors based on section */
+        #word-bank-grammar .draggable-word { background: var(--grammar-color); }
+        #word-bank-english .draggable-word { background: var(--english-color); }
+        #word-bank-1 .draggable-word { background: var(--reading-color); }
+
+        .draggable-word:hover { transform: scale(1.05); }
+        .draggable-word:active { cursor: grabbing; transform: scale(0.95); }
+        
+        .drop-zone {
+            display: inline-block; min-width: 120px; height: 40px;
+            border: 3px dashed #94a3b8; border-radius: 10px;
+            vertical-align: middle; background: #f8fafc;
+            text-align: center; line-height: 35px; font-size: 1.1rem;
+            color: #94a3b8; transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        .drop-zone.drag-over { background: #e2e8f0; border-color: #475569; transform: scale(1.05); }
+
+        /* --- PRIZE MODAL --- */
+        #prize-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85); z-index: 1000;
+            justify-content: center; align-items: center; text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        .prize-content {
+            background: white; padding: 50px; border-radius: 30px;
+            max-width: 500px; animation: bounce-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .prize-content img { width: 180px; margin: 25px 0; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)); animation: float 3s ease-in-out infinite; }
+        
+        .keep-playing-btn {
+            padding: 12px 30px; background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white; border: none; border-radius: 15px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 15px; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+        .keep-playing-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(59, 130, 246, 0.4); }
+
+        footer { text-align: center; margin-top: 50px; color: #1e293b; font-weight: 900; font-size: 1.2rem; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); background: rgba(255,255,255,0.6); padding: 10px; border-radius: 15px; display: inline-block; }
+        .footer-container { text-align: center; }
+
+        #vocab-section h2, #vocab-section .score-display { color: var(--vocab-color); }
+        #grammar-section h2, #grammar-section .score-display { color: var(--grammar-color); }
+        #reading-section h2, #reading-section .score-display { color: var(--reading-color); }
+        #english-section h2, #english-section .score-display { color: var(--english-color); }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>🚀 A2 Flyers Masterclass!</h1>
+
+        <div class="tabs">
+            <button class="tab-link active-vocab" onclick="openTab(event, 'vocab-section', 'active-vocab')">
+                <img src="learn.png" alt="Vocab"> Vocabulary
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'grammar-section', 'active-grammar')">
+                <img src="help-128x128.png" alt="Grammar"> Grammar
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'reading-section', 'active-reading')">
+                <img src="book.png" alt="Reading"> Reading
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'english-section', 'active-english')">
+                <img src="eng.png" alt="English"> Everyday English
+            </button>
+        </div>
+
+        <div class="tab-content active" id="vocab-section">
+            <div class="section-header">
+                <h2>Flyers Vocabulary</h2>
+                <div class="score-display" id="score-vocab-practice">0 / 10</div>
+            </div>
+            <div id="vocab-practice"></div>
+        </div>
+
+        <div class="tab-content" id="grammar-section">
+            <div class="section-header">
+                <h2>Grammar Rules</h2>
+                <div class="score-display" id="score-grammar-practice">0 / 15</div>
+            </div>
+            
+            <div class="grammar-guide">
+                <h3>📖 Grammar Hints for Flyers</h3>
+                <ul>
+                    <li><strong>Past Continuous:</strong> Actions happening in the past (was <em>reading</em>, were <em>playing</em>).</li>
+                    <li><strong>Present Perfect:</strong> Experiences up to now (has <em>just</em> finished, have you <em>ever</em> been).</li>
+                    <li><strong>Future Forms:</strong> Predictions and plans (will <em>stay</em>, won't <em>come</em>).</li>
+                    <li><strong>Relative Pronouns:</strong> Linking ideas (The boy <em>who</em>, The book <em>which</em>).</li>
+                    <li><strong>Modals of Advice:</strong> You <em>should</em> / You <em>ought to</em> study hard.</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--grammar-color);">Drag & Drop Challenge</h3>
+            <div class="word-bank" id="word-bank-grammar">
+                <div class="draggable-word" draggable="true" id="gw1" ondragstart="drag(event)">who</div>
+                <div class="draggable-word" draggable="true" id="gw2" ondragstart="drag(event)">already</div>
+                <div class="draggable-word" draggable="true" id="gw3" ondragstart="drag(event)">should</div>
+                <div class="draggable-word" draggable="true" id="gw4" ondragstart="drag(event)">most</div>
+                <div class="draggable-word" draggable="true" id="gw5" ondragstart="drag(event)">when</div>
+            </div>
+
+            <div id="grammar-practice"></div>
+        </div>
+
+        <div class="tab-content" id="reading-section">
+            <div class="section-header">
+                <h2>Reading Comprehension</h2>
+                <div class="score-display" id="score-reading-practice">0 / 10</div>
+            </div>
+            
+            <div class="reading-passage">
+                <h3 style="margin-top: 0; color: var(--reading-color);">📚 Part 1: Sarah's Project</h3>
+                <p>Yesterday, Sarah went to the town library to study. She needed a big book for her school history project. While she was looking at the wooden shelves, she found an amazing book about learning English. She decided to borrow it and read it at home. It helped her learn a lot of new words very quickly!</p>
+                <div style="display:flex; gap:15px; justify-content:center; margin-top:15px;">
+                    <img src="books.jpg" style="height:100px; border-radius:15px; object-fit: cover;">
+                    <img src="english.avif" style="height:100px; border-radius:15px; object-fit: cover;">
+                </div>
+            </div>
+
+            <div class="word-bank" id="word-bank-1">
+                <div class="draggable-word" draggable="true" id="rw1" ondragstart="drag(event)">library</div>
+                <div class="draggable-word" draggable="true" id="rw2" ondragstart="drag(event)">book</div>
+                <div class="draggable-word" draggable="true" id="rw3" ondragstart="drag(event)">English</div>
+                <div class="draggable-word" draggable="true" id="rw4" ondragstart="drag(event)">learn</div>
+                <div class="draggable-word" draggable="true" id="rw5" ondragstart="drag(event)">words</div>
+            </div>
+
+            <div id="reading-practice-1"></div>
+
+            <hr style="border: 2px dashed #a7f3d0; margin: 40px 0;">
+
+            <div class="reading-passage">
+                <h3 style="margin-top: 0; color: var(--reading-color);">🐒 Part 2: The Zoo Trip</h3>
+                <p>Tom and his best friends went to the zoo on Saturday afternoon. They saw a very funny monkey swinging from the tall trees. Suddenly, the monkey jumped completely over a small wall! The weather was perfectly sunny, but Tom got scared of his own dark shadow when he turned around too fast.</p>
+                <div style="display:flex; gap:15px; justify-content:center; margin-top:15px;">
+                    <img src="Monkey_over.webp" style="height:100px; border-radius:15px; object-fit: cover;">
+                    <img src="shadow.png" style="height:100px; border-radius:15px; object-fit: cover; background: #f1f5f9; padding: 5px;">
+                </div>
+            </div>
+            
+            <div id="reading-practice-2"></div>
+        </div>
+
+        <div class="tab-content" id="english-section">
+            <div class="section-header">
+                <h2>Everyday English</h2>
+                <div class="score-display" id="score-english-practice">0 / 15</div>
+            </div>
+
+            <h3 style="color: var(--english-color);">Drag & Drop Conversations</h3>
+            <div class="word-bank" id="word-bank-english">
+                <div class="draggable-word" draggable="true" id="ew1" ondragstart="drag(event)">past</div>
+                <div class="draggable-word" draggable="true" id="ew2" ondragstart="drag(event)">welcome</div>
+                <div class="draggable-word" draggable="true" id="ew3" ondragstart="drag(event)">right</div>
+                <div class="draggable-word" draggable="true" id="ew4" ondragstart="drag(event)">pounds</div>
+                <div class="draggable-word" draggable="true" id="ew5" ondragstart="drag(event)">too</div>
+            </div>
+
+            <div id="english-practice"></div>
+        </div>
+    </div>
+
+    <div id="prize-modal">
+        <div class="prize-content">
+            <h1 style="color: #f59e0b; margin-top: 0; font-size: 2.5rem; background: transparent; box-shadow: none;">🎉 Outstanding! 🎉</h1>
+            <p style="font-size: 1.3rem; color: #475569;">You scored over 85% on your total exercises! You are an absolute superstar!</p>
+            <img src="uk_symbol.png" alt="UK Prize">
+            <br>
+            <button class="keep-playing-btn" onclick="document.getElementById('prize-modal').style.display='none'">Keep Practicing</button>
+        </div>
+    </div>
+
+    <div class="footer-container">
+        <footer>
+            Made by Angel Torres
+        </footer>
+    </div>
+
+    <script>
+        // Tab Navigation
+        function openTab(evt, sectionId, activeClass) {
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
+            
+            let links = document.getElementsByClassName("tab-link");
+            for (let i = 0; i < links.length; i++) {
+                links[i].className = "tab-link"; 
+            }
+            
+            document.getElementById(sectionId).classList.add("active");
+            evt.currentTarget.classList.add(activeClass);
+        }
+
+        // Global State: Now calculating based on 50 questions
+        const solvedQuestions = new Set(); 
+        const state = {
+            totalScore: 0,
+            targetScore: Math.floor(50 * 0.85), // Needs 42 correct answers to win!
+            prizeAwarded: false,
+            sections: {
+                'vocab-practice': { score: 0, total: 10 },
+                'grammar-practice': { score: 0, total: 15 }, // Updated to 15
+                'reading-practice': { score: 0, total: 10 },
+                'english-practice': { score: 0, total: 15 }  // Updated to 15
+            }
+        };
+
+        function awardScore(sectionId, qId) {
+            if (!solvedQuestions.has(qId)) {
+                solvedQuestions.add(qId);
+                state.sections[sectionId].score += 1;
+                state.totalScore += 1;
+                
+                const scoreEl = document.getElementById(`score-${sectionId}`);
+                scoreEl.innerText = `${state.sections[sectionId].score} / ${state.sections[sectionId].total}`;
+                scoreEl.style.transform = 'scale(1.2)';
+                scoreEl.style.color = '#10b981';
+                setTimeout(() => { 
+                    scoreEl.style.transform = 'scale(1)'; 
+                    scoreEl.style.color = 'inherit';
+                }, 300);
+
+                if (state.totalScore >= state.targetScore && !state.prizeAwarded) {
+                    state.prizeAwarded = true;
+                    setTimeout(() => { document.getElementById('prize-modal').style.display = 'flex'; }, 500);
+                }
+            }
+        }
+
+        // Vocabulary Data (10 Qs)
+        const vocabData = [
+            { id: 'v1', type: 'input', text: 'A person who travels in space to the moon.', ans: ['astronaut'] },
+            { id: 'v2', type: 'input', text: 'A large, old building where kings and queens live.', ans: ['castle'] },
+            { id: 'v3', type: 'input', text: 'The dark shape on the ground when the sun shines on you.', ans: ['shadow'], img: 'shadow.png' },
+            { id: 'v4', type: 'input', text: 'A special book that explains what different words mean.', ans: ['dictionary'] },
+            { id: 'v5', type: 'input', text: 'You put this inside a car engine to make it drive.', ans: ['petrol', 'gas', 'gasoline'] },
+            { id: 'v6', type: 'input', text: 'You open this over your head to keep out the rain.', ans: ['umbrella'] },
+            { id: 'v7', type: 'input', text: 'A sweet fruit with yellow skin that monkeys love to eat.', ans: ['banana'], img: 'Monkey_over.webp' },
+            { id: 'v8', type: 'input', text: 'A person whose job is to write for a newspaper.', ans: ['journalist'] },
+            { id: 'v9', type: 'input', text: 'A flying vehicle that has an engine on top but no wings.', ans: ['helicopter'] },
+            { id: 'v10', type: 'input', text: 'You wear this small clock on your wrist to tell the time.', ans: ['watch'] }
+        ];
+
+        // Grammar Data (15 Qs: 10 Original + 5 Drag & Drop)
+        const grammarData = [
+            { id: 'g1', type: 'mcq', text: 'If it rains tomorrow, we ______ at home.', options: ['will stay', 'staying', 'stayed'], ans: ['will stay'] },
+            { id: 'g2', type: 'input', text: 'I was ______ (read) a book when the phone rang.', ans: ['reading'] },
+            { id: 'g3', type: 'mcq', text: 'He has ______ finished his homework.', options: ['already', 'just', 'never'], ans: ['just'] },
+            { id: 'g4', type: 'mcq', text: 'The boy ______ is wearing a red shirt is my brother.', options: ['who', 'which', 'where'], ans: ['who'] },
+            { id: 'g5', type: 'input', text: 'We ______ (go) to the cinema last Saturday night.', ans: ['went'] },
+            { id: 'g6', type: 'input', text: 'This is the ______ (much) interesting book I have ever read.', ans: ['most'] },
+            { id: 'g7', type: 'mcq', text: 'You ______ to listen to your teacher carefully.', options: ['should', 'ought', 'must'], ans: ['ought'] },
+            { id: 'g8', type: 'input', text: '______ you ever been to Paris?', ans: ['Have'] },
+            { id: 'g9', type: 'mcq', text: 'They won\'t come to the party, ______ they?', options: ['will', 'won\'t', 'do'], ans: ['will'] },
+            { id: 'g10', type: 'input', text: 'She ______ (not) like playing tennis on weekends.', ans: ['doesn\'t', 'does not'] },
+            
+            // New Drag and Drop Grammar Questions
+            { id: 'g11', type: 'dragdrop', text: 'The boy ______ is playing tennis is my cousin.', ans: ['who'] },
+            { id: 'g12', type: 'dragdrop', text: 'I have ______ seen that movie.', ans: ['already'] },
+            { id: 'g13', type: 'dragdrop', text: 'If you are tired, you ______ go to bed.', ans: ['should'] },
+            { id: 'g14', type: 'dragdrop', text: 'She is the ______ intelligent student in the class.', ans: ['most'] },
+            { id: 'g15', type: 'dragdrop', text: 'We were sleeping ______ the storm started.', ans: ['when'] }
+        ];
+
+        // Reading Data (10 Qs split in 2 passages)
+        const readingData1 = [
+            { id: 'r1', type: 'dragdrop', text: '1. Where did Sarah go to study? The', ans: ['library'] },
+            { id: 'r2', type: 'dragdrop', text: '2. She needed a big ______ for her history project.', ans: ['book'] },
+            { id: 'r3', type: 'dragdrop', text: '3. She found a book about learning ______.', ans: ['English'] },
+            { id: 'r4', type: 'dragdrop', text: '4. The amazing book helped her ______.', ans: ['learn'] },
+            { id: 'r5', type: 'dragdrop', text: '5. She learned a lot of new ______ very quickly.', ans: ['words'] }
+        ];
+
+        const readingData2 = [
+            { id: 'r6', type: 'mcq', text: '6. Where did Tom and his friends go?', options: ['The park', 'The zoo', 'The museum'], ans: ['The zoo'] },
+            { id: 'r7', type: 'input', text: '7. What kind of animal did they see swinging? A ______', ans: ['monkey'] },
+            { id: 'r8', type: 'mcq', text: '8. What did the monkey jump over?', options: ['A tall tree', 'A small wall', 'A fence'], ans: ['A small wall'] },
+            { id: 'r9', type: 'input', text: '9. How was the weather? It was perfectly ______', ans: ['sunny'] },
+            { id: 'r10', type: 'input', text: '10. What was Tom scared of? His own dark ______', ans: ['shadow'] }
+        ];
+
+        // Everyday English Data (15 Qs: 10 Original + 5 Drag & Drop)
+        const englishData = [
+            { id: 'e1', type: 'mcq', text: '"Could you pass the salt, please?" - "Yes, of ______."', options: ['sure', 'course', 'fine'], ans: ['course'], img: 'eng.png' },
+            { id: 'e2', type: 'mcq', text: '"What\'s the matter?" - "I have a terrible ______."', options: ['headache', 'happy', 'good'], ans: ['headache'] },
+            { id: 'e3', type: 'input', text: '"Would you like to come to my party?" - "I\'d ______ to!"', ans: ['love'] },
+            { id: 'e4', type: 'mcq', text: '"How long does it take to get to the station?" - "About ten ______."', options: ['minutes', 'miles', 'dollars'], ans: ['minutes'] },
+            { id: 'e5', type: 'input', text: '"I passed my difficult English exam!" - "______ done!"', ans: ['Well'] },
+            { id: 'e6', type: 'mcq', text: '"Excuse me, where is the post office?" - "Go ______ on."', options: ['right', 'left', 'straight'], ans: ['straight'] },
+            { id: 'e7', type: 'input', text: '"What do you do in your free time?" - "I enjoy ______ books."', ans: ['reading'] },
+            { id: 'e8', type: 'mcq', text: '"Shall we go to the park now?" - "That\'s a good ______."', options: ['idea', 'think', 'going'], ans: ['idea'] },
+            { id: 'e9', type: 'input', text: '"Can I pay by credit card?" - "Sorry, ______ only."', ans: ['cash'] },
+            { id: 'e10', type: 'input', text: '"Let\'s meet at 5 o\'clock." - "See you ______."', ans: ['then'] },
+            
+            // New Drag and Drop English Questions
+            { id: 'e11', type: 'dragdrop', text: '"What time is it?" - "It\'s half ______ four."', ans: ['past'] },
+            { id: 'e12', type: 'dragdrop', text: '"Thank you for helping me." - "You\'re ______."', ans: ['welcome'] },
+            { id: 'e13', type: 'dragdrop', text: '"I\'m sorry I\'m late." - "That\'s all ______."', ans: ['right'] },
+            { id: 'e14', type: 'dragdrop', text: '"How much is this?" - "It\'s five ______."', ans: ['pounds'] },
+            { id: 'e15', type: 'dragdrop', text: '"Have a good weekend!" - "Thanks, you ______!"', ans: ['too'] }
+        ];
+
+        // Handlers
+        function checkAnswer(element, correctAnswers, sectionId, qId) {
+            const userAnswer = element.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + qId);
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userAnswer);
+
+            if (isCorrect) {
+                element.classList.add('correct-element');
+                element.disabled = true; 
+                feedbackEl.innerHTML = "✅";
+                feedbackEl.style.animation = "bounce-in 0.4s ease forwards";
+                awardScore(sectionId, qId);
+            } else if (userAnswer !== "" && element.tagName !== 'SELECT') {
+                feedbackEl.innerHTML = "❌";
+            } else if (element.tagName === 'SELECT' && userAnswer !== "") {
+                feedbackEl.innerHTML = "❌";
+            } else {
+                feedbackEl.innerHTML = "";
+            }
+        }
+
+        // Drag and Drop Logic
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('drag-over');
+        }
+        function dragLeave(ev) {
+            ev.target.classList.remove('drag-over');
+        }
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.innerText);
+            ev.dataTransfer.setData("sourceId", ev.target.id);
+        }
+        function drop(ev, correctAnswers, sectionId, qId) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            
+            if (solvedQuestions.has(qId)) return; 
+
+            var draggedText = ev.dataTransfer.getData("text").trim().toLowerCase();
+            var isCorrect = correctAnswers.some(ans => ans.toLowerCase() === draggedText);
+            
+            if (isCorrect) {
+                ev.target.innerText = draggedText;
+                ev.target.classList.add('correct-element');
+                
+                const feedbackEl = document.getElementById('fb_' + qId);
+                feedbackEl.innerText = "✅";
+                feedbackEl.style.animation = "bounce-in 0.4s ease forwards";
+
+                awardScore(sectionId, qId);
+                
+                var sourceId = ev.dataTransfer.getData("sourceId");
+                if(sourceId) {
+                    const sourceEl = document.getElementById(sourceId);
+                    sourceEl.style.transform = 'scale(0)';
+                    setTimeout(() => { sourceEl.style.display = 'none'; }, 200);
+                }
+            } else {
+                document.getElementById('fb_' + qId).innerText = "❌";
+            }
+        }
+
+        function renderPractice(containerId, data, sectionScoreId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
+
+            data.forEach((item) => {
+                const imgHTML = item.img ? `<img src="${item.img}" class="question-visual" alt="hint">` : '';
+                let controlHTML = '';
+
+                if (item.type === 'input') {
+                    let firstLetter = item.ans[0][0].toUpperCase();
+                    if (firstLetter === '.' || firstLetter === '?') firstLetter = "Punct";
+                    else if (item.ans[0].split(' ').length > 1) firstLetter = "Phrase"; 
+                    
+                    const hintHTML = `<span class="first-letter-hint">${firstLetter} _</span>`;
+                    controlHTML = `
+                        ${hintHTML}
+                        <input type="text" class="quiz-input" id="${item.id}" placeholder="Type answer..." 
+                            oninput="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                    `;
+                } else if (item.type === 'mcq') {
+                    let optionsHTML = `<option value="">Select answer...</option>`;
+                    item.options.forEach(opt => {
+                        optionsHTML += `<option value="${opt}">${opt}</option>`;
+                    });
+                    controlHTML = `
+                        <select class="quiz-select" id="${item.id}" onchange="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                            ${optionsHTML}
+                        </select>
+                    `;
+                } else if (item.type === 'dragdrop') {
+                    controlHTML = `<span class="drop-zone" id="${item.id}" 
+                        ondrop="drop(event, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')" 
+                        ondragover="allowDrop(event)" ondragleave="dragLeave(event)">Drop word here</span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        ${imgHTML}
+                        <div class="question-text">${item.text}</div>
+                        <div class="quiz-controls">
+                            ${controlHTML}
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = () => {
+            renderPractice('vocab-practice', vocabData, 'vocab-practice');
+            renderPractice('grammar-practice', grammarData, 'grammar-practice');
+            renderPractice('reading-practice-1', readingData1, 'reading-practice');
+            renderPractice('reading-practice-2', readingData2, 'reading-practice');
+            renderPractice('english-practice', englishData, 'english-practice');
+        };
+    </script>
+</body>
+</html>

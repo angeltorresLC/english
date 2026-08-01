@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 PET English Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* B1 Mature but engaging palette */
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            
+            --reading-color: #4f46e5; 
+            --reading-bg: rgba(224, 231, 255, 0.95);
+            
+            --grammar-color: #059669; 
+            --grammar-bg: rgba(209, 250, 229, 0.95);
+
+            --matching-color: #7c3aed; 
+            --matching-bg: rgba(237, 233, 254, 0.95);
+
+            --writing-color: #d97706; 
+            --writing-bg: rgba(254, 243, 199, 0.95);
+            
+            --border-radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #cbd5e1; 
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1050px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            color: #0f172a;
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            text-shadow: 0px 2px 10px rgba(255,255,255,0.9);
+            animation: float 4s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        h1 img { width: 60px; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes bounce-in {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .tab-link {
+            background: rgba(255,255,255,0.95);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-link img { width: 28px; }
+        .tab-link:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        
+        .tab-link.active-reading { border-color: var(--reading-color); color: var(--reading-color); background: var(--reading-bg); }
+        .tab-link.active-grammar { border-color: var(--grammar-color); color: var(--grammar-color); background: var(--grammar-bg); }
+        .tab-link.active-matching { border-color: var(--matching-color); color: var(--matching-color); background: var(--matching-bg); }
+        .tab-link.active-writing { border-color: var(--writing-color); color: var(--writing-color); background: var(--writing-bg); }
+
+        /* --- CONTENT PANELS --- */
+        .tab-content {
+            display: none;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.4s ease-out forwards;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .section-header h2 { margin: 0; font-size: 2.2rem; font-family: 'Nunito', sans-serif; display: flex; align-items: center; gap: 15px; }
+        .section-header img { width: 45px; border-radius: 8px; }
+        .score-display { 
+            margin-left: auto; font-size: 1.5rem; font-weight: 800; 
+            background: white; padding: 8px 20px; border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+
+        /* --- EXPLANATION BOX --- */
+        .guide-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-left: 5px solid #475569;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* --- QUIZ ROWS --- */
+        .quiz-row {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+        .quiz-row:hover { transform: translateX(5px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+
+        .question-text { font-size: 1.15rem; flex: 1; min-width: 250px; line-height: 1.5; font-weight: 500; }
+        
+        .quiz-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* Inputs & Selects */
+        .quiz-input, .quiz-select {
+            padding: 10px 16px; border: 2px solid #cbd5e1;
+            border-radius: 8px; font-size: 1.05rem; font-family: inherit;
+            outline: none; transition: all 0.3s ease;
+            background: white;
+        }
+        .quiz-input { width: 160px; }
+        .quiz-select { cursor: pointer; max-width: 300px; }
+        
+        .quiz-input:focus, .quiz-select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+        .correct-element { 
+            border-color: #10b981 !important; 
+            color: #065f46 !important;
+            background-color: #d1fae5 !important;
+            font-weight: 600;
+        }
+
+        .feedback { font-weight: bold; font-size: 1.3rem; min-width: 30px; text-align: center; }
+
+        /* --- DRAG AND DROP --- */
+        .word-bank {
+            display: flex; flex-wrap: wrap; gap: 12px;
+            background: rgba(255,255,255,0.7); padding: 20px; border-radius: 12px;
+            margin-bottom: 25px; justify-content: center;
+            border: 1px dashed #94a3b8;
+        }
+        .draggable-word {
+            background: var(--grammar-color); color: white;
+            padding: 8px 18px; border-radius: 20px; font-weight: 600; font-size: 1.1rem;
+            cursor: grab; user-select: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .draggable-word:hover { transform: scale(1.05); }
+        .draggable-word:active { cursor: grabbing; transform: scale(0.95); }
+        
+        .drop-zone {
+            display: inline-block; min-width: 130px; height: 38px;
+            border: 2px dashed #94a3b8; border-radius: 8px;
+            vertical-align: middle; background: rgba(255,255,255,0.8);
+            text-align: center; line-height: 34px; font-size: 1.05rem;
+            color: #64748b; transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        .drop-zone.drag-over { background: #e2e8f0; border-color: var(--grammar-color); transform: scale(1.05); }
+
+        .passage-container {
+            background: white; padding: 25px; border-radius: 12px; 
+            line-height: 2.2; font-size: 1.15rem; border: 1px solid #e2e8f0; 
+            margin-bottom: 30px;
+        }
+
+        /* --- MODAL --- */
+        #prize-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85); z-index: 1000;
+            justify-content: center; align-items: center; text-align: center;
+            backdrop-filter: blur(8px);
+        }
+        .prize-content {
+            background: white; padding: 50px; border-radius: 24px;
+            max-width: 500px; animation: bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .prize-content h1 { background: none; box-shadow: none; font-size: 2.5rem; color: #f59e0b; margin-top: 0; text-shadow: none; }
+        .prize-content img { width: 160px; margin: 20px 0; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15)); }
+        
+        .keep-playing-btn {
+            padding: 14px 32px; background: #0f172a; color: white;
+            border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; margin-top: 15px; transition: all 0.2s;
+        }
+        .keep-playing-btn:hover { background: #334155; transform: translateY(-2px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+
+        footer { text-align: center; margin-top: 40px; color: #0f172a; font-weight: 800; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(255,255,255,0.9); }
+        
+        /* Thematic accents */
+        #reading-section .quiz-row { border-left-color: var(--reading-color); }
+        #grammar-section .quiz-row { border-left-color: var(--grammar-color); }
+        #matching-section .quiz-row { border-left-color: var(--matching-color); }
+        #writing-section .quiz-row { border-left-color: var(--writing-color); }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1><img src="eng.png" alt="English"> B1 PET Preparation Hub</h1>
+
+        <div class="tabs">
+            <button class="tab-link active-reading" onclick="openTab(event, 'reading-section', 'active-reading')">
+                <img src="documents-128x128.png" alt="icon"> Reading (MCQ)
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'grammar-section', 'active-grammar')">
+                <img src="help-128x128.png" alt="icon"> Open Cloze
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'matching-section', 'active-matching')">
+                <img src="chat-128x128.png" alt="icon"> Matching
+            </button>
+            <button class="tab-link" onclick="openTab(event, 'writing-section', 'active-writing')">
+                <img src="book.png" alt="icon"> Transformations
+            </button>
+        </div>
+
+        <div class="tab-content active" id="reading-section">
+            <div class="section-header">
+                <h2 style="color: var(--reading-color);">Part 1: Signs & Short Texts</h2>
+                <div class="score-display" id="score-reading">0 / 10</div>
+            </div>
+            <div class="guide-box" style="border-left-color: var(--reading-color);">
+                <div style="flex: 1;">
+                    <strong>Exam Tip:</strong> Read the sign or short text carefully. Choose the option (A, B, or C) that means exactly the same thing as the text.
+                </div>
+                <img src="materials1.jpg" alt="Reading Materials" style="height: 80px; border-radius: 8px;">
+            </div>
+            <div id="reading-practice"></div>
+        </div>
+
+        <div class="tab-content" id="grammar-section">
+            <div class="section-header">
+                <h2 style="color: var(--grammar-color);">Part 6: Open Cloze</h2>
+                <div class="score-display" id="score-grammar">0 / 10</div>
+            </div>
+            <div class="guide-box" style="border-left-color: var(--grammar-color);">
+                <div style="flex: 1;">
+                    <strong>Exam Tip:</strong> Read the whole text first to understand the context. Then drag the correct grammar word into each gap. There are two passages below (5 gaps each).
+                </div>
+                <img src="english.webp" alt="English Study" style="height: 80px; border-radius: 8px;">
+            </div>
+
+            <h3 style="color: var(--grammar-color);">Passage 1: A New Hobby</h3>
+            <div class="word-bank" id="word-bank-grammar-1">
+                <div class="draggable-word" draggable="true" id="gw1" ondragstart="drag(event)">been</div>
+                <div class="draggable-word" draggable="true" id="gw2" ondragstart="drag(event)">learn</div>
+                <div class="draggable-word" draggable="true" id="gw3" ondragstart="drag(event)">who</div>
+                <div class="draggable-word" draggable="true" id="gw4" ondragstart="drag(event)">because</div>
+                <div class="draggable-word" draggable="true" id="gw5" ondragstart="drag(event)">ever</div>
+            </div>
+
+            <div class="passage-container">
+                "Last year, I decided to take up a new hobby. I have always <span class="drop-zone" id="gq1" ondrop="drop(event, ['been'], 'grammar', 'gq1')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> interested in photography, so I bought a digital camera. At first, it was difficult to <span class="drop-zone" id="gq2" ondrop="drop(event, ['learn'], 'grammar', 'gq2')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> how to use it, but my best friend, <span class="drop-zone" id="gq3" ondrop="drop(event, ['who'], 'grammar', 'gq3')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> is a professional photographer, helped me. Now, I take my camera everywhere I go, <span class="drop-zone" id="gq4" ondrop="drop(event, ['because'], 'grammar', 'gq4')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> I want to capture every special moment. It is the best thing I have <span class="drop-zone" id="gq5" ondrop="drop(event, ['ever'], 'grammar', 'gq5')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> bought!"
+            </div>
+
+            <h3 style="color: var(--grammar-color);">Passage 2: A Trip to Paris</h3>
+            <div class="word-bank" id="word-bank-grammar-2">
+                <div class="draggable-word" draggable="true" id="gw6" ondragstart="drag(event)">visited</div>
+                <div class="draggable-word" draggable="true" id="gw7" ondragstart="drag(event)">at</div>
+                <div class="draggable-word" draggable="true" id="gw8" ondragstart="drag(event)">sure</div>
+                <div class="draggable-word" draggable="true" id="gw9" ondragstart="drag(event)">will</div>
+                <div class="draggable-word" draggable="true" id="gw10" ondragstart="drag(event)">around</div>
+            </div>
+
+            <div class="passage-container">
+                "Next week, I am going on a trip to Paris. I have never <span class="drop-zone" id="gq6" ondrop="drop(event, ['visited'], 'grammar', 'gq6')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> France before, so I am very excited. My flight leaves <span class="drop-zone" id="gq7" ondrop="drop(event, ['at'], 'grammar', 'gq7')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> 8 AM. I need to make <span class="drop-zone" id="gq8" ondrop="drop(event, ['sure'], 'grammar', 'gq8')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> my passport is ready. I hope the weather <span class="drop-zone" id="gq9" ondrop="drop(event, ['will'], 'grammar', 'gq9')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> be nice so I can walk <span class="drop-zone" id="gq10" ondrop="drop(event, ['around'], 'grammar', 'gq10')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">drop</span> the city and see the Eiffel Tower."
+            </div>
+            
+            <div style="display:none;">
+                <span id="fb_gq1"></span><span id="fb_gq2"></span><span id="fb_gq3"></span><span id="fb_gq4"></span><span id="fb_gq5"></span>
+                <span id="fb_gq6"></span><span id="fb_gq7"></span><span id="fb_gq8"></span><span id="fb_gq9"></span><span id="fb_gq10"></span>
+            </div>
+        </div>
+
+        <div class="tab-content" id="matching-section">
+            <div class="section-header">
+                <h2 style="color: var(--matching-color);">Sentence Matching</h2>
+                <div class="score-display" id="score-matching">0 / 10</div>
+            </div>
+            <div class="guide-box" style="border-left-color: var(--matching-color);">
+                <strong>Exam Tip:</strong> Match the beginning of the sentence on the left with the correct logical ending from the dropdown on the right. Pay attention to linking words and grammar.
+            </div>
+            
+            <h3 style="color: var(--matching-color);">Set 1</h3>
+            <div id="matching-practice-1"></div>
+            
+            <h3 style="color: var(--matching-color); margin-top: 30px;">Set 2</h3>
+            <div id="matching-practice-2"></div>
+        </div>
+
+        <div class="tab-content" id="writing-section">
+            <div class="section-header">
+                <h2 style="color: var(--writing-color);">Part 1: Sentence Transformations</h2>
+                <div class="score-display" id="score-writing">0 / 10</div>
+            </div>
+            <div class="guide-box" style="border-left-color: var(--writing-color);">
+                <div style="flex: 1;">
+                    <strong>Exam Tip:</strong> Complete the second sentence so that it means the same as the first. Use <strong>no more than three words</strong>.
+                </div>
+                <img src="books.jpg" alt="Books" style="height: 80px; border-radius: 8px; object-fit: cover; width: 100px;">
+            </div>
+            <div id="writing-practice"></div>
+        </div>
+    </div>
+
+    <div id="prize-modal">
+        <div class="prize-content">
+            <h1>🏆 Fantastic Work!</h1>
+            <p style="font-size: 1.2rem; color: #334155;">You scored over 85% on your B1 PET exercises! You are well on your way to passing the exam.</p>
+            <img src="uk_symbol.png" alt="UK Symbol">
+            <br>
+            <button class="keep-playing-btn" onclick="document.getElementById('prize-modal').style.display='none'">Review Answers</button>
+        </div>
+    </div>
+
+    <footer>
+        Made by Angel Torres | B1 PET Preparation
+    </footer>
+
+    <script>
+        // --- UI Navigation ---
+        function openTab(evt, sectionId, activeClass) {
+            let contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
+            
+            let links = document.getElementsByClassName("tab-link");
+            for (let i = 0; i < links.length; i++) {
+                links[i].className = "tab-link"; 
+            }
+            
+            document.getElementById(sectionId).classList.add("active");
+            evt.currentTarget.classList.add(activeClass);
+        }
+
+        // --- Game Logic & State (40 Questions Total) ---
+        const solvedQuestions = new Set(); 
+        const state = {
+            totalScore: 0,
+            targetScore: Math.floor(40 * 0.85), // Needs 34 correct answers
+            prizeAwarded: false,
+            sections: {
+                'reading': { score: 0, total: 10 },
+                'grammar': { score: 0, total: 10 },
+                'matching': { score: 0, total: 10 },
+                'writing': { score: 0, total: 10 }
+            }
+        };
+
+        function awardScore(sectionId, qId) {
+            if (!solvedQuestions.has(qId)) {
+                solvedQuestions.add(qId);
+                state.sections[sectionId].score += 1;
+                state.totalScore += 1;
+                
+                const scoreEl = document.getElementById(`score-${sectionId}`);
+                scoreEl.innerText = `${state.sections[sectionId].score} / ${state.sections[sectionId].total}`;
+                
+                // Visual pop
+                scoreEl.style.transform = 'scale(1.15)';
+                setTimeout(() => { scoreEl.style.transform = 'scale(1)'; }, 300);
+
+                if (state.totalScore >= state.targetScore && !state.prizeAwarded) {
+                    state.prizeAwarded = true;
+                    setTimeout(() => { document.getElementById('prize-modal').style.display = 'flex'; }, 600);
+                }
+            }
+        }
+
+        // --- 1. Reading (Multiple Choice - 10 Qs) ---
+        const readingData = [
+            { id: 'r1', type: 'mcq', text: '<strong>Notice:</strong> Passengers must show tickets to the driver when getting on.', options: ['A) Buy tickets from the driver.', 'B) Keep your tickets ready to show.', 'C) Give your ticket to the driver.'], ans: ['B) Keep your tickets ready to show.'] },
+            { id: 'r2', type: 'mcq', text: '<strong>To: All Students</strong><br>Please return all borrowed library books before Friday.', options: ['A) Books are due this week.', 'B) The library is closed on Friday.', 'C) You can borrow books until Friday.'], ans: ['A) Books are due this week.'] },
+            { id: 'r3', type: 'mcq', text: '<strong>Warning:</strong> High voltage. Do not touch the wires.', options: ['A) Broken wires.', 'B) Touching the wires is dangerous.', 'C) Turn off the power here.'], ans: ['B) Touching the wires is dangerous.'] },
+            { id: 'r4', type: 'mcq', text: '<strong>Sign:</strong> Gym closed for cleaning between 2:00 PM and 3:00 PM today.', options: ['A) You cannot exercise here at 2:30 PM.', 'B) The gym closes at 3:00 PM today.', 'C) Clean your equipment after 2:00 PM.'], ans: ['A) You cannot exercise here at 2:30 PM.'] },
+            { id: 'r5', type: 'mcq', text: '<strong>Sale:</strong> Buy one shirt, get a second shirt for half price.', options: ['A) All shirts are half price today.', 'B) Two shirts cost less than normal.', 'C) You must buy two shirts.'], ans: ['B) Two shirts cost less than normal.'] },
+            { id: 'r6', type: 'mcq', text: '<strong>Email from John:</strong> Hi, I will be late for the meeting. Start without me.', options: ['A) John wants to delay the meeting.', 'B) Do not wait for John to begin.', 'C) John is not coming to the meeting.'], ans: ['B) Do not wait for John to begin.'] },
+            { id: 'r7', type: 'mcq', text: '<strong>Sign:</strong> No bicycles to be left against this window.', options: ['A) Do not ride bicycles past this window.', 'B) Bicycles are sold here.', 'C) Park your bicycles somewhere else.'], ans: ['C) Park your bicycles somewhere else.'] },
+            { id: 'r8', type: 'mcq', text: '<strong>Notice:</strong> Please keep off the grass.', options: ['A) Do not walk on the grass.', 'B) Cut the grass.', 'C) You can sit on the grass.'], ans: ['A) Do not walk on the grass.'] },
+            { id: 'r9', type: 'mcq', text: '<strong>Message:</strong> Call me back when you get this, urgent!', options: ['A) Reply by phone immediately.', 'B) Send me a text message later.', 'C) I will call you back.'], ans: ['A) Reply by phone immediately.'] },
+            { id: 'r10', type: 'mcq', text: '<strong>Sign:</strong> Exact change only for the bus.', options: ['A) The bus driver can give you change.', 'B) You must have the correct money.', 'C) You can pay with a credit card.'], ans: ['B) You must have the correct money.'] }
+        ];
+
+        // --- 3. Matching Sentences Data (10 Qs in 2 sets) ---
+        const matchingData1 = [
+            { id: 'm1', type: 'mcq', text: '1. I am really tired tonight,', options: ['A) for three years.', 'B) because it was too expensive.', 'C) so I am going to bed early.', 'D) you have to study harder.', 'E) what time the train left.'], ans: ['C) so I am going to bed early.'] },
+            { id: 'm2', type: 'mcq', text: '2. If you want to pass the exam,', options: ['A) for three years.', 'B) because it was too expensive.', 'C) so I am going to bed early.', 'D) you have to study harder.', 'E) what time the train left.'], ans: ['D) you have to study harder.'] },
+            { id: 'm3', type: 'mcq', text: '3. The tourist asked the police officer', options: ['A) for three years.', 'B) because it was too expensive.', 'C) so I am going to bed early.', 'D) you have to study harder.', 'E) what time the train left.'], ans: ['E) what time the train left.'] },
+            { id: 'm4', type: 'mcq', text: '4. I have been learning English', options: ['A) for three years.', 'B) because it was too expensive.', 'C) so I am going to bed early.', 'D) you have to study harder.', 'E) what time the train left.'], ans: ['A) for three years.'] },
+            { id: 'm5', type: 'mcq', text: '5. She didn\'t buy the beautiful dress', options: ['A) for three years.', 'B) because it was too expensive.', 'C) so I am going to bed early.', 'D) you have to study harder.', 'E) what time the train left.'], ans: ['B) because it was too expensive.'] }
+        ];
+
+        const matchingData2 = [
+            { id: 'm6', type: 'mcq', text: '6. Although it was raining heavily,', options: ['F) the film had already started.', 'G) due to the bad weather.', 'H) whose car was stolen.', 'I) as soon as I arrive.', 'J) they still went for a walk.'], ans: ['J) they still went for a walk.'] },
+            { id: 'm7', type: 'mcq', text: '7. I will call you', options: ['F) the film had already started.', 'G) due to the bad weather.', 'H) whose car was stolen.', 'I) as soon as I arrive.', 'J) they still went for a walk.'], ans: ['I) as soon as I arrive.'] },
+            { id: 'm8', type: 'mcq', text: '8. He is the man', options: ['F) the film had already started.', 'G) due to the bad weather.', 'H) whose car was stolen.', 'I) as soon as I arrive.', 'J) they still went for a walk.'], ans: ['H) whose car was stolen.'] },
+            { id: 'm9', type: 'mcq', text: '9. We had to cancel the picnic', options: ['F) the film had already started.', 'G) due to the bad weather.', 'H) whose car was stolen.', 'I) as soon as I arrive.', 'J) they still went for a walk.'], ans: ['G) due to the bad weather.'] },
+            { id: 'm10', type: 'mcq', text: '10. By the time we got to the cinema,', options: ['F) the film had already started.', 'G) due to the bad weather.', 'H) whose car was stolen.', 'I) as soon as I arrive.', 'J) they still went for a walk.'], ans: ['F) the film had already started.'] }
+        ];
+
+        // --- 4. Writing (Fill in the blanks - 10 Qs) ---
+        const writingData = [
+            { id: 'w1', type: 'input', text: 'My older brother is taller than me.<br><em>I am ______ than my older brother.</em>', ans: ['shorter'] },
+            { id: 'w2', type: 'input', text: 'A ticket for the concert costs £20.<br><em>You have to ______ £20 for a concert ticket.</em>', ans: ['pay'] },
+            { id: 'w3', type: 'input', text: 'There are no eggs left in the fridge.<br><em>We don\'t have ______ eggs left in the fridge.</em>', ans: ['any'] },
+            { id: 'w4', type: 'input', text: 'The film was so boring that I fell asleep.<br><em>It was such a ______ film that I fell asleep.</em>', ans: ['boring'] },
+            { id: 'w5', type: 'input', text: '"Why don\'t we go to the beach?" said Tom.<br><em>Tom suggested ______ to the beach.</em>', ans: ['going'] },
+            { id: 'w6', type: 'input', text: 'The school was built in 1990.<br><em>They ______ the school in 1990.</em>', ans: ['built'] },
+            { id: 'w7', type: 'input', text: 'I have never eaten sushi before.<br><em>This is the first time I ______ sushi.</em>', ans: ['have eaten', 'ate'] },
+            { id: 'w8', type: 'input', text: 'The car is too expensive for me to buy.<br><em>I don\'t have enough ______ to buy the car.</em>', ans: ['money'] },
+            { id: 'w9', type: 'input', text: 'Unless you hurry, you will miss the train.<br><em>If you ______ hurry, you will miss the train.</em>', ans: ['do not', 'don\'t'] },
+            { id: 'w10', type: 'input', text: 'She prefers reading to watching TV.<br><em>She likes reading ______ than watching TV.</em>', ans: ['more'] }
+        ];
+
+        // --- Evaluation Logic ---
+        function checkAnswer(element, correctAnswers, sectionId, qId) {
+            const userAnswer = element.value.trim().toLowerCase();
+            const feedbackEl = document.getElementById('fb_' + qId);
+            
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === userAnswer);
+
+            if (isCorrect) {
+                element.classList.add('correct-element');
+                element.disabled = true; 
+                feedbackEl.innerHTML = "✅";
+                feedbackEl.style.animation = "bounce-in 0.4s ease forwards";
+                awardScore(sectionId, qId);
+            } else if (userAnswer !== "") {
+                feedbackEl.innerHTML = "❌";
+            } else {
+                feedbackEl.innerHTML = "";
+            }
+        }
+
+        // --- Drag and Drop Logic ---
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('drag-over');
+        }
+        function dragLeave(ev) {
+            ev.target.classList.remove('drag-over');
+        }
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.innerText);
+            ev.dataTransfer.setData("sourceId", ev.target.id);
+        }
+        function drop(ev, correctAnswers, sectionId, qId) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            
+            if (solvedQuestions.has(qId)) return; 
+
+            var draggedText = ev.dataTransfer.getData("text").trim().toLowerCase();
+            var isCorrect = correctAnswers.some(ans => ans.toLowerCase() === draggedText);
+            
+            if (isCorrect) {
+                ev.target.innerText = draggedText;
+                ev.target.classList.add('correct-element');
+                
+                ev.target.style.transform = "scale(1.1)";
+                setTimeout(() => { ev.target.style.transform = "scale(1)"; }, 200);
+
+                awardScore(sectionId, qId);
+                
+                var sourceId = ev.dataTransfer.getData("sourceId");
+                if(sourceId) {
+                    const sourceEl = document.getElementById(sourceId);
+                    sourceEl.style.transform = 'scale(0)';
+                    setTimeout(() => { sourceEl.style.display = 'none'; }, 200);
+                }
+            } else {
+                ev.target.style.borderColor = "#ef4444";
+                setTimeout(() => { 
+                    if(!ev.target.classList.contains('correct-element')) {
+                        ev.target.style.borderColor = "#94a3b8"; 
+                    }
+                }, 800);
+            }
+        }
+
+        // --- Render Generator ---
+        function renderPractice(containerId, data, sectionScoreId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
+
+            data.forEach((item) => {
+                let controlHTML = '';
+
+                if (item.type === 'input') {
+                    controlHTML = `
+                        <input type="text" class="quiz-input" id="${item.id}" placeholder="Type word(s)..." 
+                            oninput="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                    `;
+                } else if (item.type === 'mcq') {
+                    let optionsHTML = `<option value="">-- Select --</option>`;
+                    item.options.forEach(opt => {
+                        optionsHTML += `<option value="${opt}">${opt}</option>`;
+                    });
+                    controlHTML = `
+                        <select class="quiz-select" id="${item.id}" onchange="checkAnswer(this, ${JSON.stringify(item.ans).replace(/"/g, '&quot;')}, '${sectionScoreId}', '${item.id}')">
+                            ${optionsHTML}
+                        </select>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="quiz-row">
+                        <div class="question-text">${item.text}</div>
+                        <div class="quiz-controls">
+                            ${controlHTML}
+                            <span id="fb_${item.id}" class="feedback"></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Initialize Everything
+        window.onload = () => {
+            renderPractice('reading-practice', readingData, 'reading');
+            renderPractice('matching-practice-1', matchingData1, 'matching');
+            renderPractice('matching-practice-2', matchingData2, 'matching');
+            renderPractice('writing-practice', writingData, 'writing');
+        };
+    </script>
+</body>
+</html>

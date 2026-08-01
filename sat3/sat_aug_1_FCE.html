@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2 First (FCE) Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --window-bg: rgba(248, 250, 252, 0.95);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent body scroll, windows scroll internally */
+            background-image: url('bg1.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--dark);
+        }
+
+        /* Dark overlay for better contrast */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* --- DESKTOP INTERFACE --- */
+        .desktop {
+            position: relative;
+            z-index: 5;
+            height: 100%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-title {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            font-size: 3rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .icon-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .desktop-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .desktop-icon:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .desktop-icon img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .desktop-icon span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .global-score {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid white;
+        }
+
+        /* --- FLOATING WINDOWS --- */
+        .window {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 900px;
+            max-width: 90%;
+            height: 800px;
+            max-height: 85vh;
+            background: var(--window-bg);
+            border-radius: 15px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.8);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .window-header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+        
+        .window-header:active { cursor: grabbing; }
+
+        .close-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: #dc2626; transform: scale(1.1); }
+
+        .window-content {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* --- EXAM ELEMENTS --- */
+        .exam-instructions {
+            background: white;
+            border-left: 5px solid var(--primary);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .text-passage {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            line-height: 2.2;
+            font-size: 1.15rem;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .quiz-row {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .question-text { font-size: 1.1rem; flex: 1; min-width: 250px; }
+        
+        /* Inputs */
+        .quiz-input, .quiz-select {
+            padding: 8px 15px; border: 2px solid #cbd5e1;
+            border-radius: 8px; font-size: 1.05rem; font-family: inherit;
+            outline: none; transition: 0.3s;
+        }
+        .quiz-select { max-width: 200px; cursor: pointer; }
+        .quiz-input:focus, .quiz-select:focus { border-color: var(--primary); }
+        .correct-element { border-color: var(--success) !important; background-color: #d1fae5 !important; color: #065f46 !important; font-weight: bold; pointer-events: none; }
+        .feedback { font-weight: bold; font-size: 1.3rem; min-width: 30px; text-align: center; }
+
+        /* Drag & Drop */
+        .word-bank {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            background: #f1f5f9; padding: 20px; border-radius: 12px;
+            margin-bottom: 25px; justify-content: center;
+            border: 2px dashed #94a3b8;
+        }
+        .draggable-word {
+            background: var(--secondary); color: white;
+            padding: 8px 15px; border-radius: 20px; font-weight: 600;
+            cursor: grab; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .draggable-word:active { cursor: grabbing; }
+        
+        .drop-zone {
+            display: inline-block; min-width: 100px; height: 32px;
+            border: 2px dashed #94a3b8; border-radius: 6px;
+            vertical-align: middle; background: #f8fafc;
+            text-align: center; line-height: 28px; color: #64748b;
+            margin: 0 5px; font-size: 1rem;
+        }
+        .drop-zone.drag-over { background: #e2e8f0; border-color: var(--secondary); transform: scale(1.05); }
+
+        /* Prize Modal */
+        #prize-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); z-index: 9999;
+            justify-content: center; align-items: center; text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .prize-content {
+            background: white; padding: 50px; border-radius: 24px;
+            max-width: 500px; animation: popIn 0.5s;
+        }
+        .prize-content img { width: 160px; margin: 20px 0; }
+        .close-prize { padding: 12px 30px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="desktop">
+        <h1 class="header-title">Intermediate level of English</h1>
+
+        <div class="icon-grid">
+            <div class="desktop-icon" onclick="openWindow('window-part1')">
+                <img src="books.jpg" alt="Reading">
+                <span>Part 1<br>Multiple Choice Cloze</span>
+            </div>
+            
+            <div class="desktop-icon" onclick="openWindow('window-part2')">
+                <img src="learn.png" alt="Learn">
+                <span>Part 2<br>Open Cloze</span>
+            </div>
+
+            <div class="desktop-icon" onclick="openWindow('window-part3')">
+                <img src="materials1.webp" alt="Materials">
+                <span>Part 3<br>Word Formation</span>
+            </div>
+
+            <div class="desktop-icon" onclick="openWindow('window-part4')">
+                <img src="girl.webp" alt="UK">
+                <span>Part 4<br>Key Word Transformations</span>
+            </div>
+        </div>
+
+        <div class="global-score">
+            Total Score: <span id="main-score-display" style="color: var(--primary);">0</span> / 40
+        </div>
+        <p> <font color= "#E6D8D5">Made and designed by Angel Torres</font></p>
+    </div>
+
+    <div class="window" id="window-part1">
+        <div class="window-header" id="header-part1">
+            <span>📚 Part 1: Multiple Choice Cloze</span>
+            <button class="close-btn" onclick="closeWindow('window-part1')">X</button>
+        </div>
+        <div class="window-content">
+            <div class="exam-instructions">
+                <strong>Exam Tip:</strong> Read the text below and choose the correct word (A, B, C or D) for each space. Pay attention to collocations and phrasal verbs!
+            </div>
+            <img src="books.jpg" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;" alt="Banner">
+            <div id="part1-container"></div>
+        </div>
+    </div>
+
+    <div class="window" id="window-part2">
+        <div class="window-header" id="header-part2">
+            <span>🧩 Part 2: Open Cloze (Drag & Drop)</span>
+            <button class="close-btn" onclick="closeWindow('window-part2')">X</button>
+        </div>
+        <div class="window-content">
+            <div class="exam-instructions">
+                <strong>Exam Tip:</strong> Drag the correct grammatical word into each gap. Think about prepositions, auxiliary verbs, and relative pronouns.
+            </div>
+            <img src="learn.png" style="width: 100px; float: right; margin-left: 20px;" alt="Learn">
+            
+            <div class="word-bank" id="word-bank-part2">
+                </div>
+            <div class="text-passage" id="part2-passage">
+                </div>
+        </div>
+    </div>
+
+    <div class="window" id="window-part3">
+        <div class="window-header" id="header-part3">
+            <span>✍️ Part 3: Word Formation</span>
+            <button class="close-btn" onclick="closeWindow('window-part3')">X</button>
+        </div>
+        <div class="window-content">
+            <div class="exam-instructions">
+                <strong>Exam Tip:</strong> Use the root word given in CAPITALS to form a word that fits the gap. Look out for negative prefixes (un-, in-, dis-) or plural nouns!
+            </div>
+            <img src="materials1.webp" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;" alt="Materials">
+            <div id="part3-container"></div>
+        </div>
+    </div>
+
+    <div class="window" id="window-part4">
+        <div class="window-header" id="header-part4">
+            <span>🔄 Part 4: Key Word Transformations</span>
+            <button class="close-btn" onclick="closeWindow('window-part4')">X</button>
+        </div>
+        <div class="window-content">
+            <div class="exam-instructions">
+                <strong>Exam Tip:</strong> Complete the second sentence so it has a similar meaning to the first, using the word given in bold. Use between <strong>two and five words</strong>. Type your exact answer.
+            </div>
+            <div id="part4-container"></div>
+        </div>
+    </div>
+
+    <div id="prize-modal">
+        <div class="prize-content">
+            <h1 style="color: var(--accent); margin-top: 0; font-size: 2.5rem;">🏆 C1 Level Unlocked!</h1>
+            <p style="font-size: 1.2rem;">You scored over 85% on your B2 First practice. Excellent command of English!</p>
+            <img src="uk_symbol.png" alt="UK Badge">
+            <br>
+            <button class="close-prize" onclick="document.getElementById('prize-modal').style.display='none'">Review Answers</button>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL STATE ---
+        let totalScore = 0;
+        const targetScore = Math.floor(40 * 0.85); // 34 points
+        const solvedQuestions = new Set();
+        let prizeAwarded = false;
+
+        function awardScore(qId) {
+            if (!solvedQuestions.has(qId)) {
+                solvedQuestions.add(qId);
+                totalScore++;
+                document.getElementById('main-score-display').innerText = totalScore;
+                
+                // Pop animation on score
+                const display = document.getElementById('main-score-display');
+                display.style.transform = "scale(1.5)";
+                setTimeout(() => { display.style.transform = "scale(1)"; }, 300);
+
+                if (totalScore >= targetScore && !prizeAwarded) {
+                    prizeAwarded = true;
+                    setTimeout(() => { document.getElementById('prize-modal').style.display = 'flex'; }, 600);
+                }
+            }
+        }
+
+        // --- WINDOW MANAGEMENT (FLOATING & DRAGGING) ---
+        let highestZ = 10;
+
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            bringToFront(win);
+            
+            // Randomize slight spawn position if opened first time
+            if(!win.style.top) {
+                win.style.top = (50 + Math.random() * 50) + "px";
+                win.style.left = (50 + Math.random() * 100) + "px";
+            }
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function bringToFront(elmnt) {
+            highestZ++;
+            elmnt.style.zIndex = highestZ;
+        }
+
+        function makeDraggable(elmnt, header) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            header.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                bringToFront(elmnt); // Bring to front on click
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Initialize Draggability
+        makeDraggable(document.getElementById("window-part1"), document.getElementById("header-part1"));
+        makeDraggable(document.getElementById("window-part2"), document.getElementById("header-part2"));
+        makeDraggable(document.getElementById("window-part3"), document.getElementById("header-part3"));
+        makeDraggable(document.getElementById("window-part4"), document.getElementById("header-part4"));
+
+        // Add bring to front on window body click too
+        document.querySelectorAll('.window').forEach(w => {
+            w.addEventListener('mousedown', () => bringToFront(w));
+        });
+
+
+        // --- EVALUATION LOGIC ---
+        function checkInput(element, correctAnswers, qId) {
+            const val = element.value.trim().toLowerCase();
+            const fb = document.getElementById('fb_' + qId);
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === val);
+
+            if (isCorrect) {
+                element.classList.add('correct-element');
+                fb.innerText = "✅";
+                awardScore(qId);
+            } else if (val !== "") {
+                fb.innerText = "❌";
+            } else {
+                fb.innerText = "";
+            }
+        }
+
+        // --- DRAG AND DROP LOGIC ---
+        function allowDrop(ev) { ev.preventDefault(); ev.target.classList.add('drag-over'); }
+        function dragLeave(ev) { ev.target.classList.remove('drag-over'); }
+        function dragStart(ev) {
+            ev.dataTransfer.setData("text", ev.target.innerText);
+            ev.dataTransfer.setData("sourceId", ev.target.id);
+        }
+        function drop(ev, correctAnswers, qId) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            if (solvedQuestions.has(qId)) return; 
+
+            const text = ev.dataTransfer.getData("text").trim().toLowerCase();
+            const isCorrect = correctAnswers.some(ans => ans.toLowerCase() === text);
+            
+            if (isCorrect) {
+                ev.target.innerText = text;
+                ev.target.classList.add('correct-element');
+                awardScore(qId);
+                
+                const sourceId = ev.dataTransfer.getData("sourceId");
+                if(sourceId) document.getElementById(sourceId).style.display = 'none';
+            } else {
+                ev.target.style.borderColor = "#ef4444";
+                setTimeout(() => { if(!ev.target.classList.contains('correct-element')) ev.target.style.borderColor = "#94a3b8"; }, 800);
+            }
+        }
+
+        // --- B2 FCE DATA & RENDERING ---
+
+        // Part 1: Multiple Choice Cloze
+        const part1Data = [
+            { id: 'p1_1', text: '1. The History of Coffee: Coffee was first ______ in Ethiopia.', options: ['A) invented', 'B) discovered', 'C) created', 'D) established'], ans: ['B) discovered'] },
+            { id: 'p1_2', text: '2. Legend says that a goat herder ______ his goats acting energetically.', options: ['A) looked', 'B) viewed', 'C) noticed', 'D) watched'], ans: ['C) noticed'] },
+            { id: 'p1_3', text: '3. He decided to try the berries ______.', options: ['A) himself', 'B) alone', 'C) own', 'D) personal'], ans: ['A) himself'] },
+            { id: 'p1_4', text: '4. Soon, the news of this energy ______ across the region.', options: ['A) expanded', 'B) spread', 'C) extended', 'D) grew'], ans: ['B) spread'] },
+            { id: 'p1_5', text: '5. By the 15th century, coffee was being ______ in Yemen.', options: ['A) planted', 'B) raised', 'C) grown', 'D) kept'], ans: ['C) grown'] },
+            { id: 'p1_6', text: '6. People began to open public coffee houses, ______ became social hubs.', options: ['A) what', 'B) which', 'C) that', 'D) where'], ans: ['B) which'] },
+            { id: 'p1_7', text: '7. Patrons would listen to music, watch performers, and ______ up on news.', options: ['A) catch', 'B) keep', 'C) take', 'D) look'], ans: ['A) catch'] },
+            { id: 'p1_8', text: '8. However, not everyone ______ of this new drink immediately.', options: ['A) agreed', 'B) allowed', 'C) approved', 'D) accepted'], ans: ['C) approved'] },
+            { id: 'p1_9', text: '9. Some leaders even tried to ______ it, fearing it caused rebellion.', options: ['A) ban', 'B) stop', 'C) cancel', 'D) deny'], ans: ['A) ban'] },
+            { id: 'p1_10', text: '10. Despite this, coffee remained incredibly ______ worldwide.', options: ['A) famous', 'B) known', 'C) popular', 'D) favourite'], ans: ['C) popular'] }
+        ];
+
+        const part1HTML = part1Data.map(q => `
+            <div class="quiz-row">
+                <div class="question-text">${q.text}</div>
+                <div class="quiz-controls">
+                    <select class="quiz-select" id="${q.id}" onchange="checkInput(this, ${JSON.stringify(q.ans).replace(/"/g, '&quot;')}, '${q.id}')">
+                        <option value="">-- Choose --</option>
+                        ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>
+                    <span id="fb_${q.id}" class="feedback"></span>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('part1-container').innerHTML = part1HTML;
+
+
+        // Part 2: Open Cloze (Drag Drop)
+        const part2Words = ['been', 'which', 'out', 'up', 'more', 'to', 'for', 'in', 'are', 'as'];
+        document.getElementById('word-bank-part2').innerHTML = part2Words.map((w, i) => 
+            `<div class="draggable-word" draggable="true" id="dw_${i}" ondragstart="dragStart(event)">${w}</div>`
+        ).join('');
+
+        const part2Text = `Learning a foreign language has <span class="drop-zone" id="p2_1" ondrop="drop(event, ['been'], 'p2_1')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">1</span> shown to improve brain function. 
+        Research points <span class="drop-zone" id="p2_2" ondrop="drop(event, ['out'], 'p2_2')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">2</span> that bilingual people often find it easier 
+        <span class="drop-zone" id="p2_3" ondrop="drop(event, ['to'], 'p2_3')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">3</span> focus in noisy environments. 
+        It is not just about communication; studying grammar and vocabulary actually builds <span class="drop-zone" id="p2_4" ondrop="drop(event, ['up'], 'p2_4')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">4</span> cognitive reserves. 
+        Furthermore, individuals who speak <span class="drop-zone" id="p2_5" ondrop="drop(event, ['more'], 'p2_5')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">5</span> than one language 
+        <span class="drop-zone" id="p2_6" ondrop="drop(event, ['are'], 'p2_6')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">6</span> often better at multitasking. 
+        Many people learn a language <span class="drop-zone" id="p2_7" ondrop="drop(event, ['for'], 'p2_7')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">7</span> travel purposes, 
+        <span class="drop-zone" id="p2_8" ondrop="drop(event, ['which'], 'p2_8')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">8</span> makes exploring new countries much more enjoyable. 
+        Whether you take a class <span class="drop-zone" id="p2_9" ondrop="drop(event, ['in'], 'p2_9')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">9</span> person or use an app, 
+        treating it <span class="drop-zone" id="p2_10" ondrop="drop(event, ['as'], 'p2_10')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">10</span> a daily habit is the key to success.`;
+        document.getElementById('part2-passage').innerHTML = part2Text;
+
+
+        // Part 3: Word Formation
+        const part3Data = [
+            { id: 'p3_1', text: '1. The company is facing severe ______ problems. (FINANCE)', ans: ['financial'] },
+            { id: 'p3_2', text: '2. She gave a wonderful ______ at the concert. (PERFORM)', ans: ['performance'] },
+            { id: 'p3_3', text: '3. What is the ______ of that huge mountain? (HIGH)', ans: ['height'] },
+            { id: 'p3_4', text: '4. The teacher criticized his ______ behavior in class. (CARE)', ans: ['careless'] },
+            { id: 'p3_5', text: '5. We need to find a ______ to this issue quickly. (SOLVE)', ans: ['solution'] },
+            { id: 'p3_6', text: '6. ______ is a major problem in many developing countries. (POOR)', ans: ['poverty'] },
+            { id: 'p3_7', text: '7. The weather was so ______ that we stayed indoors all day. (TERROR)', ans: ['terrible'] },
+            { id: 'p3_8', text: '8. He spoke very ______ about his past experiences. (HONEST)', ans: ['honestly'] },
+            { id: 'p3_9', text: '9. There was a huge ______ between the two brothers. (ARGUE)', ans: ['argument'] },
+            { id: 'p3_10', text: '10. The museum has a fascinating ______ of Roman artifacts. (COLLECT)', ans: ['collection'] }
+        ];
+
+        const part3HTML = part3Data.map(q => `
+            <div class="quiz-row">
+                <div class="question-text">${q.text}</div>
+                <div class="quiz-controls">
+                    <input type="text" class="quiz-input" id="${q.id}" placeholder="Type word..." 
+                           oninput="checkInput(this, ${JSON.stringify(q.ans).replace(/"/g, '&quot;')}, '${q.id}')">
+                    <span id="fb_${q.id}" class="feedback"></span>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('part3-container').innerHTML = part3HTML;
+
+
+        // Part 4: Key Word Transformations
+        const part4Data = [
+            { id: 'p4_1', text: '1. I have never eaten such a good meal. <br><strong>BEST</strong><br> That is the _______________ eaten.', ans: ['best meal I have ever', 'best meal I\'ve ever'] },
+            { id: 'p4_2', text: '2. "Don\'t forget to lock the door," my mom said. <br><strong>REMINDED</strong><br> My mom _______________ lock the door.', ans: ['reminded me to'] },
+            { id: 'p4_3', text: '3. I didn\'t go out because it was raining. <br><strong>WOULD</strong><br> If it hadn\'t been raining, I _______________ out.', ans: ['would have gone'] },
+            { id: 'p4_4', text: '4. The exam wasn\'t as easy as I thought it would be. <br><strong>MORE</strong><br> The exam _______________ I thought it would be.', ans: ['was more difficult than', 'was more hard than'] },
+            { id: 'p4_5', text: '5. They are building a new cinema in town. <br><strong>BUILT</strong><br> A new cinema _______________ in town.', ans: ['is being built'] },
+            { id: 'p4_6', text: '6. I\'m sorry I didn\'t call you yesterday. <br><strong>APOLOGIZE</strong><br> I _______________ calling you yesterday.', ans: ['apologize for not'] },
+            { id: 'p4_7', text: '7. Somebody stole my bike last night. <br><strong>HAD</strong><br> I _______________ last night.', ans: ['had my bike stolen'] },
+            { id: 'p4_8', text: '8. It\'s too cold to go swimming today. <br><strong>WARM</strong><br> It _______________ to go swimming today.', ans: ['isn\'t warm enough', 'is not warm enough'] },
+            { id: 'p4_9', text: '9. Although he was tired, he kept running. <br><strong>SPITE</strong><br> In _______________ tired, he kept running.', ans: ['spite of being', 'spite of feeling'] },
+            { id: 'p4_10', text: '10. I started working here three years ago. <br><strong>FOR</strong><br> I _______________ three years.', ans: ['have worked here for', 'have been working here for'] }
+        ];
+
+        const part4HTML = part4Data.map(q => `
+            <div class="quiz-row">
+                <div class="question-text">${q.text}</div>
+                <div class="quiz-controls">
+                    <input type="text" class="quiz-input" id="${q.id}" placeholder="Type phrase..." style="width: 250px;"
+                           oninput="checkInput(this, ${JSON.stringify(q.ans).replace(/"/g, '&quot;')}, '${q.id}')">
+                    <span id="fb_${q.id}" class="feedback"></span>
+                </div>
+            </div>
+        `).join('');
+        document.getElementById('part4-container').innerHTML = part4HTML;
+
+    </script>
+</body>
+</html>

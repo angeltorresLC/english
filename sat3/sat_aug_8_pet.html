@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 Preliminary (PET) Reading Practice</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --radius: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Nav Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 18px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .part-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .part-header h2 {
+            font-size: 1.4rem;
+            color: var(--text-color);
+        }
+
+        .part-info {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            background-color: #eff6ff;
+            color: var(--primary);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Exercise Components */
+        .question-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sign-box {
+            background: #fef08a;
+            border: 2px solid #ca8a04;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 300px;
+            margin: 10px 0;
+            color: #854d0e;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+        }
+
+        .option-label input[type="radio"] {
+            accent-color: var(--primary);
+        }
+
+        .reading-text {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .matching-grid {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        .profile-card, .text-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: var(--radius);
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        input[type="text"] {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            width: 120px;
+        }
+
+        /* Buttons & Feedback */
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-reset {
+            background-color: #94a3b8;
+        }
+
+        .btn-reset:hover {
+            background-color: #64748b;
+        }
+
+        .feedback-box {
+            display: none;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .correct-state {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+        }
+
+        .incorrect-state {
+            background-color: var(--incorrect-bg) !important;
+            border-color: var(--incorrect-border) !important;
+        }
+
+        .explanation {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>B1 Preliminary (PET) Reading Trainer</h1>
+        <p>Interactive practice exam for Cambridge B1 Level English</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(1)">Part 1: Choice</button>
+        <button class="tab-btn" onclick="switchTab(2)">Part 2: Matching</button>
+        <button class="tab-btn" onclick="switchTab(3)">Part 3: Long Text</button>
+        <button class="tab-btn" onclick="switchTab(4)">Part 4: Gapped</button>
+        <button class="tab-btn" onclick="switchTab(5)">Part 5: Vocab</button>
+        <button class="tab-btn" onclick="switchTab(6)">Part 6: Grammar</button>
+    </nav>
+
+    <!-- PART 1 -->
+    <div id="part1" class="tab-content active">
+        <div class="part-header">
+            <h2>Part 1: Multiple Choice Notices & Messages</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Read six real-world short texts for the main message.</span>
+            </div>
+        </div>
+
+        <form id="form-part1">
+            <div class="question-card" id="p1-q1">
+                <p><strong>1. What does the notice say?</strong></p>
+                <div class="sign-box">LIBRARY SECOND FLOOR<br>Quiet study area.<br>Laptops allowed. No food or hot drinks.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_1" value="A"> A) You can eat snacks if you work quietly.</label>
+                    <label class="option-label"><input type="radio" name="p1_1" value="B"> B) You are allowed to use computers here.</label>
+                    <label class="option-label"><input type="radio" name="p1_1" value="C"> C) Cold drinks are strictly forbidden.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p1-q2">
+                <p><strong>2. Hi Sam, Mum said she can take us to the cinema if we're ready by 6:00. Let me know if you want a ride! - Mark</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_2" value="A"> A) Mark is offering Sam a lift to the cinema.</label>
+                    <label class="option-label"><input type="radio" name="p1_2" value="B"> B) Mark wants Sam to drive them to the film.</label>
+                    <label class="option-label"><input type="radio" name="p1_2" value="C"> C) Sam needs to meet Mark at 6:00 at the cinema.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p1-q3">
+                <p><strong>3. What does this notice mean?</strong></p>
+                <div class="sign-box">SCHOOL TRIP TO PARIS<br>Final deposits due by Friday.<br>Bring your passport to the office for checking.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_3" value="A"> A) Friday is the last day to pay for the trip.</label>
+                    <label class="option-label"><input type="radio" name="p1_3" value="B"> B) Students must keep their passports with them.</label>
+                    <label class="option-label"><input type="radio" name="p1_3" value="C"> C) The school will buy the tickets on Friday morning.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p1-q4">
+                <p><strong>4. Message from Dr. Hill's Surgery: Your dental appointment on Tuesday has been moved to Wednesday at 4:00 PM. Reply YES to confirm.</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_4" value="A"> A) You must call the doctor to change your appointment.</label>
+                    <label class="option-label"><input type="radio" name="p1_4" value="B"> B) The original appointment time is no longer available.</label>
+                    <label class="option-label"><input type="radio" name="p1_4" value="C"> C) Dr. Hill wants you to visit the surgery on Tuesday.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p1-q5">
+                <p><strong>5. What is the rule at the swimming pool?</strong></p>
+                <div class="sign-box">POOL RULES<br>Children under 12 must be with an adult.<br>No diving in the shallow end.</div>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_5" value="A"> A) Only adults are allowed to dive in the pool.</label>
+                    <label class="option-label"><input type="radio" name="p1_5" value="B"> B) Adults must stay in the shallow end with children.</label>
+                    <label class="option-label"><input type="radio" name="p1_5" value="C"> C) Young children cannot swim here on their own.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p1-q6">
+                <p><strong>6. Email to Jenny: Hi, I've got your concert ticket. Can you pay me back when I see you at the stadium tonight? - Chloe</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p1_6" value="A"> A) Chloe wants Jenny to bring her ticket to the stadium.</label>
+                    <label class="option-label"><input type="radio" name="p1_6" value="B"> B) Jenny should give Chloe the money for the ticket later.</label>
+                    <label class="option-label"><input type="radio" name="p1_6" value="C"> C) Chloe will meet Jenny at the ticket office tonight.</label>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn" onclick="checkPart1()">Check Answers</button>
+                <button type="button" class="btn btn-reset" onclick="resetForm('form-part1', 'fb-part1')">Reset</button>
+            </div>
+            <div id="fb-part1" class="feedback-box"></div>
+        </form>
+    </div>
+
+    <!-- PART 2 -->
+    <div id="part2" class="tab-content">
+        <div class="part-header">
+            <h2>Part 2: Matching Profiles</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Match six people to eight short descriptions.</span>
+            </div>
+        </div>
+
+        <div class="matching-grid">
+            <div>
+                <h3>People Looking for Books</h3><br>
+                <div class="question-card" id="p2-q1">
+                    <p><strong>1. Elena</strong> enjoys fantasy novels set in fictional worlds with dragons. She prefers long books with complex plots.</p>
+                    <select name="p2_1" id="p2_1">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A: The Dragon's Legacy</option>
+                        <option value="B">Book B: Life of Galileo</option>
+                        <option value="C">Book C: Mystery at Midnight</option>
+                        <option value="D">Book D: Tomorrow's Technology</option>
+                        <option value="E">Book E: The Desert King</option>
+                        <option value="F">Book F: Forest Wonders</option>
+                        <option value="G">Book G: Simple Science</option>
+                        <option value="H">Book H: Forgotten Kingdom</option>
+                    </select>
+                </div>
+                <div class="question-card" id="p2-q2">
+                    <p><strong>2. Marco</strong> wants a short biography of a famous historical figure, written in simple language with illustrations.</p>
+                    <select name="p2_2" id="p2_2">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A</option><option value="B">Book B</option><option value="C">Book C</option><option value="D">Book D</option><option value="E">Book E</option><option value="F">Book F</option><option value="G">Book G</option><option value="H">Book H</option>
+                    </select>
+                </div>
+                <div class="question-card" id="p2-q3">
+                    <p><strong>3. Sara</strong> is interested in modern technology and how it will change the world. She wants a book with expert opinions.</p>
+                    <select name="p2_3" id="p2_3">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A</option><option value="B">Book B</option><option value="C">Book C</option><option value="D">Book D</option><option value="E">Book E</option><option value="F">Book F</option><option value="G">Book G</option><option value="H">Book H</option>
+                    </select>
+                </div>
+                <div class="question-card" id="p2-q4">
+                    <p><strong>4. James</strong> wants a exciting crime story that takes place in a big city. He likes reading about detectives solving puzzles.</p>
+                    <select name="p2_4" id="p2_4">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A</option><option value="B">Book B</option><option value="C">Book C</option><option value="D">Book D</option><option value="E">Book E</option><option value="F">Book F</option><option value="G">Book G</option><option value="H">Book H</option>
+                    </select>
+                </div>
+                <div class="question-card" id="p2-q5">
+                    <p><strong>5. Lina</strong> loves reading about nature and animals. She wants a book that has beautiful photographs of the woods.</p>
+                    <select name="p2_5" id="p2_5">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A</option><option value="B">Book B</option><option value="C">Book C</option><option value="D">Book D</option><option value="E">Book E</option><option value="F">Book F</option><option value="G">Book G</option><option value="H">Book H</option>
+                    </select>
+                </div>
+                <div class="question-card" id="p2-q6">
+                    <p><strong>6. David</strong> prefers adventure stories set in the desert. He likes books where the main character has to survive difficult conditions.</p>
+                    <select name="p2_6" id="p2_6">
+                        <option value="">Select Book...</option>
+                        <option value="A">Book A</option><option value="B">Book B</option><option value="C">Book C</option><option value="D">Book D</option><option value="E">Book E</option><option value="F">Book F</option><option value="G">Book G</option><option value="H">Book H</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <h3>Available Options</h3><br>
+                <div class="text-card">
+                    <h4>Book A: The Dragon's Legacy</h4>
+                    <p>A 600-page epic tale set in a mythical kingdom filled with magic, ancient beasts, and intricate political storylines.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book B: Life of Galileo</h4>
+                    <p>An easy-to-read 100-page illustrated biography of the famous Italian astronomer, perfect for quick reading.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book C: Mystery at Midnight</h4>
+                    <p>A fast-paced crime detective story set in modern-day London, where a inspector hunts for a diamond thief.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book D: Tomorrow's Technology</h4>
+                    <p>Articles from leading scientists about future developments in AI and robotics, and their impact on society.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book E: The Desert King</h4>
+                    <p>A thrilling novel about a man lost in the Sahara who must find his way to an oasis against all odds.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book F: Forest Wonders</h4>
+                    <p>A collection of stunning professional photography showing the hidden life of wild animals in European forests.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book G: Simple Science</h4>
+                    <p>A textbook for younger students explaining basic chemistry and physics experiments you can do at home.</p>
+                </div><br>
+                <div class="text-card">
+                    <h4>Book H: Forgotten Kingdom</h4>
+                    <p>A short fantasy story about a girl who finds a magic door in her garden. Very simple and easy for children.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn" onclick="checkPart2()">Check Answers</button>
+            <button type="button" class="btn btn-reset" onclick="resetPart2()">Reset</button>
+        </div>
+        <div id="fb-part2" class="feedback-box"></div>
+    </div>
+
+    <!-- PART 3 -->
+    <div id="part3" class="tab-content">
+        <div class="part-header">
+            <h2>Part 3: Multiple Choice Long Text</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Read for detailed comprehension, opinion, and global meaning.</span>
+            </div>
+        </div>
+
+        <div class="reading-text">
+            <h3>My Passion for Underwater Photography</h3>
+            <p>By Lucas Wright</p><br>
+            <p>I’ve always loved swimming, but two years ago, my uncle gave me an underwater camera for my birthday. That gift changed everything. At first, taking good pictures was surprisingly difficult. Water distorts light, and fish move fast! My initial attempts resulted in blurry images of fish tails.</p>
+            <p>I decided to take a diving course to improve my technique. Learning to stay perfectly still underwater made a huge difference. Now, I spend hours exploring marine reserves near my home, capturing images of colorful coral and marine life. My main advice to beginners is to be patient—you can't rush nature.</p>
+            <p>What I enjoy most is the silence down there. In our busy world, it's rare to find a place where you only hear your own breathing. Some people find the ocean scary, but to me, it feels like a second home. I hope my photos encourage more people to support ocean conservation efforts because these ecosystems are fragile.</p>
+        </div>
+
+        <form id="form-part3">
+            <div class="question-card" id="p3-q1">
+                <p><strong>1. Why did Lucas struggle with underwater photography at first?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_1" value="A"> A) His camera was broken.</label>
+                    <label class="option-label"><input type="radio" name="p3_1" value="B"> B) Water light conditions and fast fish made it hard.</label>
+                    <label class="option-label"><input type="radio" name="p3_1" value="C"> C) He was afraid of deep water.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p3-q2">
+                <p><strong>2. How did the diving course help Lucas?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_2" value="A"> A) It taught him how to repair cameras.</label>
+                    <label class="option-label"><input type="radio" name="p3_2" value="B"> B) It helped him find better locations.</label>
+                    <label class="option-label"><input type="radio" name="p3_2" value="C"> C) It improved his ability to remain steady.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p3-q3">
+                <p><strong>3. What is Lucas's primary recommendation for new underwater photographers?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_3" value="A"> A) Buy expensive equipment immediately.</label>
+                    <label class="option-label"><input type="radio" name="p3_3" value="B"> B) Take photos only on sunny days.</label>
+                    <label class="option-label"><input type="radio" name="p3_3" value="C"> C) Exercise patience when trying to capture photos.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p3-q4">
+                <p><strong>4. What does Lucas like best about being underwater?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_4" value="A"> A) The quiet environment.</label>
+                    <label class="option-label"><input type="radio" name="p3_4" value="B"> B) Meeting other divers.</label>
+                    <label class="option-label"><input type="radio" name="p3_4" value="C"> C) Discovering sunken treasure.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p3-q5">
+                <p><strong>5. What is the ultimate goal of Lucas's photography?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_5" value="A"> A) To sell his pictures to magazines.</label>
+                    <label class="option-label"><input type="radio" name="p3_5" value="B"> B) To raise awareness for the environment.</label>
+                    <label class="option-label"><input type="radio" name="p3_5" value="C"> C) To win international competitions.</label>
+                </div>
+            </div>
+
+            <div class="question-card" id="p3-q6">
+                <p><strong>6. Which of the following would be a good title for this article?</strong></p>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="p3_6" value="A"> A) The Dangers of Deep Sea Diving.</label>
+                    <label class="option-label"><input type="radio" name="p3_6" value="B"> B) My Journey into the Silent Blue.</label>
+                    <label class="option-label"><input type="radio" name="p3_6" value="C"> C) How to Fix a Digital Camera.</label>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn" onclick="checkPart3()">Check Answers</button>
+                <button type="button" class="btn btn-reset" onclick="resetForm('form-part3', 'fb-part3')">Reset</button>
+            </div>
+            <div id="fb-part3" class="feedback-box"></div>
+        </form>
+    </div>
+
+    <!-- PART 4 -->
+    <div id="part4" class="tab-content">
+        <div class="part-header">
+            <h2>Part 4: Gapped Text</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Select missing sentences to complete the coherent text.</span>
+            </div>
+        </div>
+
+        <div class="reading-text">
+            <h3>Learning a Musical Instrument</h3>
+            <p>Learning an instrument is one of the most rewarding activities a young person can do. [ 1 ] <select id="p4_1"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> Not only does it boost memory and concentration, but it also provides an expressive creative outlet.</p>
+            <p>However, many students give up after just a few weeks. [ 2 ] <select id="p4_2"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> Daily effort over a long period is required to master basic techniques.</p>
+            <p>Choosing the right instrument is also vital. Some people prefer the piano because of its versatility. [ 3 ] <select id="p4_3"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> Others might choose the guitar so they can play with friends in a band.</p>
+            <p>Teachers play a massive role in a student's success. [ 4 ] <select id="p4_4"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> A good instructor knows how to keep a learner motivated through difficult stages.</p>
+            <p>Performance is the final step in the learning process. [ 5 ] <select id="p4_5"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> It builds confidence that carries over into other areas of life.</p>
+            <p>In conclusion, although it is hard work, the benefits are worth it. [ 6 ] <select id="p4_6"><option value="">Select...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select> You will have a skill that lasts a lifetime.</p>
+        </div>
+
+        <div class="text-card">
+            <h4>Sentences to insert:</h4>
+            <p><strong>A)</strong> This is usually because they expect quick progress without putting in regular practice time.</p>
+            <p><strong>B)</strong> Research shows that studying music enhances brain function significantly.</p>
+            <p><strong>C)</strong> Playing in front of an audience can be terrifying but also exhilarating.</p>
+            <p><strong>D)</strong> It can be used to play almost any style of music, from classical to jazz.</p>
+            <p><strong>E)</strong> Finding someone who matches your learning style is essential.</p>
+            <p><strong>F)</strong> So, don't be afraid to pick up a violin or a flute today!</p>
+            <p><strong>G)</strong> Most instruments are very heavy and difficult to carry to school.</p>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn" onclick="checkPart4()">Check Answers</button>
+            <button type="button" class="btn btn-reset" onclick="resetPart4()">Reset</button>
+        </div>
+        <div id="fb-part4" class="feedback-box"></div>
+    </div>
+
+    <!-- PART 5 -->
+    <div id="part5" class="tab-content">
+        <div class="part-header">
+            <h2>Part 5: Multiple-Choice Cloze (Vocabulary)</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Choose the correct vocabulary word for each gap.</span>
+            </div>
+        </div>
+
+        <div class="reading-text">
+            <h3>The History of Bicycles</h3>
+            <p>The first bicycles were (1) 
+                <select id="p5_1">
+                    <option value="">...</option>
+                    <option value="A">invented</option>
+                    <option value="B">discovered</option>
+                    <option value="C">found</option>
+                </select> 
+            in the early 19th century. They looked very (2) 
+                <select id="p5_2">
+                    <option value="">...</option>
+                    <option value="A">opposite</option>
+                    <option value="B">different</option>
+                    <option value="C">unusual</option>
+                </select> 
+            from modern bikes because they had no pedals! Riders had to (3)
+                <select id="p5_3">
+                    <option value="">...</option>
+                    <option value="A">push</option>
+                    <option value="B">pull</option>
+                    <option value="C">carry</option>
+                </select> 
+            themselves along with their feet. Later, pedals were (4)
+                <select id="p5_4">
+                    <option value="">...</option>
+                    <option value="A">joined</option>
+                    <option value="B">added</option>
+                    <option value="C">linked</option>
+                </select>
+            to the front wheel. This made cycling (5)
+                <select id="p5_5">
+                    <option value="">...</option>
+                    <option value="A">faster</option>
+                    <option value="B">higher</option>
+                    <option value="C">longer</option>
+                </select>
+            but also more dangerous. Today, millions of people (6)
+                <select id="p5_6">
+                    <option value="">...</option>
+                    <option value="A">depend</option>
+                    <option value="B">rely</option>
+                    <option value="C">trust</option>
+                </select>
+            on bicycles for daily transport.</p>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn" onclick="checkPart5()">Check Answers</button>
+            <button type="button" class="btn btn-reset" onclick="resetPart5()">Reset</button>
+        </div>
+        <div id="fb-part5" class="feedback-box"></div>
+    </div>
+
+    <!-- PART 6 -->
+    <div id="part6" class="tab-content">
+        <div class="part-header">
+            <h2>Part 6: Open Cloze (Grammar)</h2>
+            <div class="part-info">
+                <span class="badge">6 Questions</span>
+                <span class="badge">1 Mark Each</span>
+                <span>Type EXACTLY ONE missing grammatical word in each gap.</span>
+            </div>
+        </div>
+
+        <div class="reading-text">
+            <h3>Email to a Friend</h3>
+            <p>Hi Alex,</p>
+            <p>I am writing to invite you (1) <input type="text" id="p6_1"> my birthday party next weekend. It is going to (2) <input type="text" id="p6_2"> held at the local park if the weather stays warm. My parents (3) <input type="text" id="p6_3"> bringing a big barbecue, so there will be plenty (4) <input type="text" id="p6_4"> food. Please let me know (5) <input type="text" id="p6_5"> you can come by Friday. I really hope to see you (6) <input type="text" id="p6_6">!</p>
+            <p>Best wishes,<br>Tom</p>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn" onclick="checkPart6()">Check Answers</button>
+            <button type="button" class="btn btn-reset" onclick="resetPart6()">Reset</button>
+        </div>
+        <div id="fb-part6" class="feedback-box"></div>
+    </div>
+
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(partNum) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        document.querySelectorAll('.tab-btn')[partNum - 1].classList.add('active');
+        document.getElementById(`part${partNum}`).classList.add('active');
+    }
+
+    // Reset helper
+    function resetForm(formId, feedbackId) {
+        document.getElementById(formId).reset();
+        const fb = document.getElementById(feedbackId);
+        fb.className = 'feedback-box';
+        fb.innerHTML = '';
+        
+        document.querySelectorAll(`#${formId} .question-card`).forEach(card => {
+            card.classList.remove('correct-state', 'incorrect-state');
+        });
+    }
+
+    // PART 1 CHECKING
+    function checkPart1() {
+        const answers = { p1_1: 'B', p1_2: 'A', p1_3: 'A', p1_4: 'B', p1_5: 'C', p1_6: 'B' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const selected = document.querySelector(`input[name="${key}"]:checked`);
+            const qCard = document.getElementById(`p1-q${key.split('_')[1]}`);
+            
+            if (selected && selected.value === answers[key]) {
+                score++;
+                qCard.className = 'question-card correct-state';
+            } else {
+                qCard.className = 'question-card incorrect-state';
+            }
+        }
+        displayFeedback('fb-part1', score, total);
+    }
+
+    // PART 2 CHECKING
+    function checkPart2() {
+        const answers = { p2_1: 'A', p2_2: 'B', p2_3: 'D', p2_4: 'C', p2_5: 'F', p2_6: 'E' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const val = document.getElementById(key).value;
+            const card = document.getElementById(`p2-q${key.split('_')[1]}`);
+            
+            if (val === answers[key]) {
+                score++;
+                card.className = 'question-card correct-state';
+            } else {
+                card.className = 'question-card incorrect-state';
+            }
+        }
+        displayFeedback('fb-part2', score, total);
+    }
+
+    function resetPart2() {
+        for(let i=1; i<=6; i++) {
+            document.getElementById(`p2_${i}`).value = '';
+            document.getElementById(`p2-q${i}`).className = 'question-card';
+        }
+        document.getElementById('fb-part2').className = 'feedback-box';
+    }
+
+    // PART 3 CHECKING
+    function checkPart3() {
+        const answers = { p3_1: 'B', p3_2: 'C', p3_3: 'C', p3_4: 'A', p3_5: 'B', p3_6: 'B' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const selected = document.querySelector(`input[name="${key}"]:checked`);
+            const qCard = document.getElementById(`p3-q${key.split('_')[1]}`);
+            
+            if (selected && selected.value === answers[key]) {
+                score++;
+                qCard.className = 'question-card correct-state';
+            } else {
+                qCard.className = 'question-card incorrect-state';
+            }
+        }
+        displayFeedback('fb-part3', score, total);
+    }
+
+    // PART 4 CHECKING
+    function checkPart4() {
+        const answers = { p4_1: 'B', p4_2: 'A', p4_3: 'D', p4_4: 'E', p4_5: 'C', p4_6: 'F' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const el = document.getElementById(key);
+            if (el.value === answers[key]) {
+                score++;
+                el.style.borderColor = 'var(--correct-border)';
+                el.style.backgroundColor = 'var(--correct-bg)';
+            } else {
+                el.style.borderColor = 'var(--incorrect-border)';
+                el.style.backgroundColor = 'var(--incorrect-bg)';
+            }
+        }
+        displayFeedback('fb-part4', score, total);
+    }
+
+    function resetPart4() {
+        for(let i=1; i<=6; i++) {
+            const el = document.getElementById(`p4_${i}`);
+            el.value = '';
+            el.style = '';
+        }
+        document.getElementById('fb-part4').className = 'feedback-box';
+    }
+
+    // PART 5 CHECKING
+    function checkPart5() {
+        const answers = { p5_1: 'A', p5_2: 'B', p5_3: 'A', p5_4: 'B', p5_5: 'A', p5_6: 'B' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const el = document.getElementById(key);
+            if (el.value === answers[key]) {
+                score++;
+                el.style.borderColor = 'var(--correct-border)';
+                el.style.backgroundColor = 'var(--correct-bg)';
+            } else {
+                el.style.borderColor = 'var(--incorrect-border)';
+                el.style.backgroundColor = 'var(--incorrect-bg)';
+            }
+        }
+        displayFeedback('fb-part5', score, total);
+    }
+
+    function resetPart5() {
+        for(let i=1; i<=6; i++) {
+            const el = document.getElementById(`p5_${i}`);
+            el.value = '';
+            el.style = '';
+        }
+        document.getElementById('fb-part5').className = 'feedback-box';
+    }
+
+    // PART 6 CHECKING
+    function checkPart6() {
+        const answers = { p6_1: 'to', p6_2: 'be', p6_3: 'are', p6_4: 'of', p6_5: 'if', p6_6: 'there' };
+        let score = 0;
+        let total = 6;
+
+        for (let key in answers) {
+            const el = document.getElementById(key);
+            const val = el.value.trim().toLowerCase();
+            // Allow "whether" for question 5 too
+            let isCorrect = val === answers[key];
+            if (key === 'p6_5' && val === 'whether') isCorrect = true;
+
+            if (isCorrect) {
+                score++;
+                el.style.borderColor = 'var(--correct-border)';
+                el.style.backgroundColor = 'var(--correct-bg)';
+            } else {
+                el.style.borderColor = 'var(--incorrect-border)';
+                el.style.backgroundColor = 'var(--incorrect-bg)';
+            }
+        }
+        displayFeedback('fb-part6', score, total);
+    }
+
+    function resetPart6() {
+        for(let i=1; i<=6; i++) {
+            const el = document.getElementById(`p6_${i}`);
+            el.value = '';
+            el.style = '';
+        }
+        document.getElementById('fb-part6').className = 'feedback-box';
+    }
+
+    // Helper to display feedback banner
+    function displayFeedback(elementId, score, total) {
+        const fb = document.getElementById(elementId);
+        fb.classList.add('show');
+        if (score === total) {
+            fb.style.backgroundColor = 'var(--correct-bg)';
+            fb.style.color = '#15803d';
+            fb.innerHTML = `Great job! Score: ${score}/${total} (100%)`;
+        } else {
+            fb.style.backgroundColor = 'var(--incorrect-bg)';
+            fb.style.color = '#b91c1c';
+            fb.innerHTML = `Score: ${score}/${total}. Review your answers highlighted above!`;
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 Flyers - Reading & Writing Practice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --yellow: #FFE66D;
+            --purple: #9B51E0;
+            --blue: #2F80ED;
+            --dark: #2C3E50;
+            --light: #F7F9FC;
+            --white: #FFFFFF;
+            --green: #2ECC71;
+            --red: #FF4757;
+            --border-radius: 18px;
+            --cartoon-border: 3px solid #2C3E50;
+            --cartoon-shadow: 4px 4px 0px #2C3E50;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            font-weight: 700;
+        }
+
+        body {
+            background-color: #E0F7FA;
+            background-image: radial-gradient(#B2EBF2 15%, transparent 16%), radial-gradient(#B2EBF2 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            margin: 0;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            border: var(--cartoon-border);
+            border-radius: 25px;
+            box-shadow: 8px 8px 0px #2C3E50;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--yellow);
+            padding: 15px 25px;
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--cartoon-shadow);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #FF4757;
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0px #FFF;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-box, .score-box {
+            background: var(--white);
+            border: var(--cartoon-border);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            box-shadow: 2px 2px 0px #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #E2E8F0;
+            border: var(--cartoon-border);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0px #2C3E50;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 3px 3px 0px #2C3E50;
+        }
+
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Instructions Banner */
+        .instructions {
+            background-color: #EBF8FF;
+            border-left: 8px solid var(--blue);
+            border: var(--cartoon-border);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: 3px 3px 0px #2C3E50;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: var(--blue);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        /* Word Bank Component */
+        .word-bank {
+            background: #FFF9E6;
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            box-shadow: var(--cartoon-shadow);
+        }
+
+        .word-chip {
+            background: var(--white);
+            border: 2px solid #2C3E50;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: var(--dark);
+            box-shadow: 2px 2px 0px #2C3E50;
+        }
+
+        /* Question Layouts */
+        .question-card {
+            background: var(--white);
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 3px 3px 0px #2C3E50;
+        }
+
+        .question-card p {
+            font-size: 1.15rem;
+            margin-top: 0;
+        }
+
+        input[type="text"] {
+            border: 2px solid #2C3E50;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            outline: none;
+            width: 180px;
+            background: #FAFAFA;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus {
+            background: #FFF;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.2);
+        }
+
+        select {
+            border: 2px solid #2C3E50;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            outline: none;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        /* Dialogue Box for Part 2 */
+        .dialogue-box {
+            background: #F4F0FF;
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .speaker {
+            font-weight: bold;
+            color: var(--purple);
+        }
+
+        /* Story Container for Part 5 & Part 3 */
+        .story-box {
+            background: #FFF5F5;
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Picture Prompt for Part 7 */
+        .picture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .picture-card {
+            background: var(--yellow);
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--cartoon-shadow);
+        }
+
+       .picture-card svg, .picture-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover; /* Ensures the image doesn't get stretched */
+            border-radius: 8px; /* Adds a nice slight curve to the image corners */
+            border: 2px solid #2C3E50; /* Matches the cartoon outline style */
+       }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            border: var(--cartoon-border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            font-size: 1.1rem;
+            outline: none;
+            resize: vertical;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: var(--cartoon-border);
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: var(--cartoon-shadow);
+            transition: all 0.2s;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0px #2C3E50;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 2px 2px 0px #2C3E50;
+        }
+
+        .btn-check {
+            background: var(--green);
+            margin-top: 15px;
+        }
+
+        .btn-reset {
+            background: var(--red);
+        }
+
+        /* Validation Colors */
+        .correct {
+            background-color: #D4EDDA !important;
+            border-color: #28A745 !important;
+            color: #155724;
+        }
+
+        .incorrect {
+            background-color: #F8D7DA !important;
+            border-color: #DC3545 !important;
+            color: #721C24;
+        }
+
+        /* Shields Display */
+        .shields-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .shield {
+            font-size: 2rem;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .shield.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .results-content {
+            background: white;
+            border: var(--cartoon-border);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 8px 8px 0px #2C3E50;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            header { flex-direction: column; text-align: center; }
+            .tabs-nav { justify-content: center; }
+            input[type="text"] { width: 100%; margin-top: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🎈 A2 FLYERS PRACTICE 🚀</h1>
+        <div class="header-tools">
+            <div class="timer-box">⏱️ <span id="timer">40:00</span></div>
+            <div class="score-box">🛡️ Shields: <span id="shield-count">0</span> / 5</div>
+        </div>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="openTab(event, 'overview')">Overview</button>
+        <button class="tab-btn" onclick="openTab(event, 'part1')">Part 1</button>
+        <button class="tab-btn" onclick="openTab(event, 'part2')">Part 2</button>
+        <button class="tab-btn" onclick="openTab(event, 'part3')">Part 3</button>
+        <button class="tab-btn" onclick="openTab(event, 'part4')">Part 4</button>
+        <button class="tab-btn" onclick="openTab(event, 'part5')">Part 5</button>
+        <button class="tab-btn" onclick="openTab(event, 'part6')">Part 6</button>
+        <button class="tab-btn" onclick="openTab(event, 'part7')">Part 7</button>
+    </nav>
+
+    <!-- OVERVIEW TAB -->
+    <div id="overview" class="tab-content active">
+        <div class="instructions" style="background: #FFF9E6; border-color: var(--yellow);">
+            <h2 style="font-family:'Fredoka One', cursive; color: var(--purple); margin-top:0;">Welcome Young Explorers! 👋</h2>
+            <p style="font-size: 1.2rem;">Ready to test your English skills for the Cambridge A2 Flyers Reading & Writing exam?</p>
+            <ul>
+                <li>⏱️ <strong>Time Allowed:</strong> 40 minutes</li>
+                <li>🧩 <strong>Total Parts:</strong> 7 parts</li>
+                <li>❓ <strong>Total Questions:</strong> 44 questions</li>
+                <li>🛡️ <strong>Max Score:</strong> 5 Cambridge Shields</li>
+            </ul>
+            <p><strong>Important Rule:</strong> Spelling counts! Make sure to write your words carefully without typos.</p>
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn" onclick="startExam()">🚀 Start Practice Exam!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 1 TAB -->
+    <div id="part1" class="tab-content">
+        <div class="instructions">
+            <h3>Part 1 (10 Questions)</h3>
+            <p>Look and read. Choose the correct words from the word bank and write them on the lines next to their definitions. There are 15 words, but you only need 10!</p>
+        </div>
+
+        <div class="word-bank">
+            <span class="word-chip">cave</span>
+            <span class="word-chip">museum</span>
+            <span class="word-chip">astronaut</span>
+            <span class="word-chip">pirate</span>
+            <span class="word-chip">pyjamas</span>
+            <span class="word-chip">tent</span>
+            <span class="word-chip">diary</span>
+            <span class="word-chip">camel</span>
+            <span class="word-chip">swan</span>
+            <span class="word-chip">blanket</span>
+            <span class="word-chip">factory</span>
+            <span class="word-chip">dictionary</span>
+            <span class="word-chip">torch</span>
+            <span class="word-chip">umbrella</span>
+            <span class="word-chip">mechanic</span>
+        </div>
+
+        <div class="question-card">
+            <p>1. You put this on your bed when you feel cold. 🛌➡️ <input type="text" id="p1_q1" data-ans="blanket"></p>
+        </div>
+        <div class="question-card">
+            <p>2. This person travels into space in a rocket. 🧑‍🚀➡️ <input type="text" id="p1_q2" data-ans="astronaut"></p>
+        </div>
+        <div class="question-card">
+            <p>3. You open this when it starts raining so you don't get wet. ☔➡️ <input type="text" id="p1_q3" data-ans="umbrella"></p>
+        </div>
+        <div class="question-card">
+            <p>4. This animal lives in the desert and can walk without water for days. 🐪➡️ <input type="text" id="p1_q4" data-ans="camel"></p>
+        </div>
+        <div class="question-card">
+            <p>5. You use this light when you are walking in a dark place. 🔦➡️ <input type="text" id="p1_q5" data-ans="torch"></p>
+        </div>
+        <div class="question-card">
+            <p>6. People sleep inside this when they go camping in the woods. ⛺➡️ <input type="text" id="p1_q6" data-ans="tent"></p>
+        </div>
+        <div class="question-card">
+            <p>7. You go to this place to see interesting old objects from history. 🏛️➡️ <input type="text" id="p1_q7" data-ans="museum"></p>
+        </div>
+        <div class="question-card">
+            <p>8. This person fixes car engines when they stop working. 🔧➡️ <input type="text" id="p1_q8" data-ans="mechanic"></p>
+        </div>
+        <div class="question-card">
+            <p>9. You wear these comfortable clothes when you go to sleep at night. 💤➡️ <input type="text" id="p1_q9" data-ans="pyjamas"></p>
+        </div>
+        <div class="question-card">
+            <p>10. You look in this book to find out what new words mean. 📖➡️ <input type="text" id="p1_q10" data-ans="dictionary"></p>
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part1')">Check Part 1 Answers</button>
+    </div>
+
+    <!-- PART 2 TAB -->
+    <div id="part2" class="tab-content">
+        <div class="instructions">
+            <h3>Part 2 (5 Questions)</h3>
+            <p>Katy is talking to Helen about her weekend trip. Read the conversation and choose the best answer (A–H) for each gap. You do not need to use all the letters.</p>
+        </div>
+
+        <div class="word-bank" style="text-align: left; display: block;">
+            <strong>Options A – H:</strong>
+            <ul style="margin: 5px 0; padding-left: 20px;">
+                <li><strong>A.</strong> Yes, it was fantastic! <i>(Example)</i></li>
+                <li><strong>B.</strong> I went with my family and my cousin.</li>
+                <li><strong>C.</strong> We stayed in a small hotel near the beach.</li>
+                <li><strong>D.</strong> Yes, we swam in the sea every single day!</li>
+                <li><strong>E.</strong> By car, because it’s not too far from our house.</li>
+                <li><strong>F.</strong> I bought a cool shell necklace and some postcards.</li>
+                <li><strong>G.</strong> Next month, I think!</li>
+                <li><strong>H.</strong> No, I haven't seen it yet.</li>
+            </ul>
+        </div>
+
+        <div class="dialogue-box">
+            <p><span class="speaker">Helen:</span> Hi Katy! Did you have a good weekend?</p>
+            <p><span class="speaker">Katy:</span> <i>A (Yes, it was fantastic!)</i></p>
+            <hr>
+            <p><span class="speaker">Helen:</span> 1. Where did you stay during the trip?</p>
+            <p><span class="speaker">Katy:</span> Letter 
+                <select id="p2_q1" data-ans="C">
+                    <option value="">-- Choose letter --</option>
+                    <option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+                </select>
+            </p>
+            
+            <p><span class="speaker">Helen:</span> 2. Who did you go there with?</p>
+            <p><span class="speaker">Katy:</span> Letter 
+                <select id="p2_q2" data-ans="B">
+                    <option value="">-- Choose letter --</option>
+                    <option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+                </select>
+            </p>
+
+            <p><span class="speaker">Helen:</span> 3. How did you travel there?</p>
+            <p><span class="speaker">Katy:</span> Letter 
+                <select id="p2_q3" data-ans="E">
+                    <option value="">-- Choose letter --</option>
+                    <option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+                </select>
+            </p>
+
+            <p><span class="speaker">Helen:</span> 4. Was the weather warm enough to go swimming?</p>
+            <p><span class="speaker">Katy:</span> Letter 
+                <select id="p2_q4" data-ans="D">
+                    <option value="">-- Choose letter --</option>
+                    <option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+                </select>
+            </p>
+
+            <p><span class="speaker">Helen:</span> 5. Did you buy anything special at the seaside?</p>
+            <p><span class="speaker">Katy:</span> Letter 
+                <select id="p2_q5" data-ans="F">
+                    <option value="">-- Choose letter --</option>
+                    <option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    <option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option>
+                </select>
+            </p>
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part2')">Check Part 2 Answers</button>
+    </div>
+
+    <!-- PART 3 TAB -->
+    <div id="part3" class="tab-content">
+        <div class="instructions">
+            <h3>Part 3 (6 Questions)</h3>
+            <p>Read the story. Choose a word from the box for each gap 1–5. Then answer Question 6 to choose the best title!</p>
+        </div>
+
+        <div class="word-bank">
+            <span class="word-chip">frightened</span>
+            <span class="word-chip">clever</span>
+            <span class="word-chip">island</span>
+            <span class="word-chip">climbed</span>
+            <span class="word-chip">weather</span>
+            <span class="word-chip">castle</span>
+            <span class="word-chip">whispered</span>
+            <span class="word-chip">storm</span>
+        </div>
+
+        <div class="story-box">
+            Last Tuesday, Toby and his dog, Spot, went for a walk near the beach. The 
+            (1) <input type="text" id="p3_q1" data-ans="weather"> was warm and sunny. They found an old wooden boat on the sand and decided to row to a small 
+            (2) <input type="text" id="p3_q2" data-ans="island"> not far away. <br><br>
+            Suddenly, dark clouds appeared in the sky and a huge 
+            (3) <input type="text" id="p3_q3" data-ans="storm"> began! Rain started falling heavily. Toby felt a bit 
+            (4) <input type="text" id="p3_q4" data-ans="frightened">, but Spot barked bravely. They spotted a dark cave on a high hill and quickly 
+            (5) <input type="text" id="p3_q5" data-ans="climbed"> inside to stay safe and dry. After an hour, the rain stopped and they safely rowed home.
+        </div>
+
+        <div class="question-card">
+            <p><strong>(6) Now choose the best title for the story:</strong></p>
+            <label style="display:block; margin: 8px 0;"><input type="radio" name="p3_q6" value="wrong1"> Toby's trip to the zoo</label>
+            <label style="display:block; margin: 8px 0;"><input type="radio" name="p3_q6" value="correct" data-ans="true"> An unexpected island adventure 🌟</label>
+            <label style="display:block; margin: 8px 0;"><input type="radio" name="p3_q6" value="wrong2"> Spot's brand new collar</label>
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part3')">Check Part 3 Answers</button>
+    </div>
+
+    <!-- PART 4 TAB -->
+    <div id="part4" class="tab-content">
+        <div class="instructions">
+            <h3>Part 4 (10 Questions)</h3>
+            <p>Read the text about Dolphins. Choose the right words from the drop-down menus to complete the gaps.</p>
+        </div>
+
+        <div class="story-box">
+            Dolphins are amazingly smart animals. They live in the sea, 
+            (1) <select id="p4_q1" data-ans="but"><option value="">---</option><option value="but">but</option><option value="because">because</option><option value="or">or</option></select> 
+            they are not fish—they are mammals! This means they need to 
+            (2) <select id="p4_q2" data-ans="come"><option value="">---</option><option value="coming">coming</option><option value="come">come</option><option value="came">came</option></select> 
+            up to the surface to breathe air. Dolphins swim together in family groups 
+            (3) <select id="p4_q3" data-ans="called"><option value="">---</option><option value="call">call</option><option value="calling">calling</option><option value="called">called</option></select> 
+            pods. They communicate using special clicking sounds and whistle noises. Some dolphins can leap 
+            (4) <select id="p4_q4" data-ans="high"><option value="">---</option><option value="high">high</option><option value="higher">higher</option><option value="highest">highest</option></select> 
+            out of the water to play. They are famous for being very friendly 
+            (5) <select id="p4_q5" data-ans="to"><option value="">---</option><option value="to">to</option><option value="at">at</option><option value="from">from</option></select> 
+            humans. Many people love 
+            (6) <select id="p4_q6" data-ans="watching"><option value="">---</option><option value="watch">watch</option><option value="watching">watching</option><option value="watched">watched</option></select> 
+            them jumping from boats. Dolphins have sharp teeth, 
+            (7) <select id="p4_q7" data-ans="which"><option value="">---</option><option value="which">which</option><option value="who">who</option><option value="what">what</option></select> 
+            they use to catch fish, but they swallow food whole! Scientists say dolphins are among the 
+            (8) <select id="p4_q8" data-ans="most"><option value="">---</option><option value="most">most</option><option value="more">more</option><option value="much">much</option></select> 
+            clever animals on Earth. Next time you 
+            (9) <select id="p4_q9" data-ans="visit"><option value="">---</option><option value="visit">visit</option><option value="visited">visited</option><option value="visiting">visiting</option></select> 
+            the ocean, look out for these friendly creatures 
+            (10) <select id="p4_q10" data-ans="swimming"><option value="">---</option><option value="swim">swim</option><option value="swimming">swimming</option><option value="swam">swam</option></select> 
+            through the blue waves!
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part4')">Check Part 4 Answers</button>
+    </div>
+
+    <!-- PART 5 TAB -->
+    <div id="part5" class="tab-content">
+        <div class="instructions">
+            <h3>Part 5 (7 Questions)</h3>
+            <p>Read the story. Complete the sentences with 1, 2, 3, or 4 words.</p>
+        </div>
+
+        <div class="story-box">
+            <strong>Grandma's Secret Garden</strong><br>
+            Last summer, Oliver went to visit his grandmother who lives in the quiet countryside. Grandma had a huge garden with colorful flowers, big apple trees, and a fresh vegetable patch.<br><br>
+            On Thursday afternoon, while Grandma was making fresh lemonade in the kitchen, Oliver noticed a small wooden door hidden behind some tall green bushes at the back of the garden.<br><br>
+            He pushed the leaves aside and turned the tiny bronze key left in the keyhole. Inside, he was surprised to find a secret courtyard with a small pond! Three bright orange fish were swimming happily in the water. Sitting on a stone next to the pond was a big green frog wearing a tiny shiny crown! Oliver ran inside to tell Grandma. When she saw it, she laughed and said, "I lost that toy crown 20 years ago!"
+        </div>
+
+        <div class="question-card">
+            <p>1. Oliver went to stay with his <input type="text" id="p5_q1" data-ans="grandmother|his grandmother|grandma"> in the countryside last summer.</p>
+        </div>
+        <div class="question-card">
+            <p>2. While Oliver explored, Grandma was making <input type="text" id="p5_q2" data-ans="fresh lemonade|lemonade"> in the kitchen.</p>
+        </div>
+        <div class="question-card">
+            <p>3. The secret door was hidden behind some <input type="text" id="p5_q3" data-ans="tall green bushes|green bushes|bushes">.</p>
+        </div>
+        <div class="question-card">
+            <p>4. To open the door, Oliver turned a <input type="text" id="p5_q4" data-ans="tiny bronze key|bronze key|key"> that was in the lock.</p>
+        </div>
+        <div class="question-card">
+            <p>5. Inside the secret courtyard, Oliver saw a pond with three <input type="text" id="p5_q5" data-ans="bright orange fish|orange fish|fish">.</p>
+        </div>
+        <div class="question-card">
+            <p>6. A big green frog was sitting on a <input type="text" id="p5_q6" data-ans="stone|stone next to the pond">.</p>
+        </div>
+        <div class="question-card">
+            <p>7. Grandma had lost her tiny crown <input type="text" id="p5_q7" data-ans="20 years ago|twenty years ago">.</p>
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part5')">Check Part 5 Answers</button>
+    </div>
+
+    <!-- PART 6 TAB -->
+    <div id="part6" class="tab-content">
+        <div class="instructions">
+            <h3>Part 6 (5 Questions)</h3>
+            <p>Read the diary entry. Write the missing words. Write ONE word on each line. (No word bank provided!)</p>
+        </div>
+
+        <div class="story-box" style="font-family: 'Comic Neue', cursive;">
+            <strong>Dear Diary,</strong><br><br>
+            Today was (1) <input type="text" id="p6_q1" data-ans="the"> best day of my summer holiday! I went to the safari park 
+            (2) <input type="text" id="p6_q2" data-ans="with"> my family. We rode on a big yellow bus through the park.<br><br>
+            We saw tall giraffes, sleeping lions, and two enormous elephants. The giraffes were much taller 
+            (3) <input type="text" id="p6_q3" data-ans="than"> the trees! After lunch, we 
+            (4) <input type="text" id="p6_q4" data-ans="went|walked|ate"> to the gift shop. I hope we can visit the park again 
+            (5) <input type="text" id="p6_q5" data-ans="next|soon"> year!
+        </div>
+
+        <button class="btn btn-check" onclick="checkPart('part6')">Check Part 6 Answers</button>
+    </div>
+
+    <!-- PART 7 TAB -->
+    <div id="part7" class="tab-content">
+        <div class="instructions">
+            <h3>Part 7 (1 Story Question)</h3>
+            <p>Look at the three pictures. Write a short story based on what you see! Write 20 words or more.</p>
+        </div>
+
+        <div class="picture-grid">
+
+    
+    <div class="picture-card">
+        <img src="rainy.png" alt="Rainy day indoors" />
+        <p>1. Rainy day indoors</p>
+    </div>
+        
+    
+    <div class="picture-card">
+        <img src="bake.png" alt="bake" />
+        <p>2. Baking cookies together</p>
+    </div>
+                
+            <div class="picture-card">
+        <img src="enjoy.png" alt="bake" />
+         <p>3. Eating delicious cookies!</p>
+    </div>
+               
+</div>
+        <div class="question-card">
+            <p><strong>Write your story here:</strong></p>
+            <textarea id="p7_story" placeholder="One rainy Saturday, Tom was bored looking out the window..."></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <span>Word count: <strong id="word-count">0</strong> words</span>
+                <button class="btn btn-check" onclick="checkPart7()">Submit Story</button>
+            </div>
+        </div>
+
+        <div id="p7_feedback" class="instructions" style="display:none; margin-top: 15px; background: #E8F8F5; border-color: var(--green);">
+            <h4 style="color: var(--green); margin-top:0;">✨ Great effort!</h4>
+            <p id="p7_msg"></p>
+            <p><strong>Sample Model Answer:</strong><br>
+            <i>"It was a very rainy day, so Alex could not play football outside. He decided to bake chocolate cookies in the kitchen with his dad. When the cookies were ready, they sat on the comfortable sofa and ate them while watching a fun movie."</i></p>
+        </div>
+    </div>
+
+    <!-- Overall Action Bar -->
+    <div style="margin-top: 30px; text-align: center; border-top: 2px dashed #CBD5E1; padding-top: 20px;">
+        <button class="btn" style="background: var(--purple);" onclick="calculateTotalScore()">🏆 Calculate Final Exam Score</button>
+        <button class="btn btn-reset" onclick="resetExam()">🔄 Restart Exam</button>
+    </div>
+</div>
+
+<!-- Modal Results -->
+<div id="resultsModal" class="results-modal">
+    <div class="results-content">
+        <h2 style="font-family:'Fredoka One', cursive; color: var(--primary); font-size: 2rem;">Exam Completed! 🎉</h2>
+        <p style="font-size: 1.2rem;">Your Total Score: <span id="final-score" style="font-size: 1.8rem; color: var(--purple);">0</span> / 44</p>
+        
+        <h3>Your Cambridge Shields:</h3>
+        <div class="shields-container">
+            <span class="shield" id="s1">🛡️</span>
+            <span class="shield" id="s2">🛡️</span>
+            <span class="shield" id="s3">🛡️</span>
+            <span class="shield" id="s4">🛡️</span>
+            <span class="shield" id="s5">🛡️</span>
+        </div>
+        
+        <p id="shield-comment" style="margin-top:20px; font-weight: bold;"></p>
+        <button class="btn" onclick="closeModal()" style="margin-top: 15px;">Close & Review</button>
+    </div>
+</div>
+
+<script>
+    // Timer Logic
+    let totalSeconds = 40 * 60;
+    let timerInterval = null;
+
+    function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                alert("Time is up! Let's check your final score.");
+                calculateTotalScore();
+            } else {
+                totalSeconds--;
+                let m = Math.floor(totalSeconds / 60);
+                let s = totalSeconds % 60;
+                document.getElementById('timer').innerText = 
+                    `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    function startExam() {
+        openTab(null, 'part1');
+        startTimer();
+    }
+
+    // Tabs Navigation Logic
+    function openTab(evt, tabName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        if (evt) {
+            evt.currentTarget.classList.add("active");
+        } else {
+            // Find tab button matching ID
+            for (let btn of tablinks) {
+                if (btn.getAttribute('onclick').includes(tabName)) {
+                    btn.classList.add("active");
+                }
+            }
+        }
+    }
+
+    // Text Normalization for String comparison
+    function normalize(text) {
+        return text.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+    }
+
+    // Generic Part Checker
+    function checkPart(partId) {
+        const container = document.getElementById(partId);
+        const inputs = container.querySelectorAll('input[type="text"], select');
+        let partScore = 0;
+        let totalPartQuestions = inputs.length;
+
+        inputs.forEach(input => {
+            const userAns = normalize(input.value);
+            const rawAns = input.getAttribute('data-ans') || "";
+            const possibleAnswers = rawAns.split('|').map(a => normalize(a));
+
+            if (userAns !== "" && possibleAnswers.includes(userAns)) {
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+                partScore++;
+            } else {
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+            }
+        });
+
+        // Special handling for Part 3 Radio Button
+        if (partId === 'part3') {
+            const radios = container.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                if (radio.checked && radio.getAttribute('data-ans') === 'true') {
+                    partScore++;
+                }
+            });
+        }
+
+        alert(`Part Checked! You got answers correct in this section.`);
+        updateShieldDisplay();
+    }
+
+    // Word Counter for Part 7
+    const storyArea = document.getElementById('p7_story');
+    if (storyArea) {
+        storyArea.addEventListener('input', () => {
+            const text = storyArea.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            document.getElementById('word-count').innerText = words;
+        });
+    }
+
+    function checkPart7() {
+        const text = storyArea.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        const feedbackBox = document.getElementById('p7_feedback');
+        const msg = document.getElementById('p7_msg');
+
+        feedbackBox.style.display = 'block';
+        if (words >= 20) {
+            msg.innerText = `Awesome! You wrote ${words} words. Your story has been submitted for evaluation!`;
+        } else {
+            msg.innerText = `You wrote ${words} words. Try writing a little more to reach at least 20 words!`;
+        }
+    }
+
+    // Global Score & Shields Calculation
+    function calculateTotalScore() {
+        let totalCorrect = 0;
+
+        // Check text inputs & selects across Parts 1-6
+        const inputs = document.querySelectorAll('.tab-content input[type="text"], .tab-content select');
+        inputs.forEach(input => {
+            const userAns = normalize(input.value);
+            const rawAns = input.getAttribute('data-ans') || "";
+            const possibleAnswers = rawAns.split('|').map(a => normalize(a));
+            if (userAns !== "" && possibleAnswers.includes(userAns)) {
+                totalCorrect++;
+            }
+        });
+
+        // Check Part 3 radio button
+        const correctRadio = document.querySelector('input[name="p3_q6"]:checked');
+        if (correctRadio && correctRadio.getAttribute('data-ans') === 'true') {
+            totalCorrect++;
+        }
+
+        // Check Part 7 story word count requirement (1 point max)
+        const storyWords = storyArea.value.trim() ? storyArea.value.trim().split(/\s+/).length : 0;
+        if (storyWords >= 15) {
+            totalCorrect++;
+        }
+
+        // Display Modal
+        document.getElementById('final-score').innerText = totalCorrect;
+        
+        // Calculate Shields (Max 5)
+        // Score scale: 0-10 -> 1 shield, 11-20 -> 2 shields, 21-30 -> 3 shields, 31-38 -> 4 shields, 39-44 -> 5 shields
+        let shields = 1;
+        if (totalCorrect >= 39) shields = 5;
+        else if (totalCorrect >= 30) shields = 4;
+        else if (totalCorrect >= 20) shields = 3;
+        else if (totalCorrect >= 10) shields = 2;
+
+        for (let i = 1; i <= 5; i++) {
+            const s = document.getElementById(`s${i}`);
+            if (i <= shields) {
+                s.classList.add('active');
+            } else {
+                s.classList.remove('active');
+            }
+        }
+
+        const comments = [
+            "Keep practicing! You can do better next time! 💪",
+            "Good start! Review your spelling and try again! 👍",
+            "Well done! Solid effort on your Flyers test! ⭐",
+            "Great job! You are almost a Flyers Master! 🚀",
+            "Outstanding! Perfect Flyers English Master! 🏆🎉"
+        ];
+        document.getElementById('shield-comment').innerText = comments[shields - 1];
+        document.getElementById('shield-count').innerText = shields;
+        document.getElementById('resultsModal').style.display = 'flex';
+    }
+
+    function updateShieldDisplay() {
+        // Quick background shield count update
+        let totalCorrect = 0;
+        const inputs = document.querySelectorAll('.tab-content input[type="text"], .tab-content select');
+        inputs.forEach(input => {
+            const userAns = normalize(input.value);
+            const rawAns = input.getAttribute('data-ans') || "";
+            const possibleAnswers = rawAns.split('|').map(a => normalize(a));
+            if (userAns !== "" && possibleAnswers.includes(userAns)) totalCorrect++;
+        });
+
+        let shields = 1;
+        if (totalCorrect >= 39) shields = 5;
+        else if (totalCorrect >= 30) shields = 4;
+        else if (totalCorrect >= 20) shields = 3;
+        else if (totalCorrect >= 10) shields = 2;
+
+        document.getElementById('shield-count').innerText = shields;
+    }
+
+    function closeModal() {
+        document.getElementById('resultsModal').style.display = 'none';
+    }
+
+    function resetExam() {
+        if (confirm("Are you sure you want to reset the exam and clear all answers?")) {
+            location.reload();
+        }
+    }
+</script>
+
+</body>
+</html>

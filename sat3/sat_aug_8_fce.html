@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2 First (FCE) Practice - Reading & Use of English</title>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #00509e;
+            --accent-color: #e76f51;
+            --success-color: #2a9d8f;
+            --error-color: #e63946;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+            --border-color: #d8e2dc;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 6px 0 0 0;
+            font-size: 20px;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 25px auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        .overview-panel {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 6px solid var(--accent-color);
+        }
+
+        .overview-panel h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            font-size: 18px;
+        }
+
+        .overview-item strong {
+            display: block;
+            color: var(--secondary-color);
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 3px solid var(--primary-color);
+            gap: 4px;
+        }
+
+        .tab-button {
+            background-color: #e2e8f0;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 12px 18px;
+            transition: all 0.2s ease;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-button:hover {
+            background-color: #cbd5e1;
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .exam-info {
+            background-color: #eef6ff;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border: 1px solid #bd2d8;
+        }
+
+        .exam-info h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 20px;
+        }
+
+        .exam-info ul {
+            list-style-type: square;
+            padding-left: 20px;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .badge {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Question Layout Styles */
+        .reading-text {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 22px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            font-size: 20px;
+        }
+
+        .reading-text p {
+            margin-bottom: 15px;
+        }
+
+        .question-block {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #edf2f7;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+
+        .question-block strong {
+            color: var(--primary-color);
+        }
+
+        select, input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 18px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(0,80,158,0.2);
+        }
+
+        .inline-gap {
+            display: inline-block;
+            width: 130px;
+            margin: 0 4px;
+        }
+
+        .word-prompt {
+            font-weight: bold;
+            color: var(--secondary-color);
+            letter-spacing: 1px;
+        }
+
+        .transformation-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .score-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Overall Score Section */
+        .overall-panel {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .overall-panel h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .overall-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .overall-btn:hover {
+            background-color: #d85c3e;
+            transform: translateY(-2px);
+        }
+
+        .overall-result {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 20px;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .overall-result.pass {
+            background: rgba(42, 157, 143, 0.2);
+            border-color: var(--success-color);
+        }
+        
+        .overall-result.fail {
+            background: rgba(230, 57, 70, 0.2);
+            border-color: var(--error-color);
+        }
+
+        .overall-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .breakdown-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>B2 First (FCE) Practice Exam</h1>
+        <p>Reading & Use of English — Complete 7-Part Practice Module</p>
+    </header>
+
+    <div class="container">
+        <!-- Overview Panel -->
+        <div class="overview-panel">
+            <h2>Paper Overview</h2>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <strong>Time Allowed:</strong> 1 hour 15 minutes
+                </div>
+                <div class="overview-item">
+                    <strong>Format:</strong> 7 Parts, 52 Questions
+                </div>
+                <div class="overview-item">
+                    <strong>Weight:</strong> 40% of total B2 score
+                </div>
+                <div class="overview-item">
+                    <strong>Total Marks:</strong> 70
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'part1')">Part 1</button>
+            <button class="tab-button" onclick="openTab(event, 'part2')">Part 2</button>
+            <button class="tab-button" onclick="openTab(event, 'part3')">Part 3</button>
+            <button class="tab-button" onclick="openTab(event, 'part4')">Part 4</button>
+            <button class="tab-button" onclick="openTab(event, 'part5')">Part 5</button>
+            <button class="tab-button" onclick="openTab(event, 'part6')">Part 6</button>
+            <button class="tab-button" onclick="openTab(event, 'part7')">Part 7</button>
+        </div>
+
+        <!-- PART 1 -->
+        <div id="part1" class="tab-content" style="display: block;">
+            <h2>Part 1: Multiple-Choice Cloze</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Read the text below and choose the best word (A, B, C, or D) for each gap.</li>
+                    <li><strong>Focus:</strong> Vocabulary, collocations, phrasal verbs, fixed phrases.</li>
+                    <li><strong>Questions:</strong> 8 | <span class="badge">1 mark each (Total: 8)</span></li>
+                </ul>
+            </div>
+
+            <div class="reading-text">
+                <h3>The Secrets of Coffee</h3>
+                <p>
+                    Coffee is one of the most popular hot beverages in the world, enjoyed by millions daily. The drink 
+                    <strong>(1)</strong> ________ in Ethiopia, where local legends say a goat shepherd first noticed its energizing 
+                    effects. By the 15th century, coffee had grown in <strong>(2)</strong> ________ across the Arabian Peninsula. 
+                    Today, scientists agree that drinking coffee in moderation can have a positive <strong>(3)</strong> ________ 
+                    on alertness and focus. Furthermore, the coffee industry has <strong>(4)</strong> ________ dramatically over 
+                    the past few decades, introducing specialty cafes to almost every major city. 
+                    <strong>(5)</strong> ________ coffee is widely consumed, experts warn against drinking it too late in the evening. 
+                    Quality heavily <strong>(6)</strong> ________ on the origin of the beans and how they are roasted. Many roasters 
+                    strive to <strong>(7)</strong> ________ a balance between bitterness and acidity, ultimately 
+                    <strong>(8)</strong> ________ coffee preparation a refined art form.
+                </p>
+            </div>
+
+            <div class="question-block">
+                <p><strong>1.</strong> 
+                    <select id="p1_1">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) originated</option>
+                        <option value="B">B) invented</option>
+                        <option value="C">C) formed</option>
+                        <option value="D">D) arrived</option>
+                    </select>
+                </p>
+                <p><strong>2.</strong> 
+                    <select id="p1_2">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) favor</option>
+                        <option value="B">B) reputation</option>
+                        <option value="C">C) popularity</option>
+                        <option value="D">D) acceptance</option>
+                    </select>
+                </p>
+                <p><strong>3.</strong> 
+                    <select id="p1_3">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) effect</option>
+                        <option value="B">B) affect</option>
+                        <option value="C">C) result</option>
+                        <option value="D">D) outcome</option>
+                    </select>
+                </p>
+                <p><strong>4.</strong> 
+                    <select id="p1_4">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) widened</option>
+                        <option value="B">B) expanded</option>
+                        <option value="C">C) stretched</option>
+                        <option value="D">D) lengthened</option>
+                    </select>
+                </p>
+                <p><strong>5.</strong> 
+                    <select id="p1_5">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) Despite</option>
+                        <option value="B">B) Although</option>
+                        <option value="C">C) However</option>
+                        <option value="D">D) In spite</option>
+                    </select>
+                </p>
+                <p><strong>6.</strong> 
+                    <select id="p1_6">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) counts</option>
+                        <option value="B">B) relies</option>
+                        <option value="C">C) insists</option>
+                        <option value="D">D) depends</option>
+                    </select>
+                </p>
+                <p><strong>7.</strong> 
+                    <select id="p1_7">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) achieve</option>
+                        <option value="B">B) complete</option>
+                        <option value="C">C) succeed</option>
+                        <option value="D">D) fulfill</option>
+                    </select>
+                </p>
+                <p><strong>8.</strong> 
+                    <select id="p1_8">
+                        <option value="">-- Choose option --</option>
+                        <option value="A">A) doing</option>
+                        <option value="B">B) turning</option>
+                        <option value="C">C) making</option>
+                        <option value="D">D) building</option>
+                    </select>
+                </p>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(1, 8)">Check Part 1 Answers</button>
+            <div id="score_p1" class="score-box"></div>
+        </div>
+
+        <!-- PART 2 -->
+        <div id="part2" class="tab-content">
+            <h2>Part 2: Open Cloze</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Read the text and fill in each gap with <strong>ONE word only</strong>.</li>
+                    <li><strong>Focus:</strong> Grammar (articles, prepositions, auxiliary verbs, linkers, pronouns).</li>
+                    <li><strong>Questions:</strong> 8 | <span class="badge">1 mark each (Total: 8)</span></li>
+                </ul>
+            </div>
+
+            <div class="reading-text">
+                <h3>Learning a New Language</h3>
+                <p>
+                    Many adults believe that mastering a foreign language is too difficult, 
+                    <strong>(9)</strong> <input type="text" id="p2_9" class="inline-gap" placeholder="gap 9"> 
+                    is why many give up before trying. However, researchers point out that age is not as big a barrier 
+                    <strong>(10)</strong> <input type="text" id="p2_10" class="inline-gap" placeholder="gap 10"> 
+                    people commonly think. The key factor is consistency; studying for twenty minutes every day is far 
+                    <strong>(11)</strong> <input type="text" id="p2_11" class="inline-gap" placeholder="gap 11"> 
+                    effective than spending three hours once a week. In addition 
+                    <strong>(12)</strong> <input type="text" id="p2_12" class="inline-gap" placeholder="gap 12"> 
+                    regular practice, immersing yourself in authentic media like movies or podcasts helps enormously. 
+                    Instead <strong>(13)</strong> <input type="text" id="p2_13" class="inline-gap" placeholder="gap 13"> 
+                    focusing solely on complex grammar rules, learners should focus on practical communication. 
+                    Do not be afraid <strong>(14)</strong> <input type="text" id="p2_14" class="inline-gap" placeholder="gap 14"> 
+                    making mistakes, as they are <strong>(15)</strong> <input type="text" id="p2_15" class="inline-gap" placeholder="gap 15"> 
+                    unavoidable step towards fluency. If you keep practicing, you will eventually succeed in reaching 
+                    <strong>(16)</strong> <input type="text" id="p2_16" class="inline-gap" placeholder="gap 16"> 
+                    goals.
+                </p>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(2, 8)">Check Part 2 Answers</button>
+            <div id="score_p2" class="score-box"></div>
+        </div>
+
+        <!-- PART 3 -->
+        <div id="part3" class="tab-content">
+            <h2>Part 3: Word Formation</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Change the word given in <strong>CAPITALS</strong> at the end of each line to form a word that fits in the gap.</li>
+                    <li><strong>Focus:</strong> Prefixes, suffixes, noun/adjective/verb/adverb transformations.</li>
+                    <li><strong>Questions:</strong> 8 | <span class="badge">1 mark each (Total: 8)</span></li>
+                </ul>
+            </div>
+
+            <div class="reading-text">
+                <h3>An Unforgettable Cave Exploration</h3>
+                <p>
+                    A team of experienced <strong>(17)</strong> <input type="text" id="p3_17" class="inline-gap"> <span class="word-prompt">[SCIENCE]</span> 
+                    recently completed an expedition into an unexplored cave system. Their journey was filled with 
+                    <strong>(18)</strong> <input type="text" id="p3_18" class="inline-gap"> <span class="word-prompt">[EXPECT]</span> 
+                    challenges, including flooded passageways and low visibility. However, they made an 
+                    <strong>(19)</strong> <input type="text" id="p3_19" class="inline-gap"> <span class="word-prompt">[IMPRESS]</span> 
+                    discovery: ancient wall paintings preserved in complete darkness. The local community has shown great 
+                    <strong>(20)</strong> <input type="text" id="p3_20" class="inline-gap"> <span class="word-prompt">[ENTHUSIASM]</span> 
+                    about protecting the area. Experts emphasize the importance of 
+                    <strong>(21)</strong> <input type="text" id="p3_21" class="inline-gap"> <span class="word-prompt">[ENVIRONMENT]</span> 
+                    conservation to prevent damage. Authorities have reached an 
+                    <strong>(22)</strong> <input type="text" id="p3_22" class="inline-gap"> <span class="word-prompt">[AGREE]</span> 
+                    to restrict tourist access, as uncontrolled entry could be extremely 
+                    <strong>(23)</strong> <input type="text" id="p3_23" class="inline-gap"> <span class="word-prompt">[HARM]</span>. 
+                    This landmark discovery will <strong>(24)</strong> <input type="text" id="p3_24" class="inline-gap"> <span class="word-prompt">[CERTAIN]</span> 
+                    attract historical researchers for decades to come.
+                </p>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(3, 8)">Check Part 3 Answers</button>
+            <div id="score_p3" class="score-box"></div>
+        </div>
+
+        <!-- PART 4 -->
+        <div id="part4" class="tab-content">
+            <h2>Part 4: Key Word Transformations</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Complete the second sentence so that it has a similar meaning to the first sentence, using the <strong>KEY WORD</strong>.</li>
+                    <li>Do <strong>NOT</strong> change the key word. You must use between <strong>2 and 5 words</strong>, including the key word.</li>
+                    <li><strong>Questions:</strong> 6 | <span class="badge">Up to 2 marks each (Total: 12)</span></li>
+                </ul>
+            </div>
+
+            <div class="question-block">
+                <div class="transformation-item">
+                    <p><strong>25.</strong> "I didn't break the kitchen window," said Mark.</p>
+                    <p><strong>DENIED</strong></p>
+                    <p>Mark <input type="text" id="p4_25" placeholder="type your answer here"> the kitchen window.</p>
+                </div>
+
+                <div class="transformation-item">
+                    <p><strong>26.</strong> The heavy rain forced the organizers to cancel the match.</p>
+                    <p><strong>CALL</strong></p>
+                    <p>The organizers had to <input type="text" id="p4_26" placeholder="type your answer here"> because of the heavy rain.</p>
+                </div>
+
+                <div class="transformation-item">
+                    <p><strong>27.</strong> I haven't seen Sarah for three years.</p>
+                    <p><strong>LAST</strong></p>
+                    <p>It has been three years <input type="text" id="p4_27" placeholder="type your answer here"> Sarah.</p>
+                </div>
+
+                <div class="transformation-item">
+                    <p><strong>28.</strong> You are not allowed to smoke inside the building.</p>
+                    <p><strong>MUST</strong></p>
+                    <p>You <input type="text" id="p4_28" placeholder="type your answer here"> inside the building.</p>
+                </div>
+
+                <div class="transformation-item">
+                    <p><strong>29.</strong> "Why don't we order a pizza tonight?" suggested Alex.</p>
+                    <p><strong>GOING</strong></p>
+                    <p>Alex <input type="text" id="p4_29" placeholder="type your answer here"> pizza that night.</p>
+                </div>
+
+                <div class="transformation-item">
+                    <p><strong>30.</strong> I am certain that Jake didn't leave his keys on the train.</p>
+                    <p><strong>HAVE</strong></p>
+                    <p>Jake <input type="text" id="p4_30" placeholder="type your answer here"> his keys on the train.</p>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(4, 12)">Check Part 4 Answers</button>
+            <div id="score_p4" class="score-box"></div>
+        </div>
+
+        <!-- PART 5 -->
+        <div id="part5" class="tab-content">
+            <h2>Part 5: Multiple Choice</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Read the article and choose the correct answer (A, B, C, or D) based on the text.</li>
+                    <li><strong>Focus:</strong> Detailed understanding, opinions, tone, attitude, text structure.</li>
+                    <li><strong>Questions:</strong> 6 | <span class="badge">2 marks each (Total: 12)</span></li>
+                </ul>
+            </div>
+
+            <div class="reading-text">
+                <h3>A Life in Wildlife Photography</h3>
+                <p>
+                    When I first decided to abandon my secure corporate job to pursue wildlife photography, my family thought I was making a disastrous mistake. I had a steady income, a clear path to promotion, and comfortable routine. Yet every weekend, I found myself driving out to remote forest reserves, camera in hand, waiting hours in freezing temperatures just to photograph a rare owl or deer. The decision to leap into full-time freelancing was not impulsive—it took eighteen months of careful financial planning—but it was the best risk I ever took.
+                </p>
+                <p>
+                    People often assume that being a wildlife photographer is endlessly glamorous. They imagine exotic travel, dramatic animal encounters, and peaceful days in nature. In reality, it involves endless patience, physical exhaustion, and frequent disappointment. On one expedition to Alaska, I spent twelve consecutive days sitting in a cramped canvas tent waiting for grizzly bears to appear near a river. When they finally showed up, a dense fog rolled in, making high-quality photography nearly impossible.
+                </p>
+                <p>
+                    Despite these challenges, moments of pure magic make the hardship worthwhile. Capturing a fleeting interaction—a mother leopard grooming her cub or an eagle diving for fish—requires an intuitive understanding of animal behavior. You cannot predict nature, but by studying your subjects meticulously, you begin to anticipate their movements seconds before they happen. That split second where technical skill and natural beauty align is where real art is created.
+                </p>
+            </div>
+
+            <div class="question-block">
+                <p><strong>31. How did the writer's family react to his career change?</strong></p>
+                <select id="p5_31">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) They encouraged him to take risks.</option>
+                    <option value="B">B) They believed it was a terrible decision.</option>
+                    <option value="C">C) They helped him plan his finances.</option>
+                    <option value="D">D) They were indifferent to his choice.</option>
+                </select>
+
+                <p style="margin-top:15px;"><strong>32. What does the writer emphasize about his decision to quit his job?</strong></p>
+                <select id="p5_32">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) It was made suddenly without much thought.</option>
+                    <option value="B">B) It was forced upon him by office circumstances.</option>
+                    <option value="C">C) It was thoroughly prepared in advance.</option>
+                    <option value="D">D) It immediately generated a higher income.</option>
+                </select>
+
+                <p style="margin-top:15px;"><strong>33. In the second paragraph, what misconception does the writer address?</strong></p>
+                <select id="p5_33">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) That photographers don't earn much money.</option>
+                    <option value="B">B) That wildlife photography is easy and romantic.</option>
+                    <option value="C">C) That equipment is overly expensive.</option>
+                    <option value="D">D) That animals are dangerous to photograph.</option>
+                </select>
+
+                <p style="margin-top:15px;"><strong>34. What problem did the writer encounter during his trip to Alaska?</strong></p>
+                <select id="p5_34">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) Bears attacked his camping tent.</option>
+                    <option value="B">B) Poor weather ruined his shooting conditions.</option>
+                    <option value="C">C) His photographic gear was damaged.</option>
+                    <option value="D">D) The bears failed to show up completely.</option>
+                </select>
+
+                <p style="margin-top:15px;"><strong>35. According to the writer, great wildlife photos depend mostly on:</strong></p>
+                <select id="p5_35">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) Buying the most expensive camera lenses.</option>
+                    <option value="B">B) Luck and favorable weather conditions.</option>
+                    <option value="C">C) Understanding animal behavior to predict actions.</option>
+                    <option value="D">D) Travelling to uncharted territories.</option>
+                </select>
+
+                <p style="margin-top:15px;"><strong>36. What is the writer's overall tone towards his profession?</strong></p>
+                <select id="p5_36">
+                    <option value="">-- Choose option --</option>
+                    <option value="A">A) Passionate despite the difficulties.</option>
+                    <option value="B">B) Regretful about lost financial security.</option>
+                    <option value="C">C) Frustrated by modern technical demands.</option>
+                    <option value="D">D) Critical of other wildlife photographers.</option>
+                </select>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(5, 12)">Check Part 5 Answers</button>
+            <div id="score_p5" class="score-box"></div>
+        </div>
+
+        <!-- PART 6 -->
+        <div id="part6" class="tab-content">
+            <h2>Part 6: Gapped Text</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Read the text with missing sentences. Choose the correct sentence (A–G) for each gap (37–42). There is <strong>one extra sentence</strong>.</li>
+                    <li><strong>Focus:</strong> Text structure, cohesive devices, logical flow.</li>
+                    <li><strong>Questions:</strong> 6 | <span class="badge">2 marks each (Total: 12)</span></li>
+                </ul>
+            </div>
+
+            <div class="reading-text">
+                <h3>The Rise of Community Gardens</h3>
+                <p>
+                    In modern cities, concrete skyscrapers and asphalt roads often seem to dominate the landscape. However, a quiet green revolution is taking root in urban neighborhoods worldwide. 
+                    <strong>[37]</strong> <select id="p6_37" class="inline-gap"></select> 
+                    These spaces, known as community gardens, allow city residents to cultivate vegetables, flowers, and herbs together.
+                </p>
+                <p>
+                    The benefits of these gardens extend far beyond harvesting fresh produce. For many urban residents, urban gardening provides a welcome escape from screen time and daily stress. 
+                    <strong>[38]</strong> <select id="p6_38" class="inline-gap"></select> 
+                    Working in the soil has been scientifically proven to lower anxiety and boost physical well-being.
+                </p>
+                <p>
+                    Furthermore, community gardens foster a strong sense of neighborhood connection. In large metropolitan areas, people often live near each other for years without ever speaking. 
+                    <strong>[39]</strong> <select id="p6_39" class="inline-gap"></select> 
+                    Gardening projects break down these social barriers as volunteers share tools, advice, and harvests.
+                </p>
+                <p>
+                    Local governments have also started recognizing the environmental advantages of urban greenery. 
+                    <strong>[40]</strong> <select id="p6_40" class="inline-gap"></select> 
+                    Plants absorb rainwater, reducing local flood risks during heavy storms.
+                </p>
+                <p>
+                    Setting up a community garden is not without challenges, however. Securing suitable land in dense cities can be extremely difficult and expensive. 
+                    <strong>[41]</strong> <select id="p6_41" class="inline-gap"></select> 
+                    Despite these obstacles, passionate community organizers continue to transform vacant lots into vibrant green spaces.
+                </p>
+                <p>
+                    Looking ahead, urban agriculture seems destined to play a crucial role in future city development. 
+                    <strong>[42]</strong> <select id="p6_42" class="inline-gap"></select> 
+                    It serves as a powerful reminder that human beings thrive best when connected to nature and to one another.
+                </p>
+            </div>
+
+            <div class="question-block">
+                <h4>Sentence Options:</h4>
+                <p><strong>A.</strong> They help reduce urban heat by replacing dark asphalt with foliage.</p>
+                <p><strong>B.</strong> Shared gardening gives neighbours a common purpose and an easy conversation starter.</p>
+                <p><strong>C.</strong> Abandoned parking lots and empty roofs are being converted into lively gardens.</p>
+                <p><strong>D.</strong> Supermarkets are now buying more produce from these small local growers.</p>
+                <p><strong>E.</strong> It offers physical exercise while reconnecting people with natural cycles.</p>
+                <p><strong>F.</strong> Soil contamination also requires expensive testing before planting can begin.</p>
+                <p><strong>G.</strong> As cities continue growing, green sanctuaries like these become ever more vital.</p>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(6, 12)">Check Part 6 Answers</button>
+            <div id="score_p6" class="score-box"></div>
+        </div>
+
+        <!-- PART 7 -->
+        <div id="part7" class="tab-content">
+            <h2>Part 7: Multiple Matching</h2>
+            <div class="exam-info">
+                <h3>Task Guide</h3>
+                <ul>
+                    <li>Read the four reviews of young entrepreneurs (A–D). Match each question (43–52) to the correct person.</li>
+                    <li><strong>Focus:</strong> Locating specific information, opinions, and detail.</li>
+                    <li><strong>Questions:</strong> 10 | <span class="badge">1 mark each (Total: 10)</span></li>
+                </ul>
+            </div>
+
+            <div class="matching-grid">
+                <div class="reading-text">
+                    <h4>A) Clara - Eco-Pack Solutions</h4>
+                    <p>
+                        Clara launched a biodegradable packaging company at age twenty after noticing how much plastic online retailers used. Initially, investors refused to take her seriously due to her age. However, after securing a small government grant, she developed a durable material made from seaweed. Today, her company supplies over fifty international eco-brands. Clara stresses that having a clear social mission kept her motivated when early sales were low.
+                    </p>
+
+                    <h4>B) David - CodeJunior App</h4>
+                    <p>
+                        David created a gamified app designed to teach young children computer programming skills. He came up with the idea while trying to tutor his younger brother. David admits he made several coding errors in the first version that led to negative early reviews. Rather than giving up, he actively listened to user feedback and overhauled the app design. Within a year, downloads skyrocketed worldwide.
+                    </p>
+                </div>
+
+                <div class="reading-text">
+                    <h4>C) Maya - Urban Cycle Delivery</h4>
+                    <p>
+                        Maya founded an zero-emission bicycle delivery service serving local bakeries and florists. She started with just one bicycle and an ambitious plan. Managing daily logistics proved far more complex than she anticipated, forcing her to hire an experienced operations manager early on. Maya believes that delegating tasks was the single best decision she made for her business's growth.
+                    </p>
+
+                    <h4>D) Liam - Vintage Thrift Online</h4>
+                    <p>
+                        Liam turned his teenage passion for vintage clothing into a thriving online marketplace. He sources second-hand fashion items, restores them, and sells them online. Liam notes that standing out required establishing a very distinct visual style on social media. Although managing inventory takes long hours, he loves being his own boss and controlling his schedule.
+                    </p>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <h4>Which person mentions...</h4>
+                <p><strong>43.</strong> admitting that a lack of experience caused initial product flaws? 
+                    <select id="p7_43" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>44.</strong> struggling to get financial backing due to youth? 
+                    <select id="p7_44" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>45.</strong> the benefit of handing over responsibilities to qualified staff? 
+                    <select id="p7_45" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>46.</strong> building an attractive visual brand presence on social media? 
+                    <select id="p7_46" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>47.</strong> deriving inspiration from a family member? 
+                    <select id="p7_47" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>48.</strong> holding onto values during slow business periods? 
+                    <select id="p7_48" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>49.</strong> enjoying independence and working hours flexibility? 
+                    <select id="p7_49" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>50.</strong> underestimated how complex daily operational tasks would be? 
+                    <select id="p7_50" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>51.</strong> using customer comments to improve product design? 
+                    <select id="p7_51" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+                <p><strong>52.</strong> creating eco-friendly alternatives to traditional packaging? 
+                    <select id="p7_52" class="inline-gap"><option value="">-Select-</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+                </p>
+            </div>
+
+            <button class="action-btn" onclick="checkAndDisplayPart(7, 10)">Check Part 7 Answers</button>
+            <div id="score_p7" class="score-box"></div>
+        </div>
+
+        <!-- Overall Score Display Section -->
+        <div class="overall-panel">
+            <h2>Complete the Exam?</h2>
+            <p>Click below to evaluate all 7 parts and see your final B2 First (FCE) estimated grade.</p>
+            <button class="overall-btn" onclick="calculateOverallScore()">Calculate Overall Score</button>
+            
+            <div id="overall_result" class="overall-result">
+                <span id="overall_score_text"></span>
+                <div class="overall-breakdown" id="overall_breakdown">
+                    <!-- Breakdown injected by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Populate options for Part 6 dropdowns dynamically
+        document.addEventListener("DOMContentLoaded", function() {
+            const part6Options = ["", "A", "B", "C", "D", "E", "F", "G"];
+            for (let i = 37; i <= 42; i++) {
+                const selectEl = document.getElementById("p6_" + i);
+                part6Options.forEach(opt => {
+                    const option = document.createElement("option");
+                    option.value = opt;
+                    option.text = opt === "" ? "-Select-" : opt;
+                    selectEl.appendChild(option);
+                });
+            }
+        });
+
+        // Tab Navigation Function
+        function openTab(evt, partName) {
+            let tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+
+            let tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            }
+
+            document.getElementById(partName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Helper function for individual score rendering
+        function displayScore(elementId, score, maxScore) {
+            const el = document.getElementById(elementId);
+            el.style.display = "block";
+            const percent = Math.round((score / maxScore) * 100);
+            if (percent >= 60) {
+                el.className = "score-box correct";
+                el.innerHTML = `Great job! Your Score: ${score} / ${maxScore} (${percent}% - B2 Pass Level)`;
+            } else {
+                el.className = "score-box incorrect";
+                el.innerHTML = `Score: ${score} / ${maxScore} (${percent}%). Review your answers and try again.`;
+            }
+        }
+
+        function checkAndDisplayPart(partNum, maxScore) {
+            const score = getScoreForPart(partNum);
+            displayScore("score_p" + partNum, score, maxScore);
+        }
+
+        // Core scoring functions (returns numerical score)
+        function getScoreForPart(part) {
+            let score = 0;
+            if (part === 1) {
+                const key = { p1_1: "A", p1_2: "C", p1_3: "A", p1_4: "B", p1_5: "B", p1_6: "D", p1_7: "A", p1_8: "C" };
+                for (let id in key) if (document.getElementById(id).value === key[id]) score++;
+            }
+            else if (part === 2) {
+                const key = {
+                    p2_9: ["which"], p2_10: ["as"], p2_11: ["more"], p2_12: ["to"],
+                    p2_13: ["of"], p2_14: ["of"], p2_15: ["an"], p2_16: ["your"]
+                };
+                for (let id in key) {
+                    const val = document.getElementById(id).value.trim().toLowerCase();
+                    if (key[id].includes(val)) score++;
+                }
+            }
+            else if (part === 3) {
+                const key = {
+                    p3_17: "scientists", p3_18: "unexpected", p3_19: "impressive", p3_20: "enthusiasm",
+                    p3_21: "environmental", p3_22: "agreement", p3_23: "harmful", p3_24: "certainly"
+                };
+                for (let id in key) {
+                    const val = document.getElementById(id).value.trim().toLowerCase();
+                    if (val === key[id]) score++;
+                }
+            }
+            else if (part === 4) {
+                const key = {
+                    p4_25: ["denied breaking", "denied having broken"],
+                    p4_26: ["call off the match", "call the match off"],
+                    p4_27: ["since i last saw", "since we last saw"],
+                    p4_28: ["must not smoke", "mustn't smoke"],
+                    p4_29: ["suggested going for a", "suggested getting a", "suggested ordering a"],
+                    p4_30: ["could not have left", "couldn't have left", "cannot have left", "can't have left"]
+                };
+                for (let id in key) {
+                    const val = document.getElementById(id).value.trim().toLowerCase();
+                    if (key[id].some(k => val.includes(k))) score += 2; 
+                }
+            }
+            else if (part === 5) {
+                const key = { p5_31: "B", p5_32: "C", p5_33: "B", p5_34: "B", p5_35: "C", p5_36: "A" };
+                for (let id in key) if (document.getElementById(id).value === key[id]) score += 2;
+            }
+            else if (part === 6) {
+                const key = { p6_37: "C", p6_38: "E", p6_39: "B", p6_40: "A", p6_41: "F", p6_42: "G" };
+                for (let id in key) if (document.getElementById(id).value === key[id]) score += 2;
+            }
+            else if (part === 7) {
+                const key = {
+                    p7_43: "B", p7_44: "A", p7_45: "C", p7_46: "D", p7_47: "B",
+                    p7_48: "A", p7_49: "D", p7_50: "C", p7_51: "B", p7_52: "A"
+                };
+                for (let id in key) if (document.getElementById(id).value === key[id]) score++;
+            }
+            return score;
+        }
+
+        // Calculate Overall Exam Score
+        function calculateOverallScore() {
+            const maxScores = [8, 8, 8, 12, 12, 12, 10];
+            const scores = [];
+            let totalScore = 0;
+            
+            for (let i = 1; i <= 7; i++) {
+                const s = getScoreForPart(i);
+                scores.push(s);
+                totalScore += s;
+            }
+
+            const totalMax = 70;
+            const percentage = Math.round((totalScore / totalMax) * 100);
+            
+            // Cambridge FCE grading logic (approximate for reading/UoE)
+            let gradeText = "";
+            let passClass = "";
+            if (percentage >= 80) { gradeText = "Grade A (Pass)"; passClass = "pass"; }
+            else if (percentage >= 73) { gradeText = "Grade B (Pass)"; passClass = "pass"; }
+            else if (percentage >= 60) { gradeText = "Grade C (Pass)"; passClass = "pass"; }
+            else if (percentage >= 45) { gradeText = "Level B1 (Narrow Fail)"; passClass = "fail"; }
+            else { gradeText = "Fail"; passClass = "fail"; }
+
+            // Display Results
+            const resultBox = document.getElementById("overall_result");
+            const scoreText = document.getElementById("overall_score_text");
+            const breakdownBox = document.getElementById("overall_breakdown");
+
+            resultBox.style.display = "block";
+            resultBox.className = "overall-result " + passClass;
+            
+            scoreText.innerHTML = `<strong>Total Score: ${totalScore} / ${totalMax}</strong> <br> 
+                                   Percentage: ${percentage}% &mdash; Estimated Result: <strong>${gradeText}</strong>`;
+            
+            // Create breakdown HTML
+            let breakdownHTML = "";
+            for (let i = 0; i < 7; i++) {
+                breakdownHTML += `<div class="breakdown-item">Part ${i+1}: <strong>${scores[i]}/${maxScores[i]}</strong></div>`;
+            }
+            breakdownBox.innerHTML = breakdownHTML;
+        }
+    </script>
+
+</body>
+</html>

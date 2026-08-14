@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <title>B2 Quest: The English Wilderness</title>
+    <style>
+        :root {
+            --dark-blue: #0A2463;
+            --white: #FFFFFF;
+            --grey: #F0F2F5;
+            --red: #D90429;
+            --green: #248232;
+            --yellow: #FFC300;
+            --text-color: #333333;
+            --hud-bg: #1a1a2e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--grey);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Gamification HUD */
+        #game-hud {
+            background-color: var(--hud-bg);
+            color: var(--white);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: 3px solid var(--yellow);
+        }
+
+        .hud-stats { display: flex; gap: 20px; }
+        .xp-text { color: var(--yellow); }
+        .badge-text { color: #4facf7; }
+
+        header {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-title { display: flex; align-items: center; gap: 15px; }
+
+        .tabs { display: flex; background-color: var(--white); overflow-x: auto; border-bottom: 2px solid var(--grey); }
+        .tab-btn {
+            background: none; border: none; padding: 15px 25px; font-size: 1rem;
+            font-weight: 600; color: var(--dark-blue); cursor: pointer;
+            border-bottom: 4px solid transparent; transition: all 0.3s ease; white-space: nowrap;
+        }
+        .tab-btn:hover:not(:disabled) { background-color: var(--grey); }
+        .tab-btn.active { border-bottom-color: var(--yellow); background-color: #f8f9fa; }
+        .tab-btn:disabled { color: #aaa; cursor: not-allowed; }
+
+        .container {
+            max-width: 1000px; margin: 30px auto; padding: 20px;
+            background-color: var(--white); border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .part-content { display: none; }
+        .part-content.active { display: block; animation: fadeIn 0.5s ease; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        h2 { color: var(--dark-blue); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        .instructions {
+            background-color: #e9ecef; border-left: 4px solid var(--dark-blue);
+            padding: 15px; margin-bottom: 25px; font-size: 0.95rem;
+        }
+
+        .question-block { margin-bottom: 25px; padding: 15px; border: 1px solid var(--grey); border-radius: 6px; }
+        .text-box { background-color: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid var(--yellow); }
+
+        /* Part 1 Betting Options */
+        .bet-container { margin-top: 10px; background: #e3f2fd; padding: 10px; border-radius: 5px; display: inline-block; }
+        .bet-input { width: 60px; padding: 5px; margin-left: 10px; border: 1px solid #ccc; border-radius: 4px; }
+
+        /* Part 2 & 3 Hospital Wounds */
+        .hospital-wound { border: 2px dashed var(--red) !important; background: #fff0f0; transition: all 0.4s; }
+        .hospital-healed { border: 2px solid var(--green) !important; background: #e8f5e9 !important; color: var(--green); font-weight: bold; }
+        .hospital-failed { border: 2px solid var(--red) !important; background: #ffebee !important; }
+
+        /* Escape Room Hidden Nodes */
+        .escape-node { display: none; padding: 15px; background: #fdfbf7; border: 1px dashed #d1c4e9; margin-bottom: 15px; border-radius: 8px; }
+        .escape-node.active-node { display: block; }
+        .unlock-msg { color: var(--green); font-weight: bold; font-size: 0.9rem; margin-top: 5px; }
+
+        /* Timer */
+        .quest-timer { font-size: 1.5rem; font-weight: bold; color: var(--red); float: right; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .option-label { display: block; padding: 10px; background-color: var(--grey); border-radius: 4px; cursor: pointer; }
+        .option-label:hover { background-color: #e2e4e8; }
+        input[type="radio"]:disabled + .option-label { cursor: not-allowed; opacity: 0.7; }
+        
+        input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        input[type="text"]:disabled { cursor: not-allowed; }
+
+        .submit-btn {
+            background-color: var(--green); color: var(--white); border: none;
+            padding: 12px 25px; font-size: 1.1rem; font-weight: bold;
+            border-radius: 4px; cursor: pointer; margin-top: 20px; display: block; width: 100%;
+        }
+        .submit-btn:hover:not(:disabled) { background-color: #1c6627; }
+        .submit-btn:disabled { background-color: #a5d6a7; cursor: not-allowed; }
+
+        .inline-gap { width: 60px !important; text-align: center; padding: 4px !important; margin: 0 5px; font-weight: bold; }
+        .small-gap { width: 40px !important; text-align: center; }
+        
+        /* Modals */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-content { background: var(--white); padding: 30px; border-radius: 8px; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; }
+        .modal-header { font-size: 1.5rem; color: var(--dark-blue); margin-bottom: 15px; border-bottom: 2px solid var(--grey); padding-bottom: 10px; font-weight: bold; }
+        .feedback-item { margin-bottom: 15px; padding: 15px; border-radius: 4px; }
+        .feedback-correct { background-color: #d4edda; border-left: 4px solid var(--green); }
+        .feedback-incorrect { background-color: #f8d7da; border-left: 4px solid var(--red); }
+        .explanation-item { margin-bottom: 10px; padding: 10px; font-size: 0.95rem; }
+        
+        .close-modal-btn {
+            background-color: var(--dark-blue); color: var(--white); border: none;
+            padding: 12px 20px; border-radius: 4px; cursor: pointer; margin-top: 20px; font-weight: bold; width: 100%; font-size: 1.1rem;
+        }
+        .close-modal-btn:hover { background-color: #061846; }
+    </style>
+</head>
+<body>
+
+<div id="game-hud">
+    <div class="hud-stats">
+        <span>🎮 The B2 Quest</span>
+        <span class="xp-text">XP: <span id="xp-display">500</span></span>
+        <span class="badge-text">Badges: <span id="badge-display">0</span></span>
+    </div>
+    <div class="header-images">
+        <img src="UK-128x128.png" alt="UK" width="60" onerror="this.style.display='none'">
+    </div>
+</div>
+
+<header>
+    <div class="header-title">
+        <h1>Reading and Use of English Practice</h1>
+    </div>
+    <div class="cefr-badge" style="background:var(--yellow); color:var(--dark-blue); padding:5px 12px; border-radius:20px; font-weight:bold;">B2 First</div>
+</header>
+
+<div class="tabs" id="tabContainer">
+    <button class="tab-btn active" onclick="switchTab(1)" id="btn-part1">Part 1: The Casino</button>
+    <button class="tab-btn" onclick="switchTab(2)" id="btn-part2" disabled>Part 2: Hospital</button>
+    <button class="tab-btn" onclick="switchTab(3)" id="btn-part3" disabled>Part 3: Diagnostics</button>
+    <button class="tab-btn" onclick="switchTab(4)" id="btn-part4" disabled>Part 4: Time Trial</button>
+    <button class="tab-btn" onclick="switchTab(5)" id="btn-part5" disabled>Part 5: Escape Room</button>
+    <button class="tab-btn" onclick="switchTab(6)" id="btn-part6" disabled>Part 6: Reconstruction</button>
+    <button class="tab-btn" onclick="switchTab(7)" id="btn-part7" disabled>Part 7: Finale</button>
+</div>
+
+<div class="container">
+    <div id="part1" class="part-content active">
+        <h2>Mission 1: Context Clue Betting</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> You have a starting budget of 500 XP. Place a wager (bet) on your answers. If correct, you double your bet. If wrong, you lose it!
+        </div>
+        <div class="text-box">
+            <p><strong>The Joy of Reading</strong></p>
+            <p>Many people find that reading a good book is a great way to <strong>(1)</strong> ______ after a long, stressful day at work. It allows them to escape into another world <strong>(2)</strong> ______. Studies show that people who read regularly <strong>(3)</strong> ______ from improved memory and focus. In <strong>(4)</strong> ______ to fully immerse yourself in a story, it is best to find a quiet space. This helps you to <strong>(5)</strong> ______ on the narrative without distractions. <strong>(6)</strong> ______ the rise of digital entertainment, traditional books still hold a strong appeal. The physical <strong>(7)</strong> ______ of turning pages is something many cherish. Incorporating reading into your daily <strong>(8)</strong> ______ can drastically improve your mental well-being.</p>
+        </div>
+        <div id="p1-questions"></div>
+        <button class="submit-btn" id="submit-p1" onclick="submitPart1Betting()">Lock in Bets (Submit)</button>
+    </div>
+
+    <div id="part2" class="part-content">
+        <h2>Mission 2: Grammar Hospital</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> You are the surgeon. The text below is "wounded" with missing prepositions and articles. Diagnose and heal the text.
+        </div>
+        <div class="text-box">
+            <p><strong>A Trip to Berlin</strong></p>
+            <p>Last year, I decided to travel to Germany. I had never been there <strong>(1)</strong> <input type="text" id="p2q1" class="inline-gap hospital-wound">, so I was very excited to explore <strong>(2)</strong> <input type="text" id="p2q2" class="inline-gap hospital-wound"> historical streets of Berlin. I arrived <strong>(3)</strong> <input type="text" id="p2q3" class="inline-gap hospital-wound"> a Tuesday morning and immediately visited the Brandenburg Gate, <strong>(4)</strong> <input type="text" id="p2q4" class="inline-gap hospital-wound"> is one of the most famous landmarks. There were hundreds <strong>(5)</strong> <input type="text" id="p2q5" class="inline-gap hospital-wound"> tourists taking photos. Later, I worked <strong>(6)</strong> <input type="text" id="p2q6" class="inline-gap hospital-wound"> a volunteer at a local festival. I found it very easy <strong>(7)</strong> <input type="text" id="p2q7" class="inline-gap hospital-wound"> make friends. The trip was <strong>(8)</strong> <input type="text" id="p2q8" class="inline-gap hospital-wound"> memorable than I could have ever imagined.</p>
+        </div>
+        <button class="submit-btn" id="submit-p2" onclick="submitHospital(2)">Heal Text (Submit)</button>
+    </div>
+
+    <div id="part3" class="part-content">
+        <h2>Mission 3: Word Formation Hospital</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> Continue your surgical shift. Form the correct words to heal the broken sentences.
+        </div>
+        <div class="question-block">
+            <p><strong>A Career in Medicine</strong></p>
+            <p style="margin-bottom:10px;">1. Becoming a doctor requires years of study and complete <input type="text" id="p3q1" class="hospital-wound">. <strong>(DEDICATE)</strong></p>
+            <p style="margin-bottom:10px;">2. It is a profession that comes with immense <input type="text" id="p3q2" class="hospital-wound">. <strong>(RESPONSIBLE)</strong></p>
+            <p style="margin-bottom:10px;">3. The training is highly <input type="text" id="p3q3" class="hospital-wound"> and requires focus. <strong>(INTENSE)</strong></p>
+            <p style="margin-bottom:10px;">4. <input type="text" id="p3q4" class="hospital-wound">, not all students complete the course. <strong>(FORTUNATE)</strong></p>
+            <p style="margin-bottom:10px;">5. The hospital environment can be incredibly <input type="text" id="p3q5" class="hospital-wound"> at times. <strong>(STRESS)</strong></p>
+            <p style="margin-bottom:10px;">6. Doctors must be capable of making quick <input type="text" id="p3q6" class="hospital-wound">. <strong>(DECIDE)</strong></p>
+            <p style="margin-bottom:10px;">7. They also need excellent <input type="text" id="p3q7" class="hospital-wound"> skills to communicate. <strong>(PERSON)</strong></p>
+            <p style="margin-bottom:10px;">8. Despite the challenges, the <input type="text" id="p3q8" class="hospital-wound"> of helping others is huge. <strong>(SATISFY)</strong></p>
+        </div>
+        <button class="submit-btn" id="submit-p3" onclick="submitHospital(3)">Heal Text (Submit)</button>
+    </div>
+
+    <div id="part4" class="part-content">
+        <h2>Mission 4: Sentence Building Blocks <span class="quest-timer" id="timer-display">04:00</span></h2>
+        <div class="instructions">
+            <strong>Quest:</strong> You have exactly 3 minutes to reconstruct these sentences. Work fast!
+        </div>
+        <div class="question-block" id="p4-container"></div>
+        <button class="submit-btn" id="submit-p4" onclick="submitStandard(4)">Stop the Clock (Submit)</button>
+    </div>
+
+    <div id="part5" class="part-content">
+        <h2>Mission 5: The Escape Room</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> The doors are locked. You must correctly answer a question to uncover the code for the next room. Read carefully.
+        </div>
+        <div class="text-box">
+            <p><strong>The Digital Age and Us</strong></p>
+            <p>While the transition to digital documents has improved accessibility, some researchers argue it has negatively impacted our attention spans. They claim that scrolling through screens encourages skimming rather than deep, focused reading. (Q1, Q2) Furthermore, the constant barrage of notifications interrupts cognitive flow, making it harder to retain complex information (Q3). However, proponents argue that digital literacy is an evolution of learning, allowing rapid cross-referencing (Q4). Young people today multitask seamlessly, which might just be a different cognitive skill rather than a deficit (Q5). Yet, psychologists warn that replacing physical interaction with screens affects emotional development (Q6). Ultimately, the debate hinges on moderation (Q7). The key is balancing screen time with physical reality (Q8).</p>
+        </div>
+        <div id="p5-questions"></div>
+    </div>
+
+    <div id="part6" class="part-content">
+        <h2>Mission 6: Text Reconstruction Race</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> The paragraphs have been scrambled. Reconstruct the document logically.
+        </div>
+        <div class="text-box">
+            <p><strong>Exploring the Canadian Wilderness</strong></p>
+            <p>The Canadian Rockies offer some of the most breathtaking landscapes in the world. <strong>(1)</strong> <input type="text" id="p6q1" class="small-gap" maxlength="1">. Wildlife is abundant. <strong>(2)</strong> <input type="text" id="p6q2" class="small-gap" maxlength="1">. It is highly recommended to travel with a guide. <strong>(3)</strong> <input type="text" id="p6q3" class="small-gap" maxlength="1">. This ensures safety and a better understanding of the ecosystem. The weather can change rapidly. <strong>(4)</strong> <input type="text" id="p6q4" class="small-gap" maxlength="1">. Visitors should always pack layers. Banff National Park is the most famous destination. <strong>(5)</strong> <input type="text" id="p6q5" class="small-gap" maxlength="1">. However, Jasper National Park is less crowded and equally stunning. <strong>(6)</strong> <input type="text" id="p6q6" class="small-gap" maxlength="1">. Photography enthusiasts will find endless inspiration here. <strong>(7)</strong> <input type="text" id="p6q7" class="small-gap" maxlength="1">. Finally, respecting the local environment is crucial. <strong>(8)</strong> <input type="text" id="p6q8" class="small-gap" maxlength="1">. Leave no trace behind.</p>
+        </div>
+        <div class="question-block" style="background: var(--grey);" id="p6-options"></div>
+        <button class="submit-btn" id="submit-p6" onclick="submitStandard(6)">Submit Blueprint</button>
+    </div>
+
+    <div id="part7" class="part-content">
+        <h2>Mission 7: Final Matching</h2>
+        <div class="instructions">
+            <strong>Quest:</strong> Final challenge. Map the reviewers to their opinions.
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div style="flex:1; background: #fff; padding: 15px; border: 1px solid #ccc;">
+                <strong>A) Sarah</strong><br>Opting for the hot chocolate seemed like a sensible choice given the freezing temperatures outside. Although it was incredibly rich and comforting, making it ideal for the bitter winter weather, it was certainly a beverage to be savored slowly. However, I must admit it was rather overpriced.
+            </div>
+            <div style="flex:1; background: #fff; padding: 15px; border: 1px solid #ccc;">
+                <strong>B) Mark</strong><br>At first glance, the tropical mocktail appeared quite unconventional, but a single sip entirely altered my perspective. Not only was it remarkably refreshing, but it also completely rejuvenated me following a strenuous walk. Furthermore, it turned out to be surprisingly reasonably priced.
+            </div>
+            <div style="flex:1; background: #fff; padding: 15px; border: 1px solid #ccc;">
+                <strong>C) Chloe</strong><br>The espresso possessed a robust and bitter flavor profile, which is precisely what I rely on to kickstart my daily morning routine. Nevertheless, the atmosphere in the café was far too chaotic and deafening for me to focus adequately on my book.
+            </div>
+            <div style="flex:1; background: #fff; padding: 15px; border: 1px solid #ccc;">
+                <strong>D) James</strong><br>I decided to sample their signature iced tea, which unfortunately proved to be excessively sweet and distinctly lacking in flavor. Consequently, I wouldn't highly recommend it; however, the delightfully snug and inviting ambiance of the establishment somewhat compensated for the disappointing beverage.
+            </div>
+        </div>
+        <div class="question-block" id="p7-container"></div>
+        <button class="submit-btn" id="submit-p7" onclick="submitStandard(7)">Complete Quest!</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="resultsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modalTitle">Mission Results</span>
+        </div>
+        <div id="modalBody"></div>
+        <button class="close-modal-btn" id="btn-next-action">Continue Quest</button>
+    </div>
+</div>
+
+<script>
+    // System Variables
+    let userXP = 500;
+    let userBadges = 0;
+    let timerInterval;
+
+    function updateHUD() {
+        document.getElementById('xp-display').innerText = userXP;
+        document.getElementById('badge-display').innerText = userBadges;
+    }
+
+    function shuffleArray(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    // Exam Data Engine with Explanations
+    const examData = {
+        1: { 
+            answers: { 'p1q1': 'A', 'p1q2': 'B', 'p1q3': 'C', 'p1q4': 'A', 'p1q5': 'D', 'p1q6': 'B', 'p1q7': 'C', 'p1q8': 'A' },
+            explanations: {
+                'p1q1': "'Unwind' is the correct verb meaning to relax after a period of stress.",
+                'p1q2': "'Completely' is the adverb that collocates with 'escape' in this context.",
+                'p1q3': "You 'benefit from' something. Profit, gain, and earn do not take the preposition 'from' here.",
+                'p1q4': "'In order to' is a standard fixed phrase used to express purpose.",
+                'p1q5': "You 'focus on' a subject. Target, aim, and point take different prepositions.",
+                'p1q6': "'Despite' is followed by a noun phrase ('the rise of...'). 'Although' requires a subject and a verb.",
+                'p1q7': "'Physical act' is a strong, natural English collocation.",
+                'p1q8': "'Daily routine' refers to your standard, everyday schedule."
+            }
+        },
+        2: { 
+            answers: { 'p2q1': ['before'], 'p2q2': ['the'], 'p2q3': ['on'], 'p2q4': ['which'], 'p2q5': ['of'], 'p2q6': ['as'], 'p2q7': ['to'], 'p2q8': ['more'] },
+            explanations: {
+                'p2q1': "'Before' fits perfectly with 'had never been there', creating the timeline.",
+                'p2q2': "'The' is needed because 'historical streets of Berlin' specifies exactly which streets.",
+                'p2q3': "We always use the preposition 'on' with days of the week (e.g., 'on a Tuesday morning').",
+                'p2q4': "'Which' is the correct relative pronoun for things (the Brandenburg Gate).",
+                'p2q5': "'Hundreds of' is the correct expression for large, indefinite quantities.",
+                'p2q6': "You work 'as' a volunteer, expressing the role or job you take on.",
+                'p2q7': "The adjective structure is 'easy + to + infinitive' (easy to make).",
+                'p2q8': "This is a comparative sentence structure: 'more [adjective] than'."
+            }
+        },
+        3: { 
+            answers: { 'p3q1': ['dedication'], 'p3q2': ['responsibility'], 'p3q3': ['intensive'], 'p3q4': ['unfortunately'], 'p3q5': ['stressful'], 'p3q6': ['decisions'], 'p3q7': ['interpersonal', 'personal'], 'p3q8': ['satisfaction'] },
+            explanations: {
+                'p3q1': "The noun form of DEDICATE is 'dedication'.",
+                'p3q2': "The noun form of RESPONSIBLE is 'responsibility'.",
+                'p3q3': "The adjective form describing the training is 'intensive' (or intense).",
+                'p3q4': "An adverb is needed at the start of the sentence, and the negative context requires 'unfortunately'.",
+                'p3q5': "The adjective form of STRESS is 'stressful'.",
+                'p3q6': "The plural noun form of DECIDE is 'decisions' (you make decisions).",
+                'p3q7': "The adjective modifying skills is 'interpersonal' (or 'personal').",
+                'p3q8': "The noun form of SATISFY is 'satisfaction'."
+            }
+        },
+        4: { 
+            answers: { 'p4q1': ['such a boring film'], 'p4q2': ['in spite of the'], 'p4q3': ['unless you study'], 'p4q4': ['wish i had gone'], 'p4q5': ['looking forward to seeing'], 'p4q6': ['is used to waking'], 'p4q7': ['would rather not go'], 'p4q8': ['in case it rains'] },
+            explanations: {
+                'p4q1': "so + adjective + that -> such + a/an + adjective + noun + that.",
+                'p4q2': "Although + clause -> in spite of + noun phrase (the heavy rain).",
+                'p4q3': "If you don't -> unless you (meaning 'if not').",
+                'p4q4': "Regret + gerund (past) -> wish + past perfect (I had gone).",
+                'p4q5': "Can't wait to + infinitive -> look forward to + gerund (seeing).",
+                'p4q6': "Finds it normal -> is used to + gerund (waking).",
+                'p4q7': "Would prefer not to -> would rather not + bare infinitive (go).",
+                'p4q8': "Because it might -> in case it."
+            }
+        },
+        5: { 
+            answers: { 'p5q1': 'B', 'p5q2': 'A', 'p5q3': 'B', 'p5q4': 'C', 'p5q5': 'B', 'p5q6': 'B', 'p5q7': 'A', 'p5q8': 'C' },
+            explanations: {
+                'p5q1': "The text states researchers claim it encourages skimming rather than deep reading (B).",
+                'p5q2': "The text explicitly says scrolling encourages 'skimming' (A).",
+                'p5q3': "The text states the barrage of notifications 'interrupts cognitive flow' (B).",
+                'p5q4': "Proponents argue it is an evolution allowing 'rapid cross-referencing' (C).",
+                'p5q5': "The text notes it might just be a 'different cognitive skill rather than a deficit' (B).",
+                'p5q6': "Psychologists warn it affects 'emotional development' (B).",
+                'p5q7': "The text says 'Ultimately, the debate hinges on moderation' (A).",
+                'p5q8': "The conclusion is balancing 'screen time with physical reality' (C)."
+            }
+        },
+        6: { 
+            answers: { 'p6q1': ['b'], 'p6q2': ['d'], 'p6q3': ['a'], 'p6q4': ['g'], 'p6q5': ['b'], 'p6q6': ['i'], 'p6q7': ['f'], 'p6q8': ['c'] },
+            explanations: {
+                'p6q1': "Sentence B connects with 'famous destination' logic regarding tourism.",
+                'p6q2': "Sentence D explicitly links to the previous mention of 'abundant wildlife' (spotting a bear).",
+                'p6q3': "Sentence A links 'travel with a guide' because guides 'know the terrain perfectly'.",
+                'p6q4': "Sentence G connects to 'weather can change rapidly' (sunny morning turning to snowy afternoon).",
+                'p6q5': "Sentence B is actually the best fit after 'Banff is the most famous destination' because 'It receives millions...'.",
+                'p6q6': "Sentence I links with Jasper being uncrowded and having natural benefits like 'dark skies... stargazing'.",
+                'p6q7': "Sentence F links directly to 'Photography enthusiasts' mentioning the 'golden hour lighting'.",
+                'p6q8': "Sentence C concludes the environmental message perfectly: 'protect this pristine nature'."
+            }
+        },
+        7: { 
+            answers: { 'p7q1': ['b'], 'p7q2': ['a'], 'p7q3': ['c'], 'p7q4': ['d'], 'p7q5': ['b'], 'p7q6': ['d'], 'p7q7': ['c'], 'p7q8': ['a'] },
+            explanations: {
+                'p7q1': "Mark (B) states it was 'remarkably refreshing'.",
+                'p7q2': "Sarah (A) states it was 'rather overpriced'.",
+                'p7q3': "Chloe (C) states the café was 'far too chaotic and deafening'.",
+                'p7q4': "James (D) states his drink was 'excessively sweet and distinctly lacking in flavor'.",
+                'p7q5': "Mark (B) states it was 'surprisingly reasonably priced'.",
+                'p7q6': "James (D) states the 'inviting ambiance... compensated for the disappointing beverage'.",
+                'p7q7': "Chloe (C) relies on it to 'kickstart my daily morning routine'.",
+                'p7q8': "Sarah (A) chose it given the 'freezing temperatures' and 'bitter winter weather'."
+            }
+        }
+    };
+
+    // --- Generation & Randomization ---
+    
+    // Part 1
+    let p1Options = [
+        {q: 1, opts: ['A) unwind', 'B) undo', 'C) untie', 'D) unwrap']},
+        {q: 2, opts: ['A) largely', 'B) completely', 'C) strongly', 'D) strictly']},
+        {q: 3, opts: ['A) profit', 'B) gain', 'C) benefit', 'D) earn']},
+        {q: 4, opts: ['A) order', 'B) case', 'C) chance', 'D) hope']},
+        {q: 5, opts: ['A) target', 'B) aim', 'C) point', 'D) focus']},
+        {q: 6, opts: ['A) Although', 'B) Despite', 'C) However', 'D) Unless']},
+        {q: 7, opts: ['A) touch', 'B) handle', 'C) act', 'D) grab']},
+        {q: 8, opts: ['A) routine', 'B) custom', 'C) trend', 'D) system']}
+    ];
+    let p1HTML = '';
+    p1Options.forEach(item => {
+        let shuffledOpts = shuffleArray([...item.opts]);
+        p1HTML += `<div style="margin-bottom: 15px;"><strong>Question ${item.q}:</strong><div class="options-grid">`;
+        shuffledOpts.forEach(opt => {
+            let val = opt.charAt(0);
+            p1HTML += `<label><input type="radio" name="p1q${item.q}" value="${val}"> ${opt}</label>`;
+        });
+        p1HTML += `</div><div class="bet-container">Bet XP: <input type="number" id="bet-p1q${item.q}" class="bet-input" value="10" min="5" max="100"></div></div>`;
+    });
+    document.getElementById('p1-questions').innerHTML = p1HTML;
+
+    // Part 4
+    let p4Questions = [
+        {q: 1, text: "The film was so boring that I fell asleep.", word: "SUCH", prompt: "It was ... that I fell asleep."},
+        {q: 2, text: "Although it was raining heavily, we went out.", word: "SPITE", prompt: "We went out ... heavy rain."},
+        {q: 3, text: "You won't pass the exam if you don't study hard.", word: "UNLESS", prompt: "You won't pass the exam ... hard."},
+        {q: 4, text: "I regret not going to the party last night.", word: "WISH", prompt: "I ... to the party last night."},
+        {q: 5, text: "I can't wait to see you next week.", word: "FORWARD", prompt: "I am ... you next week."},
+        {q: 6, text: "He finds it normal to wake up early.", word: "USED", prompt: "He ... up early."},
+        {q: 7, text: "I would prefer not to go to the cinema tonight.", word: "RATHER", prompt: "I ... to the cinema tonight."},
+        {q: 8, text: "Take an umbrella because it might rain.", word: "CASE", prompt: "Take an umbrella ..."}
+    ];
+    shuffleArray(p4Questions);
+    let p4HTML = '';
+    p4Questions.forEach(item => {
+        let parts = item.prompt.split('...');
+        p4HTML += `<div style="margin-bottom:15px;"><p>${item.q}. ${item.text} <br><strong>${item.word}</strong></p>
+        <p>${parts[0]} <input type="text" id="p4q${item.q}" style="width: 200px;"> ${parts[1]}</p></div>`;
+    });
+    document.getElementById('p4-container').innerHTML = p4HTML;
+
+    // Part 5 - Escape Room Generation
+    let p5Options = [
+        {q: 1, text: "What is the researchers' main concern about digital documents?", opts: ['A) They are hard to access.', 'B) They cause superficial reading.', 'C) They cost more.', 'D) They hurt eyesight.']},
+        {q: 2, text: "What does scrolling encourage according to the text?", opts: ['A) Skimming', 'B) Deep focus', 'C) Better memory', 'D) Analytical thinking']},
+        {q: 3, text: "How do notifications affect readers?", opts: ['A) They help multitasking.', 'B) They interrupt cognitive flow.', 'C) They speed up reading.', 'D) They have no effect.']},
+        {q: 4, text: "Proponents argue that digital literacy:", opts: ['A) Is a waste of time', 'B) Reduces intelligence', 'C) Allows rapid cross-referencing', 'D) Is too complex']},
+        {q: 5, text: "How is young people's multitasking viewed by some?", opts: ['A) As a severe deficit', 'B) As a different cognitive skill', 'C) As a myth', 'D) As a sign of genius']},
+        {q: 6, text: "Psychologists warn that replacing physical interaction with screens:", opts: ['A) Improves social skills', 'B) Affects emotional development', 'C) Builds confidence', 'D) Is completely harmless']},
+        {q: 7, text: "The debate ultimately hinges on:", opts: ['A) Moderation', 'B) Banning technology', 'C) Buying new devices', 'D) Ignoring research']},
+        {q: 8, text: "What is the key conclusion of the text?", opts: ['A) Read only books', 'B) Stop using screens', 'C) Balance screen time with reality', 'D) Embrace full digital immersion']}
+    ];
+    let p5HTML = '';
+    p5Options.forEach((item, index) => {
+        let isFirst = index === 0 ? "active-node" : "";
+        p5HTML += `<div class="escape-node ${isFirst}" id="node-p5q${item.q}">
+            <strong>${item.q}. ${item.text}</strong><div class="options-grid">`;
+        item.opts.forEach(opt => {
+            let val = opt.charAt(0);
+            p5HTML += `<label><input type="radio" name="p5q${item.q}" value="${val}" onchange="checkEscapeRoom(${item.q})"> ${opt}</label>`;
+        });
+        p5HTML += `</div><div id="unlock-msg-${item.q}" class="unlock-msg"></div></div>`;
+    });
+    document.getElementById('p5-questions').innerHTML = p5HTML + `<button class="submit-btn" id="submit-p5" onclick="submitStandard(5)" style="display:none;">Escape! (Submit)</button>`;
+
+    // Part 6 - Scramble
+    let p6Paragraphs = [
+        "<p>A. They know the terrain perfectly.</p>", "<p>B. It receives millions of tourists every summer.</p>",
+        "<p>C. We must protect this pristine nature for future generations.</p>", "<p>D. You might even spot a bear if you are lucky.</p>",
+        "<p>E. Hiking through these mountains provides a profound sense of peace.</p>", "<p>F. The golden hour at sunset provides the best lighting.</p>",
+        "<p>G. A sunny morning can quickly turn into a snowy afternoon.</p>", "<p>H. The currency used there is the Canadian dollar.</p>",
+        "<p>I. The dark skies there offer incredible stargazing opportunities at night.</p>"
+    ];
+    document.getElementById('p6-options').innerHTML = shuffleArray(p6Paragraphs).join('');
+
+    // Part 7
+    let p7Questions = [
+        "1. ...found the drink unexpectedly refreshing? ", "2. ...complains about the price? ", "3. ...mentions the venue was loud? ",
+        "4. ...did not enjoy the taste of their drink? ", "5. ...drank something highly affordable? ", "6. ...liked the ambiance despite a bad drink? ",
+        "7. ...uses this drink as a morning routine? ", "8. ...found the drink suitable for cold weather? "
+    ];
+    shuffleArray(p7Questions);
+    let p7HTML = '<strong>Which reviewer mentions...</strong><br><br>';
+    p7Questions.forEach((q) => {
+        let num = q.charAt(0);
+        p7HTML += `<p>${q} <input type="text" id="p7q${num}" maxlength="1" class="small-gap"></p>`;
+    });
+    document.getElementById('p7-container').innerHTML = p7HTML;
+
+
+    // --- Game Logic ---
+
+    function switchTab(partNum) {
+        document.querySelectorAll('.part-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('part' + partNum).classList.add('active');
+        document.getElementById('btn-part' + partNum).classList.add('active');
+
+        if(partNum === 4) {
+            startTimer(240);
+        } else {
+            clearInterval(timerInterval);
+        }
+    }
+
+    function startTimer(duration) {
+        let timer = duration, minutes, seconds;
+        let display = document.getElementById('timer-display');
+        clearInterval(timerInterval);
+        timerInterval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+            if (--timer < 0) {
+                clearInterval(timerInterval);
+                display.textContent = "TIME UP!";
+                submitStandard(4);
+            }
+        }, 1000);
+    }
+
+    function checkEscapeRoom(qNum) {
+        const correctAns = examData[5].answers[`p5q${qNum}`];
+        const checked = document.querySelector(`input[name="p5q${qNum}"]:checked`);
+        if (checked && checked.value === correctAns) {
+            document.getElementById(`unlock-msg-${qNum}`).innerText = "Code accepted! Door unlocked.";
+            userXP += 15;
+            updateHUD();
+            
+            let nextNode = document.getElementById(`node-p5q${qNum + 1}`);
+            if(nextNode) {
+                nextNode.classList.add('active-node');
+            } else {
+                document.getElementById('submit-p5').style.display = 'block';
+                userBadges++;
+                updateHUD();
+            }
+        } else {
+            document.getElementById(`unlock-msg-${qNum}`).innerText = "Security alert: Incorrect code.";
+            document.getElementById(`unlock-msg-${qNum}`).style.color = "var(--red)";
+            userXP -= 5;
+            updateHUD();
+        }
+    }
+
+    // Submits
+    function submitPart1Betting() {
+        let feedbackHTML = '';
+        let explanationsHTML = '';
+        let partData = examData[1].answers;
+        let correctCount = 0;
+
+        for (let i = 1; i <= 8; i++) {
+            let qId = `p1q${i}`;
+            let correctAns = partData[qId];
+            let checked = document.querySelector(`input[name="${qId}"]:checked`);
+            let userAns = checked ? checked.value : null;
+            
+            let betInput = document.getElementById(`bet-${qId}`);
+            let bet = betInput ? (parseInt(betInput.value) || 0) : 0;
+            if (betInput) betInput.disabled = true;
+
+            if (userAns === correctAns) {
+                userXP += bet;
+                correctCount++;
+                feedbackHTML += `<div class="feedback-item feedback-correct">Q${i}: Correct! Won ${bet} XP.</div>`;
+            } else {
+                userXP -= bet;
+                feedbackHTML += `<div class="feedback-item feedback-incorrect">Q${i}: Incorrect. Lost ${bet} XP.</div>`;
+                explanationsHTML += `<li class="explanation-item"><strong>Q${i}:</strong> ${examData[1].explanations[qId]}</li>`;
+            }
+        }
+        
+        if(correctCount >= 6) { userBadges++; }
+        triggerResultsModal(1, feedbackHTML, explanationsHTML);
+    }
+
+    function submitHospital(partNum) {
+        let partData = examData[partNum].answers;
+        let correctCount = 0;
+        let explanationsHTML = '';
+        
+        for (const [qId, correctAns] of Object.entries(partData)) {
+            let inputEl = document.getElementById(qId);
+            if (inputEl) {
+                let userAns = inputEl.value.trim().toLowerCase();
+                inputEl.disabled = true;
+                
+                if (correctAns.includes(userAns) && userAns !== "") {
+                    inputEl.classList.remove('hospital-wound');
+                    inputEl.classList.add('hospital-healed');
+                    userXP += 20;
+                    correctCount++;
+                } else {
+                    inputEl.classList.remove('hospital-wound');
+                    inputEl.classList.add('hospital-failed');
+                    let qNumber = qId.replace(`p${partNum}q`, '');
+                    explanationsHTML += `<li class="explanation-item"><strong>Q${qNumber}:</strong> ${examData[partNum].explanations[qId]}</li>`;
+                }
+            }
+        }
+
+        if(correctCount === 8) { userBadges++; }
+        let msg = `<div class="feedback-item feedback-correct">Surgery Complete! You successfully healed ${correctCount}/8 text wounds. Total XP: ${userXP}</div>`;
+        triggerResultsModal(partNum, msg, explanationsHTML);
+    }
+
+    function submitStandard(partNum) {
+        let partData = examData[partNum].answers;
+        let correctCount = 0;
+        let explanationsHTML = '';
+        
+        for (const [qId, correctAns] of Object.entries(partData)) {
+            let userAns = '';
+            let isCorrect = false;
+            
+            if (partNum === 5) { 
+                let checked = document.querySelector(`input[name="${qId}"]:checked`);
+                userAns = checked ? checked.value : '';
+                isCorrect = (userAns === correctAns);
+            } else { 
+                let inputEl = document.getElementById(qId);
+                if (inputEl) {
+                    userAns = inputEl.value.trim().toLowerCase();
+                    inputEl.disabled = true;
+                    isCorrect = Array.isArray(correctAns) ? correctAns.includes(userAns) : correctAns === userAns;
+                }
+            }
+
+            if(isCorrect) {
+                correctCount++;
+                userXP += (partNum === 4 || partNum === 5 || partNum === 6) ? 30 : 20;
+            } else {
+                let qNumber = qId.replace(`p${partNum}q`, '');
+                explanationsHTML += `<li class="explanation-item"><strong>Q${qNumber}:</strong> ${examData[partNum].explanations[qId]}</li>`;
+            }
+        }
+
+        if(correctCount >= 6) { userBadges++; }
+        let msg = `<div class="feedback-item feedback-correct">Mission ${partNum} Complete! Score: ${correctCount}/8.</div>`;
+        triggerResultsModal(partNum, msg, explanationsHTML);
+    }
+
+    // Core Logic: Combines HTML and Explanations into a SINGLE window per part
+    function triggerResultsModal(partNum, html, explanations) {
+        updateHUD();
+        document.getElementById('submit-p' + partNum).disabled = true;
+        
+        // 1. Set the Title dynamically based on the part
+        document.getElementById('modalTitle').innerHTML = `Mission ${partNum} Report`;
+        
+        // 2. Build the body content
+        let fullContent = html;
+        
+        // 3. If there are errors, append the explanation section directly into the body
+        if (explanations !== '') {
+            fullContent += `
+            <div style="background-color: #fff3cd; border-left: 4px solid var(--yellow); padding: 20px; margin-top: 20px; border-radius: 4px;">
+                <h3 style="color: #856404; margin-bottom: 10px;">Review your mistakes:</h3>
+                <ul style="padding-left: 20px; margin: 0; color: #333;">
+                    ${explanations}
+                </ul>
+            </div>`;
+        } else {
+            // Perfect Score message
+            fullContent += `
+            <div style="background-color: #d4edda; border-left: 4px solid var(--green); padding: 15px; margin-top: 20px; border-radius: 4px; font-weight: bold; color: var(--green);">
+                Flawless victory! No mistakes to review.
+            </div>`;
+        }
+
+        document.getElementById('modalBody').innerHTML = fullContent;
+        
+        // 4. Handle Button Navigation
+        const nextActionBtn = document.getElementById('btn-next-action');
+        if (partNum < 7) {
+            nextActionBtn.innerHTML = "Continue Quest";
+            nextActionBtn.onclick = function() {
+                document.getElementById('resultsModal').style.display = 'none';
+                document.getElementById('btn-part' + (partNum + 1)).disabled = false;
+                switchTab(partNum + 1);
+            };
+        } else {
+            nextActionBtn.innerHTML = "Finish Quest";
+            nextActionBtn.onclick = function() {
+                document.getElementById('resultsModal').style.display = 'none';
+                triggerVictoryScreen();
+            };
+        }
+
+        // 5. Show the unified modal
+        document.getElementById('resultsModal').style.display = 'flex';
+    }
+
+    function triggerVictoryScreen() {
+        document.getElementById('modalTitle').innerHTML = `Quest Complete!`;
+        document.getElementById('modalBody').innerHTML = `
+            <h3 style="text-align:center; color: var(--dark-blue); margin-bottom: 20px;">Congratulations!</h3>
+            <p style="text-align:center; font-size: 1.2rem;">Total XP Earned: <strong>${userXP}</strong></p>
+            <p style="text-align:center; font-size: 1.2rem; color: #4facf7;">Badges Unlocked: <strong>${userBadges}</strong></p>
+        `;
+        const nextBtn = document.getElementById('btn-next-action');
+        nextBtn.innerHTML = "Close";
+        nextBtn.onclick = function() { document.getElementById('resultsModal').style.display = 'none'; };
+        document.getElementById('resultsModal').style.display = 'flex';
+    }
+</script>
+
+</body>
+</html>

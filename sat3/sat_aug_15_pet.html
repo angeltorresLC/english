@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <title>B1 Preliminary (PET) Reading Practice Exam</title>
+  <style>
+    :root {
+      --primary-blue: #0f2c59;
+      --secondary-blue: #183d73;
+      --accent-green: #2e7d32;
+      --accent-red: #c62828;
+      --accent-yellow: #fbc02d;
+      --bg-grey: #f4f6f9;
+      --card-grey: #ffffff;
+      --border-grey: #dcdfe6;
+      --text-dark: #2c3e50;
+      --disabled-grey: #9e9e9e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-grey);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 5px solid var(--accent-yellow);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    /* Tabs Navigation */
+    .tabs-container {
+      background-color: var(--secondary-blue);
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 15px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-yellow);
+      color: var(--primary-blue);
+    }
+
+    .tab-btn:disabled {
+      color: var(--disabled-grey);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .lock-icon {
+      font-size: 0.8rem;
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    .part-content {
+      display: none;
+      background: var(--card-grey);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-top: 4px solid var(--primary-blue);
+    }
+
+    .part-content.active {
+      display: block;
+    }
+
+    .instructions {
+      background-color: #eef2f7;
+      padding: 15px;
+      border-left: 4px solid var(--primary-blue);
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+
+    .question-card {
+      background: white;
+      border: 1px solid var(--border-grey);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .question-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--primary-blue);
+    }
+
+    /* Part 1 Notice Styling */
+    .notice-box {
+      background-color: #fff9e6;
+      border: 2px dashed var(--accent-yellow);
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+
+    /* Options & Inputs */
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border: 1px solid var(--border-grey);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .option-label:hover {
+      background-color: #f8f9fa;
+    }
+
+    .option-label input[type="radio"] {
+      margin-right: 12px;
+      accent-color: var(--primary-blue);
+    }
+
+    .option-label.locked {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .input-text {
+      padding: 10px;
+      border: 1px solid var(--border-grey);
+      border-radius: 4px;
+      width: 200px;
+      font-size: 1rem;
+    }
+
+    .input-text:disabled {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+    }
+
+    /* Text Column Layouts */
+    .reading-text {
+      background: #fafafa;
+      padding: 15px;
+      border-left: 3px solid var(--primary-blue);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* Action Buttons */
+    .action-container {
+      margin-top: 30px;
+      text-align: right;
+    }
+
+    .btn-check {
+      background-color: var(--accent-green);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      display: none; /* Shown via JS when all questions in part are answered */
+      transition: background 0.3s;
+    }
+
+    .btn-check:hover {
+      background-color: #1b5e20;
+    }
+
+    /* Results Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 650px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border-top: 6px solid var(--primary-blue);
+    }
+
+    .modal-header {
+      font-size: 1.5rem;
+      color: var(--primary-blue);
+      margin-bottom: 15px;
+    }
+
+    .score-summary {
+      background-color: var(--bg-grey);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .score-summary span {
+      font-weight: bold;
+      color: var(--accent-green);
+    }
+
+    .explanation-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-grey);
+    }
+
+    .explanation-item strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .correct-text {
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    .wrong-text {
+      color: var(--accent-red);
+      font-weight: bold;
+    }
+
+    .btn-next {
+      background-color: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+      float: right;
+    }
+
+    /* Security Notice */
+    .security-banner {
+      background-color: var(--primary-blue);
+      color: white;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body class="notranslate">
+
+  <div class="security-banner">
+    Language: English (Official Exam Settings Enabled - Translation Restricted)
+  </div>
+
+  <header>
+    <h1>B1 Preliminary (PET) Reading Practice</h1>
+    <p>Interactive Exam Suite — Cambridge English Qualifications</p>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tabs-container">
+    <button class="tab-btn active" id="tab-1" onclick="switchTab(1)">Part 1</button>
+    <button class="tab-btn" id="tab-2" onclick="switchTab(2)" disabled><span class="lock-icon">🔒</span> Part 2</button>
+    <button class="tab-btn" id="tab-3" onclick="switchTab(3)" disabled><span class="lock-icon">🔒</span> Part 3</button>
+    <button class="tab-btn" id="tab-4" onclick="switchTab(4)" disabled><span class="lock-icon">🔒</span> Part 4</button>
+    <button class="tab-btn" id="tab-5" onclick="switchTab(5)" disabled><span class="lock-icon">🔒</span> Part 5</button>
+    <button class="tab-btn" id="tab-6" onclick="switchTab(6)" disabled><span class="lock-icon">🔒</span> Part 6</button>
+  </nav>
+
+  <main>
+    <!-- PART 1 -->
+    <section id="part-1" class="part-content active">
+      <div class="instructions">
+        <h2>Part 1: Multiple Choice</h2>
+        <p>Read five real-world notices or messages. Choose the correct option (A, B, or C) for each question.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Question 1</h3>
+        <div class="notice-box">
+          LIBRARY NOTICE:<br>Please return all books to the front desk before exiting. Do not leave them on the study tables.
+        </div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p1_q1" value="A" onclick="registerAnswer(1, 1)"> A) You must take your books to the desk when you leave.</label>
+          <label class="option-label"><input type="radio" name="p1_q1" value="B" onclick="registerAnswer(1, 1)"> B) You should leave books on study tables after reading.</label>
+          <label class="option-label"><input type="radio" name="p1_q1" value="C" onclick="registerAnswer(1, 1)"> C) Only return books if you are borrowing them today.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Question 2</h3>
+        <div class="notice-box">
+          HI SAM, Can you pick up some milk on your way home? The fridge is completely empty. - Sarah
+        </div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p1_q2" value="A" onclick="registerAnswer(1, 2)"> A) Sarah wants Sam to buy milk before he arrives home.</label>
+          <label class="option-label"><input type="radio" name="p1_q2" value="B" onclick="registerAnswer(1, 2)"> B) Sarah is telling Sam she already bought milk.</label>
+          <label class="option-label"><input type="radio" name="p1_q2" value="C" onclick="registerAnswer(1, 2)"> C) Sam is asking Sarah to go to the store.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Question 3</h3>
+        <div class="notice-box">
+          SWIMMING POOL:<br>Lockers are for daily use only. Key deposit £2, refunded on departure.
+        </div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p1_q3" value="A" onclick="registerAnswer(1, 3)"> A) You can rent a locker permanently for £2.</label>
+          <label class="option-label"><input type="radio" name="p1_q3" value="B" onclick="registerAnswer(1, 3)"> B) You will get your £2 back when you return the key.</label>
+          <label class="option-label"><input type="radio" name="p1_q3" value="C" onclick="registerAnswer(1, 3)"> C) Lockers are free of charge at all times.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Question 4</h3>
+        <div class="notice-box">
+          FOOTBALL PRACTICE:<br>Cancelled today due to heavy rain. Rescheduled for Thursday at 4 PM.
+        </div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p1_q4" value="A" onclick="registerAnswer(1, 4)"> A) Practice will happen today despite the rain.</label>
+          <label class="option-label"><input type="radio" name="p1_q4" value="B" onclick="registerAnswer(1, 4)"> B) Thursday's practice has been moved to today.</label>
+          <label class="option-label"><input type="radio" name="p1_q4" value="C" onclick="registerAnswer(1, 4)"> C) Today's session is moved to Thursday afternoon.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Question 5</h3>
+        <div class="notice-box">
+          CAFE DISCOUNT:<br>Show your student ID card to receive 15% off all hot drinks!
+        </div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p1_q5" value="A" onclick="registerAnswer(1, 5)"> A) All customers get 15% off hot drinks.</label>
+          <label class="option-label"><input type="radio" name="p1_q5" value="B" onclick="registerAnswer(1, 5)"> B) Students can pay less for hot drinks with proof of ID.</label>
+          <label class="option-label"><input type="radio" name="p1_q5" value="C" onclick="registerAnswer(1, 5)"> C) Student ID cards are on sale at the cafe.</label>
+        </div>
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-1" class="btn-check" onclick="checkAnswers(1)">Check Answers (Part 1)</button>
+      </div>
+    </section>
+
+    <!-- PART 2 -->
+    <section id="part-2" class="part-content">
+      <div class="instructions">
+        <h2>Part 2: Matching</h2>
+        <p>Match the five people to the correct options (A-H). Select the best matching text letter for each person.</p>
+      </div>
+
+      <div class="reading-text">
+        <h4>Available Courses:</h4>
+        <p><strong>A) Beginners Photography:</strong> Learn basic camera controls in an outdoor natural setting.</p>
+        <p><strong>B) Advanced Digital Art:</strong> Computer software drawing techniques for experienced artists.</p>
+        <p><strong>C) Creative Writing Workshop:</strong> Story design for adults with evening availability.</p>
+        <p><strong>D) Weekend Painting Class:</strong> Watercolors for complete beginners indoors.</p>
+        <p><strong>E) Youth Acting Club:</strong> Drama and theater basics for teenagers on Saturdays.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Question 6: Elena wants an evening course to learn how to write fictional stories.</h3>
+        <select id="p2_q1" class="input-text" onchange="registerAnswer(2, 1)">
+          <option value="">Select option...</option>
+          <option value="A">Course A</option>
+          <option value="B">Course B</option>
+          <option value="C">Course C</option>
+          <option value="D">Course D</option>
+          <option value="E">Course E</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Question 7: Marco is 15 years old and wants to learn performance and drama on weekends.</h3>
+        <select id="p2_q2" class="input-text" onchange="registerAnswer(2, 2)">
+          <option value="">Select option...</option>
+          <option value="A">Course A</option>
+          <option value="B">Course B</option>
+          <option value="C">Course C</option>
+          <option value="D">Course D</option>
+          <option value="E">Course E</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Question 8: Sarah has a new camera and wants to practice basic outdoor photography skills.</h3>
+        <select id="p2_q3" class="input-text" onchange="registerAnswer(2, 3)">
+          <option value="">Select option...</option>
+          <option value="A">Course A</option>
+          <option value="B">Course B</option>
+          <option value="C">Course C</option>
+          <option value="D">Course D</option>
+          <option value="E">Course E</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Question 9: David wants to start painting indoors during the weekend and has no prior experience.</h3>
+        <select id="p2_q4" class="input-text" onchange="registerAnswer(2, 4)">
+          <option value="">Select option...</option>
+          <option value="A">Course A</option>
+          <option value="B">Course B</option>
+          <option value="C">Course C</option>
+          <option value="D">Course D</option>
+          <option value="E">Course E</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Question 10: Chloe is an experienced illustrator who wants to learn digital software tools.</h3>
+        <select id="p2_q5" class="input-text" onchange="registerAnswer(2, 5)">
+          <option value="">Select option...</option>
+          <option value="A">Course A</option>
+          <option value="B">Course B</option>
+          <option value="C">Course C</option>
+          <option value="D">Course D</option>
+          <option value="E">Course E</option>
+        </select>
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-2" class="btn-check" onclick="checkAnswers(2)">Check Answers (Part 2)</button>
+      </div>
+    </section>
+
+    <!-- PART 3 -->
+    <section id="part-3" class="part-content">
+      <div class="instructions">
+        <h2>Part 3: Multiple Choice (Longer Text)</h2>
+        <p>Read the text below and answer the 5 questions with the correct option (A, B, C, or D).</p>
+      </div>
+
+      <div class="reading-text">
+        <h3>My Experience Learning to Surf</h3>
+        <p>Last summer, I decided to try surfing in Cornwall. I’ve always been a confident swimmer, so I assumed standing up on a surfboard would be simple. However, during my first lesson, I spent most of the time falling into cold water! My instructor, Mark, was very patient and taught me how to read the ocean waves. By the third day, I finally managed to stay upright for ten seconds. It was exhausting, but extremely rewarding.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Question 11: What was the writer's initial expectation about surfing?</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p3_q1" value="A" onclick="registerAnswer(3, 1)"> A) It would be too difficult to learn.</label>
+          <label class="option-label"><input type="radio" name="p3_q1" value="B" onclick="registerAnswer(3, 1)"> B) It would be easy because he could swim well.</label>
+          <label class="option-label"><input type="radio" name="p3_q1" value="C" onclick="registerAnswer(3, 1)"> C) The water would be warmer.</label>
+          <label class="option-label"><input type="radio" name="p3_q1" value="D" onclick="registerAnswer(3, 1)"> D) He would need a better instructor.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Question 12: How did the writer feel during his first lesson?</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p3_q2" value="A" onclick="registerAnswer(3, 2)"> A) He kept falling into the water.</label>
+          <label class="option-label"><input type="radio" name="p3_q2" value="B" onclick="registerAnswer(3, 2)"> B) He mastered standing up immediately.</label>
+          <label class="option-label"><input type="radio" name="p3_q2" value="C" onclick="registerAnswer(3, 2)"> C) He became angry with his instructor.</label>
+          <label class="option-label"><input type="radio" name="p3_q2" value="D" onclick="registerAnswer(3, 2)"> D) He decided to quit surfing.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Question 13: How is Mark described by the writer?</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p3_q3" value="A" onclick="registerAnswer(3, 3)"> A) Strict and fast-paced.</label>
+          <label class="option-label"><input type="radio" name="p3_q3" value="B" onclick="registerAnswer(3, 3)"> B) Patient and helpful.</label>
+          <label class="option-label"><input type="radio" name="p3_q3" value="C" onclick="registerAnswer(3, 3)"> C) Easily frustrated.</label>
+          <label class="option-label"><input type="radio" name="p3_q3" value="D" onclick="registerAnswer(3, 3)"> D) Unprofessional.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Question 14: What happened on the third day?</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p3_q4" value="A" onclick="registerAnswer(3, 4)"> A) The writer gave up completely.</label>
+          <label class="option-label"><input type="radio" name="p3_q4" value="B" onclick="registerAnswer(3, 4)"> B) The writer stood up on the board briefly.</label>
+          <label class="option-label"><input type="radio" name="p3_q4" value="C" onclick="registerAnswer(3, 4)"> C) The lesson was cancelled due to bad weather.</label>
+          <label class="option-label"><input type="radio" name="p3_q4" value="D" onclick="registerAnswer(3, 4)"> D) The writer won a surfing competition.</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Question 15: What is the overall tone of the text?</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p3_q5" value="A" onclick="registerAnswer(3, 5)"> A) Disappointed by the experience.</label>
+          <label class="option-label"><input type="radio" name="p3_q5" value="B" onclick="registerAnswer(3, 5)"> B) Satisfied despite the challenge.</label>
+          <label class="option-label"><input type="radio" name="p3_q5" value="C" onclick="registerAnswer(3, 5)"> C) Anxious about future lessons.</label>
+          <label class="option-label"><input type="radio" name="p3_q5" value="D" onclick="registerAnswer(3, 5)"> D) Bored by the lack of activity.</label>
+        </div>
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-3" class="btn-check" onclick="checkAnswers(3)">Check Answers (Part 3)</button>
+      </div>
+    </section>
+
+    <!-- PART 4 -->
+    <section id="part-4" class="part-content">
+      <div class="instructions">
+        <h2>Part 4: Gapped Text</h2>
+        <p>Read the text below with 5 missing sentences. Choose the correct sentence (A-E) for each gap.</p>
+      </div>
+
+      <div class="reading-text">
+        <p>A Night at the Museum</p>
+        <p>Last month, I had the unique opportunity to stay overnight at the Natural History Museum. [ Gap 16 ]. When we arrived, we set up our sleeping bags right under the giant blue whale skeleton. [ Gap 17 ]. After dark, we took a torchlight tour of the dinosaur exhibits. [ Gap 18 ]. It was slightly scary, but fascinating! Later, we watched an educational movie before going to sleep. [ Gap 19 ]. The next morning, we had breakfast before the doors opened to the public. [ Gap 20 ]. It was an experience I will never forget.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Gap 16</h3>
+        <select id="p4_q1" class="input-text" onchange="registerAnswer(4, 1)">
+          <option value="">Select sentence...</option>
+          <option value="A">A) I went with my school class and two teachers.</option>
+          <option value="B">B) It felt amazing to look up at such a massive display.</option>
+          <option value="C">C) The shadows made the ancient bones look alive.</option>
+          <option value="D">D) Waking up in such a huge, quiet building felt surreal.</option>
+          <option value="E">E) We bought souvenirs before leaving for home.</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Gap 17</h3>
+        <select id="p4_q2" class="input-text" onchange="registerAnswer(4, 2)">
+          <option value="">Select sentence...</option>
+          <option value="A">A) I went with my school class and two teachers.</option>
+          <option value="B">B) It felt amazing to look up at such a massive display.</option>
+          <option value="C">C) The shadows made the ancient bones look alive.</option>
+          <option value="D">D) Waking up in such a huge, quiet building felt surreal.</option>
+          <option value="E">E) We bought souvenirs before leaving for home.</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Gap 18</h3>
+        <select id="p4_q3" class="input-text" onchange="registerAnswer(4, 3)">
+          <option value="">Select sentence...</option>
+          <option value="A">A) I went with my school class and two teachers.</option>
+          <option value="B">B) It felt amazing to look up at such a massive display.</option>
+          <option value="C">C) The shadows made the ancient bones look alive.</option>
+          <option value="D">D) Waking up in such a huge, quiet building felt surreal.</option>
+          <option value="E">E) We bought souvenirs before leaving for home.</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Gap 19</h3>
+        <select id="p4_q4" class="input-text" onchange="registerAnswer(4, 4)">
+          <option value="">Select sentence...</option>
+          <option value="A">A) I went with my school class and two teachers.</option>
+          <option value="B">B) It felt amazing to look up at such a massive display.</option>
+          <option value="C">C) The shadows made the ancient bones look alive.</option>
+          <option value="D">D) Waking up in such a huge, quiet building felt surreal.</option>
+          <option value="E">E) We bought souvenirs before leaving for home.</option>
+        </select>
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Gap 20</h3>
+        <select id="p4_q5" class="input-text" onchange="registerAnswer(4, 5)">
+          <option value="">Select sentence...</option>
+          <option value="A">A) I went with my school class and two teachers.</option>
+          <option value="B">B) It felt amazing to look up at such a massive display.</option>
+          <option value="C">C) The shadows made the ancient bones look alive.</option>
+          <option value="D">D) Waking up in such a huge, quiet building felt surreal.</option>
+          <option value="E">E) We bought souvenirs before leaving for home.</option>
+        </select>
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-4" class="btn-check" onclick="checkAnswers(4)">Check Answers (Part 4)</button>
+      </div>
+    </section>
+
+    <!-- PART 5 -->
+    <section id="part-5" class="part-content">
+      <div class="instructions">
+        <h2>Part 5: Multiple-Choice Cloze</h2>
+        <p>Choose the correct word (A, B, C, or D) for each of the 6 gaps.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Gap 21: Bicycles are a very popular (21) ______ of transport in many cities.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q1" value="A" onclick="registerAnswer(5, 1)"> A) means</label>
+          <label class="option-label"><input type="radio" name="p5_q1" value="B" onclick="registerAnswer(5, 1)"> B) track</label>
+          <label class="option-label"><input type="radio" name="p5_q1" value="C" onclick="registerAnswer(5, 1)"> C) route</label>
+          <label class="option-label"><input type="radio" name="p5_q1" value="D" onclick="registerAnswer(5, 1)"> D) system</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Gap 22: Riding a bike helps to (22) ______ air pollution.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q2" value="A" onclick="registerAnswer(5, 2)"> A) destroy</label>
+          <label class="option-label"><input type="radio" name="p5_q2" value="B" onclick="registerAnswer(5, 2)"> B) reduce</label>
+          <label class="option-label"><input type="radio" name="p5_q2" value="C" onclick="registerAnswer(5, 2)"> C) decline</label>
+          <label class="option-label"><input type="radio" name="p5_q2" value="D" onclick="registerAnswer(5, 2)"> D) drop</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Gap 23: It is also great for your health, as it (23) ______ exercise.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q3" value="A" onclick="registerAnswer(5, 3)"> A) provides</label>
+          <label class="option-label"><input type="radio" name="p5_q3" value="B" onclick="registerAnswer(5, 3)"> B) supports</label>
+          <label class="option-label"><input type="radio" name="p5_q3" value="C" onclick="registerAnswer(5, 3)"> C) presents</label>
+          <label class="option-label"><input type="radio" name="p5_q3" value="D" onclick="registerAnswer(5, 3)"> D) serves</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Gap 24: Many local councils have (24) ______ special bike lanes.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q4" value="A" onclick="registerAnswer(5, 4)"> A) built</label>
+          <label class="option-label"><input type="radio" name="p5_q4" value="B" onclick="registerAnswer(5, 4)"> B) invented</label>
+          <label class="option-label"><input type="radio" name="p5_q4" value="C" onclick="registerAnswer(5, 4)"> C) discovered</label>
+          <label class="option-label"><input type="radio" name="p5_q4" value="D" onclick="registerAnswer(5, 4)"> D) composed</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Gap 25: This makes cycling much (25) ______ for everyone.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q5" value="A" onclick="registerAnswer(5, 5)"> A) safer</label>
+          <label class="option-label"><input type="radio" name="p5_q5" value="B" onclick="registerAnswer(5, 5)"> B) strongest</label>
+          <label class="option-label"><input type="radio" name="p5_q5" value="C" onclick="registerAnswer(5, 5)"> C) secure</label>
+          <label class="option-label"><input type="radio" name="p5_q5" value="D" onclick="registerAnswer(5, 5)"> D) protected</label>
+        </div>
+      </div>
+
+      <div class="question-card" data-q="6">
+        <h3>Gap 26: People are encouraged to (26) ______ cycling to work.</h3>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="p5_q6" value="A" onclick="registerAnswer(5, 6)"> A) take up</label>
+          <label class="option-label"><input type="radio" name="p5_q6" value="B" onclick="registerAnswer(5, 6)"> B) get on</label>
+          <label class="option-label"><input type="radio" name="p5_q6" value="C" onclick="registerAnswer(5, 6)"> C) look after</label>
+          <label class="option-label"><input type="radio" name="p5_q6" value="D" onclick="registerAnswer(5, 6)"> D) turn into</label>
+        </div>
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-5" class="btn-check" onclick="checkAnswers(5)">Check Answers (Part 5)</button>
+      </div>
+    </section>
+
+    <!-- PART 6 -->
+    <section id="part-6" class="part-content">
+      <div class="instructions">
+        <h2>Part 6: Open Cloze</h2>
+        <p>Complete the 6 gaps with exactly ONE word for each gap. Type your answer and click Submit.</p>
+      </div>
+
+      <div class="question-card" data-q="1">
+        <h3>Gap 27: I have live in London ______ three years.</h3>
+        <input type="text" id="p6_q1" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 1)">
+      </div>
+
+      <div class="question-card" data-q="2">
+        <h3>Gap 28: It is one of ______ most exciting cities in the world.</h3>
+        <input type="text" id="p6_q2" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 2)">
+      </div>
+
+      <div class="question-card" data-q="3">
+        <h3>Gap 29: If you like history, you ______ visit the museums.</h3>
+        <input type="text" id="p6_q3" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 3)">
+      </div>
+
+      <div class="question-card" data-q="4">
+        <h3>Gap 30: There are many parks ______ you can relax on sunny days.</h3>
+        <input type="text" id="p6_q4" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 4)">
+      </div>
+
+      <div class="question-card" data-q="5">
+        <h3>Gap 31: My sister enjoys shopping ______ buying new clothes.</h3>
+        <input type="text" id="p6_q5" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 5)">
+      </div>
+
+      <div class="question-card" data-q="6">
+        <h3>Gap 32: I hope you will come and visit me ______ soon!</h3>
+        <input type="text" id="p6_q6" class="input-text" placeholder="Type one word..." oninput="registerAnswer(6, 6)">
+      </div>
+
+      <div class="action-container">
+        <button id="check-btn-6" class="btn-check" onclick="checkAnswers(6)">Check Answers (Part 6)</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for Explanations and Results -->
+  <div id="results-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">Part Performance & Feedback</div>
+      <div id="modal-score" class="score-summary"></div>
+      <div id="modal-explanations"></div>
+      <button id="modal-next-btn" class="btn-next" onclick="closeModalAndUnlockNext()">Continue to Next Part</button>
+    </div>
+  </div>
+
+  <script>
+    // System Answer Keys and Explanations Data
+    const examData = {
+      1: {
+        total: 5,
+        keys: { 1: "A", 2: "A", 3: "B", 4: "C", 5: "B" },
+        explanations: {
+          1: "Option A is correct. The notice states 'return all books to the front desk before exiting', which means you must return them when leaving.",
+          2: "Option A is correct. 'On your way home' means buying the milk before arriving.",
+          3: "Option B is correct. 'Key deposit £2, refunded on departure' means your money is returned when leaving the key back.",
+          4: "Option C is correct. The notice explicitly says practice today is cancelled and rescheduled for Thursday.",
+          5: "Option B is correct. Showing student ID gets 15% off, meaning reduced price with student proof."
+        }
+      },
+      2: {
+        total: 5,
+        keys: { 1: "C", 2: "E", 3: "A", 4: "D", 5: "B" },
+        explanations: {
+          1: "Course C matches Elena: creative story writing in the evening.",
+          2: "Course E matches Marco: teenagers' drama and acting club on Saturdays.",
+          3: "Course A matches Sarah: basic photography outdoors with a camera.",
+          4: "Course D matches David: indoor beginner painting during the weekend.",
+          5: "Course B matches Chloe: experienced artist learning digital computer software."
+        }
+      },
+      3: {
+        total: 5,
+        keys: { 1: "B", 2: "A", 3: "B", 4: "B", 5: "B" },
+        explanations: {
+          1: "B is correct. He assumed standing up would be simple because he was a confident swimmer.",
+          2: "A is correct. The text says he 'spent most of the time falling into cold water'.",
+          3: "B is correct. Mark is directly described as 'very patient' and taught him well.",
+          4: "B is correct. On the third day, he 'managed to stay upright for ten seconds'.",
+          5: "B is correct. He concluded it was 'exhausting, but extremely rewarding'."
+        }
+      },
+      4: {
+        total: 5,
+        keys: { 1: "A", 2: "B", 3: "C", 4: "D", 5: "E" },
+        explanations: {
+          1: "A fits Gap 16: Introduces who he went with before entering.",
+          2: "B fits Gap 17: References looking up at the giant blue whale skeleton mentioned right before it.",
+          3: "C fits Gap 18: Refers back to the 'torchlight tour' causing shadows.",
+          4: "D fits Gap 19: Connects sleeping overnight with waking up the next morning.",
+          5: "E fits Gap 20: Logical concluding action before leaving."
+        }
+      },
+      5: {
+        total: 6,
+        keys: { 1: "A", 2: "B", 3: "A", 4: "A", 5: "A", 6: "A" },
+        explanations: {
+          1: "'Means of transport' is a fixed collocation.",
+          2: "'Reduce' correctly completes the idea of lowering pollution.",
+          3: "'Provides' fits grammatically with offering exercise.",
+          4: "'Built' is used for physical structures like bike lanes.",
+          5: "'Safer' forms a correct comparative degree structure.",
+          6: "'Take up' is a phrasal verb meaning to start a new activity/habit."
+        }
+      },
+      6: {
+        total: 6,
+        keys: { 1: "for", 2: "the", 3: "should", 4: "where", 5: "and", 6: "very" },
+        explanations: {
+          1: "'for' is required with present perfect to indicate duration.",
+          2: "'the' completes the superlative construction 'the most'.",
+          3: "'should' or 'can' serves as a modal offering recommendations.",
+          4: "'where' is a relative pronoun referring to parks.",
+          5: "'and' links two related activities (shopping and buying).",
+          6: "'very' or 'here' logically completes the phrase 'visit me very soon'."
+        }
+      }
+    };
+
+    // Tracks answered states
+    let answeredState = {
+      1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}
+    };
+
+    let completedParts = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false };
+
+    function switchTab(partNum) {
+      if (document.getElementById(`tab-${partNum}`).disabled) return;
+
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.part-content').forEach(content => content.classList.remove('active'));
+
+      document.getElementById(`tab-${partNum}`).classList.add('active');
+      document.getElementById(`part-${partNum}`).classList.add('active');
+    }
+
+    function registerAnswer(partNum, qNum) {
+      const card = document.querySelector(`#part-${partNum} .question-card[data-q="${qNum}"]`);
+
+      if (partNum === 6) {
+        const inputVal = document.getElementById(`p6_q${qNum}`).value.trim();
+        if (inputVal !== "") {
+          answeredState[partNum][qNum] = inputVal.toLowerCase();
+        } else {
+          delete answeredState[partNum][qNum];
+        }
+      } else if (partNum === 2 || partNum === 4) {
+        const selectVal = document.getElementById(`p${partNum}_q${qNum}`).value;
+        if (selectVal !== "") {
+          answeredState[partNum][qNum] = selectVal;
+          // Lock input so answers can't be changed after selection
+          document.getElementById(`p${partNum}_q${qNum}`).disabled = true;
+        }
+      } else {
+        const selected = document.querySelector(`input[name="p${partNum}_q${qNum}"]:checked`);
+        if (selected) {
+          answeredState[partNum][qNum] = selected.value;
+          // Lock radio options once selected
+          const radios = document.querySelectorAll(`input[name="p${partNum}_q${qNum}"]`);
+          radios.forEach(r => r.disabled = true);
+          const labels = card.querySelectorAll('.option-label');
+          labels.forEach(l => l.classList.add('locked'));
+        }
+      }
+
+      // Lock text inputs in part 6 once filled and blurred
+      if (partNum === 6) {
+        const inputEl = document.getElementById(`p6_q${qNum}`);
+        inputEl.addEventListener('blur', function() {
+          if (this.value.trim() !== "") {
+            this.disabled = true;
+          }
+        }, { once: true });
+      }
+
+      checkCompletion(partNum);
+    }
+
+    function checkCompletion(partNum) {
+      const totalQuestions = examData[partNum].total;
+      const count = Object.keys(answeredState[partNum]).length;
+
+      if (count === totalQuestions) {
+        document.getElementById(`check-btn-${partNum}`).style.display = "inline-block";
+      }
+    }
+
+    function checkAnswers(partNum) {
+      const currentData = examData[partNum];
+      let score = 0;
+      let explanationsHTML = "";
+
+      for (let i = 1; i <= currentData.total; i++) {
+        const userAns = answeredState[partNum][i];
+        const correctAns = currentData.keys[i];
+        let isCorrect = false;
+
+        if (partNum === 6) {
+          isCorrect = userAns === correctAns.toLowerCase();
+        } else {
+          isCorrect = userAns === correctAns;
+        }
+
+        if (isCorrect) score++;
+
+        explanationsHTML += `
+          <div class="explanation-item">
+            <strong>Question ${i}:</strong> 
+            Your answer: <span class="${isCorrect ? 'correct-text' : 'wrong-text'}">${userAns ? userAns.toUpperCase() : 'No Answer'}</span> 
+            ${!isCorrect ? `| Correct answer: <span class="correct-text">${correctAns}</span>` : ''}
+            <p style="margin-top:5px; font-size:0.9rem; color:#555;">${currentData.explanations[i]}</p>
+          </div>
+        `;
+      }
+
+      document.getElementById('modal-score').innerHTML = `You scored <span>${score}</span> out of <span>${currentData.total}</span>`;
+      document.getElementById('modal-explanations').innerHTML = explanationsHTML;
+      
+      const modalBtn = document.getElementById('modal-next-btn');
+      if (partNum === 6) {
+        modalBtn.innerText = "Finish Exam";
+      } else {
+        modalBtn.innerText = `Continue to Part ${partNum + 1}`;
+      }
+
+      document.getElementById('results-modal').style.display = "flex";
+      completedParts[partNum] = true;
+    }
+
+    function closeModalAndUnlockNext() {
+      document.getElementById('results-modal').style.display = "none";
+      
+      // Determine which part was just completed
+      let currentPart = 1;
+      for (let i = 1; i <= 6; i++) {
+        if (!completedParts[i]) {
+          currentPart = i - 1;
+          break;
+        }
+        if (i === 6 && completedParts[6]) currentPart = 6;
+      }
+
+      const nextPart = currentPart + 1;
+
+      if (nextPart <= 6) {
+        const nextTab = document.getElementById(`tab-${nextPart}`);
+        nextTab.disabled = false;
+        nextTab.innerHTML = `Part ${nextPart}`; // Remove lock icon
+        switchTab(nextPart);
+      } else {
+        alert("Congratulations! You have completed all parts of the B1 Preliminary Reading exam.");
+      }
+    }
+  </script>
+</body>
+</html>

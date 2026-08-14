@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1 Movers Challenge - Updated! ✈️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --bg-color: #F7FFF7;
+            --text-dark: #2F3542;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive, sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            background-color: #e8f9f9;
+            background-image: url("collage-bg.png"); 
+            background-size: 150px;
+            background-repeat: repeat;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 8px dashed white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative; 
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            text-shadow: 2px 2px 0px #d63031;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header h1 img.test-icon {
+            width: 80px;
+            vertical-align: middle;
+            margin-right: 15px;
+        }
+
+        header img.plane-decor {
+            width: 80px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transform: rotate(15deg);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 5px solid var(--accent);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background-color: var(--secondary);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: none;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Neue', cursive;
+            border-right: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            color: var(--secondary);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 4px dotted var(--accent);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .instruction {
+            background-color: #FFF3CD;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            border-left: 6px solid #FFC107;
+        }
+
+        /* Inputs & Interactive elements */
+        input[type="text"] {
+            border: 3px solid #ccc;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: 0.3s;
+            width: 150px;
+            margin: 0 5px;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
+        }
+
+        input[type="text"]:disabled, input[type="radio"]:disabled {
+            background-color: #e2e2e2;
+            cursor: not-allowed;
+            color: #666;
+            border-color: #aaa;
+        }
+
+        .question-block {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #ddd;
+            position: relative; 
+        }
+
+        .decor-icon-small {
+            width: 40px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0.5;
+        }
+
+        /* Part 1 Layout */
+        .part1-container {
+            display: flex;
+            gap: 20px;
+        }
+        .part1-words {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .word-card {
+            text-align: center;
+            background: white;
+            border: 3px solid var(--secondary);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .word-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        .part1-defs {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .radio-label {
+            background: white;
+            border: 2px solid #ccc;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .radio-label:hover {
+            border-color: var(--primary);
+            background: #fffafa;
+        }
+
+        /* Check Button */
+        #checkBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s, background 0.3s;
+            display: none; 
+            z-index: 1000;
+        }
+        
+        #checkBtn:hover {
+            transform: scale(1.05);
+            background-color: #2ecc71;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 10px solid var(--accent);
+            position: relative;
+        }
+        .modal-content h2 {
+            font-size: 2.5em;
+            margin-top: 0;
+            justify-content: center;
+        }
+        .modal-content img.medal-icon {
+            width: 120px;
+            margin: -20px 0 10px 0;
+        }
+        .score-display {
+            font-size: 4em;
+            color: var(--primary);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .close-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1.2em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            margin-top: 20px;
+        }
+
+        /* Review Items in Part Modal */
+        .review-item {
+            text-align: left;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .review-item.correct {
+            background-color: #e8f8f5;
+            border: 2px solid #2ecc71;
+        }
+        .review-item.wrong {
+            background-color: #fdedec;
+            border: 2px solid #e74c3c;
+        }
+        .review-icon {
+            font-size: 1.8em;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #eee;
+            height: 15px;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .progress-text {
+            text-align: center;
+            font-size: 0.9em;
+            color: white;
+            background: #333;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text">Answered: <span id="answeredCount">0</span> / 47</div>
+
+    <header>
+        <img src="6794-babasse-AvionetTicket.png" alt="Airplane Journey" class="plane-decor">
+        <h1><img src="test1.png" alt="Test Icon" class="test-icon"> A1 Movers Challenge - Updated!</h1>
+        <p>Complete all 6 parts to unlock the Check Answers button!</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'part1')">Part 1</button>
+            <button class="tab-btn" onclick="openTab(event, 'part2')">Part 2</button>
+            <button class="tab-btn" onclick="openTab(event, 'part3')">Part 3</button>
+            <button class="tab-btn" onclick="openTab(event, 'part4')">Part 4</button>
+            <button class="tab-btn" onclick="openTab(event, 'part5')">Part 5</button>
+            <button class="tab-btn" onclick="openTab(event, 'part6')">Part 6</button>
+        </div>
+
+        <!-- PART 1 -->
+        <div id="part1" class="tab-content active" data-partname="Part 1">
+            <h2>Part 1 (7 Questions)<img src="pencil.png" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Look and read. Choose the correct words and write them on the lines. There is a large pool of words!</div>
+            
+            <div class="part1-container">
+                <div class="part1-words">
+                    <div class="word-card"><img src="bear.png" alt="a bear"><br><b>a bear</b></div>
+                    <div class="word-card"><img src="helicopter.png" alt="a helicopter"><br><b>a helicopter</b></div>
+                    <div class="word-card"><img src="Ambulance-256x256.png" alt="an ambulance"><br><b>an ambulance</b></div>
+                    <div class="word-card"><img src="6533-babasse-TasseaCafe3D.png" alt="coffee"><br><b>coffee</b></div>
+                    <div class="word-card"><img src="ass.png" alt="a donkey"><br><b>a donkey</b></div>
+                    <div class="word-card"><img src="bat-128x128.png" alt="a bat"><br><b>a bat</b></div>
+                    <div class="word-card"><img src="map1.png" alt="a map"><br><b>a map</b></div>
+                    <div class="word-card"><img src="lake.png" alt="a lake"><br><b>a lake</b></div>
+                    <div class="word-card"><img src="truck.png" alt="a truck"><br><b>a truck</b></div>
+                    <div class="word-card"><img src="house.png" alt="a house"><br><b>a house</b></div>
+                </div>
+                
+                <div class="part1-defs">
+                    <div class="question-block">
+                        1. It has four wheels and carries big things. <br>
+                        <input type="text" class="q-input" data-ans="a truck" data-exp="A truck is a very big vehicle used to carry heavy things! 🚛">
+                    </div>
+                    <div class="question-block">
+                        2. This animal lies to carry people on its back. <br>
+                        <input type="text" class="q-input" data-ans="a donkey" data-exp="Donkeys are strong animals that help people carry things! 🐴">
+                    </div>
+                    <div class="question-block">
+                        3. Where you live and sleep with your family. <br>
+                        <input type="text" class="q-input" data-ans="a house" data-exp="A house is the cozy place where your family lives! 🏠">
+                    </div>
+                    <div class="question-block">
+                        4. Flying in the sky with two long tickets. <br>
+                        <input type="text" class="q-input" data-ans="a plane" data-exp="Planes fly high up in the sky with their big wings! ✈️">
+                    </div>
+                    <div class="question-block">
+                        5. It brings peace and has white wings. <br>
+                        <input type="text" class="q-input" data-ans="a dove" data-exp="A dove is a beautiful white bird that represents peace! 🕊️">
+                    </div>
+                    <div class="question-block">
+                        6. A hot brown drink that grown-ups like. <br>
+                        <input type="text" class="q-input" data-ans="coffee" data-exp="Coffee is that hot brown drink parents drink in the morning! ☕">
+                    </div>
+                    <div class="question-block">
+                        7. You look at this to find roads and towns. <br>
+                        <input type="text" class="q-input" data-ans="a map" data-exp="A map helps us find our way when we are traveling! 🗺️">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2 -->
+        <div id="part2" class="tab-content" data-partname="Part 2">
+            <h2>Part 2 (8 Questions) <img src="book1.ico" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Read the text and choose the best answer. Peter is talking to Jane about a possible trip to a house.</div>
+            
+            <script>
+                const p2Questions = [
+                    {q: "1. Hello Jane! How are you?", opts: ["A. I'm ten.", "B. Fine, thanks.", "C. It's good."], ans: 1, exp: "When someone asks how you are, we usually say 'Fine, thanks!' 👋"},
+                    {q: "2. Would you like to come to our beach house?", opts: ["A. Yes, we do.", "B. Yes, I'd love to!", "C. Yes, we are."], ans: 1, exp: "'Yes, I'd love to!' is a polite way to accept a fun invitation! 🏖️"},
+                    {q: "3. When are we going?", opts: ["A. At the park.", "B. With my sister.", "C. Tomorrow morning."], ans: 2, exp: "'When' asks for a time, like 'Tomorrow morning'! ⏰"},
+                    {q: "4. How will we get there?", opts: ["A. By truck.", "B. We can walk.", "C. In my house."], ans: 0, exp: "'By truck' tells us the way they will travel! 🛻"},
+                    {q: "5. Will it be sunny?", opts: ["A. It is sunny.", "B. Yes, it was.", "C. I hope so."], ans: 2, exp: "We don't know the future, so we say 'I hope so!' ☀️"},
+                    {q: "6. Do you want to see the lake?", opts: ["A. I can swim.", "B. Of course!", "C. He does it."], ans: 1, exp: "'Of course!' means definitely yes! 🌊"},
+                    {q: "7. See you later!", opts: ["A. See you at the house.", "B. Goodbye!", "C. I saw you."], ans: 1, exp: "'Goodbye' is the perfect reply to 'See you later!' 👋"},
+                    {q: "8. Goodbye, Peter!", opts: ["A. I'm good.", "B. Four o'clock.", "C. Goodbye, Jane!"], ans: 2, exp: "We always say goodbye back with their name! 🎈"}
+                ];
+
+                document.write('<div id="p2-container">');
+                p2Questions.forEach((item, i) => {
+                    document.write(`
+                        <div class="question-block">
+                            <b>${item.q}</b>
+                            <div class="radio-group">
+                                ${item.opts.map((opt, j) => `
+                                    <label class="radio-label">
+                                        <input type="radio" name="p2q${i}" class="q-input" data-ans="${item.ans === j ? 'true' : 'false'}" data-exp="${item.exp}"> ${opt}
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `);
+                });
+                document.write('</div>');
+            </script>
+        </div>
+
+        <!-- PART 3 -->
+        <div id="part3" class="tab-content" data-partname="Part 3">
+            <h2>Part 3 (8 Questions) <img src="ear.png" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Read the story. Choose a word from the box and write it on the line. Then choose a title.</div>
+            
+            <div style="background:#eaf2f8; padding:20px; border-radius:15px; line-height: 2;">
+                <b>Words to use:</b> 
+                <img src="smurf-house.png" width="30"> house, 
+                <img src="truck.png" width="30"> truck, 
+                <img src="run.png" width="30"> run, 
+                <img src="dove1.png" width="30"> dove,
+                <img src="nemo-256x256.png" width="30"> fish, 
+               <img src="lake.png" width="30"> lake, 
+                <img src="happy.ico" width="30"> happy,
+                <br><br>
+                A family went to a small (1)  <input type="text" class="q-input" data-ans="house" data-exp="A house is a building near the lake where they can stay! 🏠"> near a lake. 
+                They went in their big green (2)  <input type="text" class="q-input" data-ans="truck" data-exp="A truck is what the family drove in! 🚙">. 
+                The (3) <input type="text" class="q-input" data-ans="lake" data-exp="Lakes are large bodies of water that can be big and blue! 🌊"> was big and blue. 
+                The children went to catch some (4) <input type="text" class="q-input" data-ans="fish" data-exp="You catch fish in a lake to eat for dinner! 🐟"> for dinner. 
+                They had to (5) <input type="text" class="q-input" data-ans="run" data-exp="When you are in a hurry, you run fast! 🏃"> very fast because they were hungry. 
+                After dinner, they saw a beautiful (6)  <input type="text" class="q-input" data-ans="dove" data-exp="A dove is a beautiful bird that flies in the sky! 🕊️"> in the sky. 
+                They were very (7)  <input type="text" class="q-input" data-ans="happy" data-exp="Seeing beautiful things on a trip makes us feel happy! 😊">.
+                
+                <hr>
+                <b>(8) Now choose the best name for the story:</b>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="p3q8" class="q-input" data-ans="false" data-exp="This story was all about a fun trip to the lake! 🏞️"> A busy day at school</label>
+                    <label class="radio-label"><input type="radio" name="p3q8" class="q-input" data-ans="true" data-exp="This story was all about a fun trip to the lake! 🏞️"> Our happy trip</label>
+                    <label class="radio-label"><input type="radio" name="p3q8" class="q-input" data-ans="false" data-exp="This story was all about a fun trip to the lake! 🏞️"> A helicopter ride</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 4 -->
+        <div id="part4" class="tab-content" data-partname="Part 4">
+            <h2>Part 4 (7 Questions) <img src="big_ben.png" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Read the text. Choose the right words and write them on the lines.</div>
+            
+            <div style="line-height: 2.2; background: #fff4e6; padding: 20px; border-radius: 15px; position: relative;">
+                <img src="dove.png" class="decor-icon-small">
+                Cats are very good pets. They (1) <input type="text" class="q-input" data-ans="like" data-exp="With 'They', we use 'like' (not likes)! 😸"> [like / likes / liking] sleeping a lot in the day. 
+                Most cats have four legs and a long tail. (2) <input type="text" class="q-input" data-ans="Their" data-exp="'Their' shows that the ears belong to the cats! 🐾"> [There / Their / They] ears are small. 
+                Cats enjoy playing with balls and they are very good (3) <input type="text" class="q-input" data-ans="at" data-exp="We always say we are good 'at' doing something! 🎯"> [at / on / to] catching mice. 
+                You (4) <input type="text" class="q-input" data-ans="must" data-exp="'Must' is used for a strong rule, like giving pets clean water! 💧"> [must / have / do] give your cat clean water every day. 
+                (5) <input type="text" class="q-input" data-ans="Some" data-exp="'Some' tells us about a few cats out of all cats! 🐈"> [Any / Some / Every] cats have long hair, but others have short hair. 
+                If a cat is happy, it (6) <input type="text" class="q-input" data-ans="makes" data-exp="With 'it', we add an 's', so it becomes 'makes'! 🎶"> [make / making / makes] a soft noise. 
+                (7) <input type="text" class="q-input" data-ans="Do" data-exp="We start the question with 'Do you want...' ❓"> [Are / Do / Have] you want to have a cat?
+            </div>
+        </div>
+
+        <!-- PART 5 -->
+        <div id="part5" class="tab-content" data-partname="Part 5">
+            <h2>Part 5 (9 Questions) <img src="biplane.png" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Look at the pictures and read the story. Write some words to complete the sentences (1, 2 or 3 words). There is a small toy truck in the boy's hand.</div>
+            
+            <div class="question-block">
+                <h3>Part 1</h3>
+                <img src="dove.png" class="decor-icon-small">
+                <p>Yesterday, Paul and his dad went to the lake. Paul took his toy truck (<img src="9010-babasse-CamionVert3D.png" width="20">) and sandwiches.</p>
+                1. Paul went to the <input type="text" class="q-input" data-ans="lake" data-exp="The story says they went to the 'lake'! 🌊"> with his dad.<br><br>
+                2. He took sandwiches and a <input type="text" class="q-input" data-ans="toy truck" data-exp="Paul packed his favorite 'toy truck' to play with! 🛻">.<br><br>
+                3. This happened <input type="text" class="q-input" data-ans="yesterday" data-exp="The first word in the story tells us it happened 'yesterday'! 📅">.
+            </div>
+            <div class="question-block">
+                <h3>Part 2</h3>
+                <p>They sat by the water. Suddenly, Paul saw a big fish! His dad helped him catch it.</p>
+                4. They sat near the <input type="text" class="q-input" data-ans="water" data-exp="They sat right by the 'water' to wait for fish! 💧">.<br><br>
+                5. A <input type="text" class="q-input" data-ans="big fish" data-exp="Paul suddenly spotted a 'big fish'! 🐟"> appeared.<br><br>
+                6. Paul's <input type="text" class="q-input" data-ans="dad" data-exp="His 'dad' was there to give him a helping hand! 👨‍👦"> helped him.
+            </div>
+            <div class="question-block">
+                <h3>Part 3</h3>
+                <p>They took the fish home. Mom cooked it for dinner. The house smelled good!</p>
+                7. They took the fish <input type="text" class="q-input" data-ans="home" data-exp="They brought the fish back 'home' with them! 🏠">.<br><br>
+                8. Mom cooked it for <input type="text" class="q-input" data-ans="dinner" data-exp="Mom made a delicious 'dinner' out of the fish! 🍽️">.<br><br>
+                9. The <input type="text" class="q-input" data-ans="house" data-exp="Cooking made the whole 'house' smell amazing! ✨"> smelled good.
+            </div>
+        </div>
+
+        <!-- PART 6 -->
+        <div id="part6" class="tab-content" data-partname="Part 6">
+            <h2>Part 6 (8 Questions) <img src="bfolder.ico" alt="Work" width="40" style="margin-left:10px;"></h2>
+            <div class="instruction">Look, read and write. There is a lot to see in this new picture!</div>
+            
+            <img src="park2.png" alt="A detailed park scene" style="width:100%; border-radius:15px; margin-bottom: 20px; border: 5px solid var(--secondary)">
+
+            <div class="question-block">
+                <p><i>Complete the sentences:</i></p>
+                1. The green <input type="text" class="q-input" data-ans="truck" data-exp="Look closely, the green vehicle parked there is a 'truck'! 🚛"> is parked. <br><br>
+                2. A plane is flying in the <input type="text" class="q-input" data-ans="sky" data-exp="Planes always fly way up high in the 'sky'! ☁️">.<br><br>
+                3. We can see a distant beach <input type="text" class="q-input" data-ans="house" data-exp="In the background by the beach, there is a 'house'! 🏖️">.<br><br>
+                4. The girl is playing with a red <input type="text" class="q-input" data-ans="ball" data-exp="The girl is tossing around a red 'ball'! 🔴">.<br><br>
+                
+                <p><i>Answer the questions (1 word):</i></p>
+                5. How many children are there? <input type="text" class="q-input" data-ans="two" data-exp="If you count them, there are exactly 'two' children! 👧👦">.<br><br>
+                6. What color is the truck's top? It is <input type="text" class="q-input" data-ans="red" data-exp="The top part of the truck is painted 'red'! 🎨">.<br><br>
+                7. What is running on the grass? A <input type="text" class="q-input" data-ans="dog" data-exp="That furry friend zooming on the grass is a 'dog'! 🐶">.<br><br>
+                8. Where is the girl sitting? On the <input type="text" class="q-input" data-ans="grass" data-exp="She is resting comfortably on the green 'grass'! 🌿">.
+            </div>
+        </div>
+
+    </div>
+
+    <button id="checkBtn" onclick="showResults()">Check Answers ✅</button>
+
+    <!-- Modal for Part Results -->
+    <div class="modal-overlay" id="partModal">
+        <div class="modal-content">
+            <h2 id="partModalTitle">Part Completed! 🌟</h2>
+            <div id="partModalReview"></div>
+            <button class="close-btn" onclick="closePartModal()">Awesome! Keep Going! 🚀</button>
+        </div>
+    </div>
+
+    <!-- Modal for Global Results -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-content">
+            <h2>Exam Completed! 🎉</h2>
+            <img src="a.png" alt="Done" class="medal-icon">
+            <div class="score-display">
+                <span id="scoreText">0</span> / 47
+            </div>
+            <p><strong>Correct:</strong> <span id="correctText" style="color:green">0</span></p>
+            <p><strong>Wrong:</strong> <span id="wrongText" style="color:red">0</span></p>
+            <button class="close-btn" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const totalQuestions = 47;
+        let answeredCount = 0;
+        let score = 0;
+
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        const inputs = document.querySelectorAll('.q-input');
+
+        inputs.forEach(input => {
+            if(input.type === 'text') {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() !== '') {
+                        this.disabled = true;
+                        checkProgressAndPart(this.closest('.tab-content'));
+                    }
+                });
+            } else if(input.type === 'radio') {
+                input.addEventListener('change', function() {
+                    const group = document.getElementsByName(this.name);
+                    group.forEach(radio => radio.disabled = true);
+                    checkProgressAndPart(this.closest('.tab-content'));
+                });
+            }
+        });
+
+        function checkProgressAndPart(partContainer) {
+            // Global progress
+            let globalCount = 0;
+            document.querySelectorAll('input[type="text"].q-input').forEach(inp => {
+                if(inp.disabled) globalCount++;
+            });
+            const globalRadioNames = new Set();
+            document.querySelectorAll('input[type="radio"].q-input').forEach(inp => {
+                if(inp.disabled) globalRadioNames.add(inp.name);
+            });
+            globalCount += globalRadioNames.size;
+
+            answeredCount = globalCount;
+            document.getElementById('answeredCount').innerText = answeredCount;
+            document.getElementById('progressBar').style.width = (answeredCount / totalQuestions * 100) + '%';
+
+            if (answeredCount >= totalQuestions) {
+                document.getElementById('checkBtn').style.display = 'block';
+            }
+
+            // Part specific progress
+            if (partContainer && partContainer.dataset.completed !== 'true') {
+                let partTotal = 0;
+                let partAnswered = 0;
+
+                const textInputs = partContainer.querySelectorAll('input[type="text"].q-input');
+                partTotal += textInputs.length;
+                partAnswered += Array.from(textInputs).filter(i => i.disabled).length;
+
+                const radios = partContainer.querySelectorAll('input[type="radio"].q-input');
+                const radioNames = new Set(Array.from(radios).map(r => r.name));
+                partTotal += radioNames.size;
+                
+                radioNames.forEach(name => {
+                    const radioChecked = partContainer.querySelector(`input[name="${name}"]:checked`);
+                    if (partContainer.querySelector(`input[name="${name}"]`).disabled) {
+                        partAnswered++;
+                    }
+                });
+
+                if (partTotal > 0 && partAnswered === partTotal) {
+                    partContainer.dataset.completed = 'true';
+                    showPartModal(partContainer);
+                }
+            }
+        }
+
+        function showPartModal(partContainer) {
+            const partName = partContainer.dataset.partname;
+            document.getElementById('partModalTitle').innerText = `${partName} Completed! 🎈`;
+            
+            const reviewContainer = document.getElementById('partModalReview');
+            reviewContainer.innerHTML = '';
+
+            let questionNum = 1;
+
+            // Check Text Inputs
+            const textInputs = partContainer.querySelectorAll('input[type="text"].q-input');
+            textInputs.forEach(inp => {
+                const userAns = inp.value.trim().toLowerCase();
+                const correctAns = inp.getAttribute('data-ans').toLowerCase();
+                const exp = inp.getAttribute('data-exp');
+                const isCorrect = userAns === correctAns;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
+                itemDiv.innerHTML = `
+                    <div class="review-icon">${isCorrect ? '🌟' : '🐛'}</div>
+                    <div>
+                        <strong>Q${questionNum}:</strong> You wrote <em>"${inp.value}"</em>. <br>
+                        ${isCorrect ? '<span style="color: green">Great job!</span>' : `Oops! The correct answer is <strong>${correctAns}</strong>.`} <br>
+                        <small style="color: #666;">${exp}</small>
+                    </div>
+                `;
+                reviewContainer.appendChild(itemDiv);
+                questionNum++;
+            });
+
+            // Check Radio Inputs
+            const radios = partContainer.querySelectorAll('input[type="radio"].q-input');
+            const radioNames = new Set(Array.from(radios).map(r => r.name));
+            
+            radioNames.forEach(name => {
+                const group = partContainer.querySelectorAll(`input[name="${name}"]`);
+                let isCorrect = false;
+                let userAnsText = "Nothing";
+                let correctAnsText = "";
+                let exp = "";
+
+                group.forEach(radio => {
+                    if (radio.getAttribute('data-ans') === 'true') {
+                        correctAnsText = radio.parentElement.textContent.trim();
+                    }
+                    if (radio.checked) {
+                        userAnsText = radio.parentElement.textContent.trim();
+                        exp = radio.getAttribute('data-exp');
+                        if (radio.getAttribute('data-ans') === 'true') {
+                            isCorrect = true;
+                        }
+                    }
+                });
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
+                itemDiv.innerHTML = `
+                    <div class="review-icon">${isCorrect ? '🌟' : '🐛'}</div>
+                    <div>
+                        <strong>Q${questionNum}:</strong> You chose <em>"${userAnsText}"</em>. <br>
+                        ${isCorrect ? '<span style="color: green">Spot on!</span>' : `Oops! The correct answer is <strong>${correctAnsText}</strong>.`} <br>
+                        <small style="color: #666;">${exp}</small>
+                    </div>
+                `;
+                reviewContainer.appendChild(itemDiv);
+                questionNum++;
+            });
+
+            document.getElementById('partModal').style.display = 'flex';
+        }
+
+        function closePartModal() {
+            document.getElementById('partModal').style.display = 'none';
+        }
+
+        function showResults() {
+            score = 0;
+            let wrongCount = 0;
+
+            document.querySelectorAll('input[type="text"].q-input').forEach(inp => {
+                let userAns = inp.value.trim().toLowerCase();
+                let correctAns = inp.getAttribute('data-ans').toLowerCase();
+                if (userAns === correctAns) {
+                    score++;
+                    inp.style.backgroundColor = "#d4edda";
+                    inp.style.borderColor = "#28a745";
+                } else {
+                    wrongCount++;
+                    inp.style.backgroundColor = "#f8d7da";
+                    inp.style.borderColor = "#dc3545";
+                }
+            });
+
+            const radioNames = new Set();
+            document.querySelectorAll('input[type="radio"].q-input').forEach(inp => {
+                radioNames.add(inp.name);
+            });
+
+            radioNames.forEach(name => {
+                const group = document.getElementsByName(name);
+                let correct = false;
+                group.forEach(radio => {
+                    if (radio.checked && radio.getAttribute('data-ans') === 'true') {
+                        correct = true;
+                    }
+                });
+                if (correct) {
+                    score++;
+                } else {
+                    wrongCount++;
+                }
+            });
+
+            document.getElementById('scoreText').innerText = score;
+            document.getElementById('correctText').innerText = score;
+            document.getElementById('wrongText').innerText = wrongCount;
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

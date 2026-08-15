@@ -560,10 +560,22 @@
         }
 
         function playAudio(context) {
-            let utterance = new SpeechSynthesisUtterance(currentAudioWord);
-            utterance.lang = 'en-GB'; 
-            utterance.rate = 0.85; 
-            window.speechSynthesis.speak(utterance);
+            if (!('speechSynthesis' in window)) {
+                alert('Sorry, your browser does not support audio playback (text-to-speech).');
+                return;
+            }
+            if (!currentAudioWord) return;
+
+            window.speechSynthesis.cancel();
+
+
+            // A short delay lets cancel() finish before the new utterance is queued.
+            setTimeout(() => {
+                currentUtterance = new SpeechSynthesisUtterance(currentAudioWord);
+                currentUtterance.lang = 'en-GB';
+                currentUtterance.rate = 0.85;
+                window.speechSynthesis.speak(currentUtterance);
+            }, 50);
         }
 
         function setupMCQ(q) {

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCE Prep 🚀</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #7F00FF 0%, #E100FF 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.97);
+            max-width: 700px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3 { color: #4A00E0; margin-bottom: 10px; font-weight: 900; }
+        .subtitle { color: #666; margin-bottom: 20px; font-weight: 700; font-size: 18px; }
+
+        /* UI Headers */
+        .top-bar { display: none; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: bold; background: #f4f4f9; padding: 10px 20px; border-radius: 15px; }
+        .stage-badge { background: #4A00E0; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: 800; }
+        .score-display { color: #E100FF; font-size: 18px; font-weight: 900; }
+        
+        .progress-wrap { display: flex; gap: 5px; justify-content: center; margin-bottom: 20px; }
+        .pip { width: 30px; height: 10px; background: #ddd; border-radius: 5px; }
+        .pip.active { background: #4A00E0; }
+        .pip.correct { background: #00E676; }
+        .pip.wrong { background: #FF3D00; }
+
+        /* Screens */
+        #start-screen, #stage-intro-screen, #result-screen, #stage-result-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
+        #question-box { display: none; flex-grow: 1; text-align: left; animation: fadeIn 0.4s ease; }
+        
+        .question-text { font-size: 22px; font-weight: 800; color: #222; margin-bottom: 20px; line-height: 1.4; }
+        
+        /* Question Elements */
+        .reading-box { background: #E3F2FD; padding: 15px; border-radius: 12px; font-size: 16px; margin-bottom: 20px; border-left: 5px solid #2196F3; }
+        .audio-box { background: #FFF9C4; padding: 15px; border-radius: 12px; border: 2px dashed #FBC02D; margin-bottom: 20px; text-align: center; }
+        audio { width: 100%; margin-top: 10px; outline: none; }
+        
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background: white; border: 2px solid #E0E0E0; padding: 15px; border-radius: 15px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; color: #444; }
+        .option-btn:hover { background: #F3E5F5; border-color: #9C27B0; transform: translateY(-2px); }
+        .option-btn.selected-correct { background: #00E676 !important; color: white !important; border-color: #00C853 !important; }
+        .option-btn.selected-wrong { background: #FF3D00 !important; color: white !important; border-color: #DD2C00 !important; }
+        .option-btn.actual-correct { background: #00E676 !important; color: white !important; border-color: #00C853 !important; }
+        .option-btn:disabled { cursor: not-allowed; transform: none; }
+
+        .fill-input { width: 100%; padding: 15px; font-size: 20px; border: 2px solid #E0E0E0; border-radius: 12px; outline: none; font-weight: bold; }
+        .fill-input:focus { border-color: #9C27B0; }
+
+        /* Instant Feedback Panel */
+        #feedback-panel { display: none; background: #f8f9fa; border-radius: 15px; padding: 20px; margin-top: 20px; border-left: 6px solid #ccc; animation: slideUp 0.3s ease; }
+        #feedback-panel.correct { border-color: #00E676; background: #E8F5E9; }
+        #feedback-panel.wrong { border-color: #FF3D00; background: #FFEBEE; }
+        .feedback-title { font-size: 20px; font-weight: 900; margin-bottom: 5px; }
+        .feedback-text { font-size: 16px; color: #333; }
+
+        /* Buttons */
+        .btn-container { text-align: center; margin-top: 25px; }
+        .action-btn { background: linear-gradient(135deg, #4A00E0 0%, #8E2DE2 100%); color: white; border: none; padding: 15px 30px; font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: 900; transition: transform 0.2s, box-shadow 0.2s; }
+        .action-btn:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(74, 0, 224, 0.4); }
+        .action-btn.secondary { background: #FF4081; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. Start Screen -->
+        <div id="start-screen">
+            <h1 style="font-size: 38px;">🇬🇧 FCE Exam Pro 🧠</h1>
+            <p class="subtitle">B1-B2 Level Prep • 50 Questions <br> Pass Mark: 7/10 per Stage 🔥</p>
+            <div style="font-size: 70px; margin: 20px 0; animation: bounce 2s infinite;">🎓</div>
+            <button class="action-btn" onclick="startGame()">Start Challenge 🚀</button>
+        </div>
+
+        <!-- 2. Stage Intro Screen -->
+        <div id="stage-intro-screen" style="display: none;">
+            <div style="font-size: 80px; margin-bottom: 10px;" id="stage-emoji">🔥</div>
+            <h1 id="stage-title" style="font-size: 32px;">Stage 1</h1>
+            <p class="subtitle" id="stage-desc">Get ready to slay these questions!</p>
+            <div style="background: #FFF3E0; padding: 15px; border-radius: 10px; color: #E65100; font-weight: bold; margin-bottom: 20px;">
+                ⚠️ You need at least 7 correct answers to advance!
+            </div>
+            <button class="action-btn" onclick="startStage()">Let's Go! ➡️</button>
+        </div>
+
+        <!-- 3. Top Bar (Active during quiz) -->
+        <div class="top-bar" id="top-bar">
+            <div class="stage-badge" id="stage-badge">Stage 1</div>
+            <div class="score-display" id="score-display">Total Points: 0</div>
+        </div>
+
+        <!-- Progress Pips -->
+        <div class="progress-wrap" id="progress-wrap" style="display: none;">
+            <!-- Pips injected via JS -->
+        </div>
+
+        <!-- 4. Question Screen -->
+        <div id="question-box">
+            <div id="dynamic-content"></div>
+            
+            <div class="btn-container">
+                <button class="action-btn secondary" id="check-btn" style="display: none;" onclick="checkManualAnswer()">Check 🧐</button>
+            </div>
+
+            <!-- Instant Feedback Panel -->
+            <div id="feedback-panel">
+                <div class="feedback-title" id="feedback-title">Correct! 🎉</div>
+                <div class="feedback-text" id="feedback-desc">Explanation goes here.</div>
+                <button class="action-btn" style="margin-top: 15px; width: 100%;" onclick="nextQuestion()">Continue ➡️</button>
+            </div>
+        </div>
+
+        <!-- 5. Stage Result Screen -->
+        <div id="stage-result-screen" style="display: none;">
+            <div id="stage-result-emoji" style="font-size: 80px;">📊</div>
+            <h1 id="stage-result-title">Stage Complete!</h1>
+            <p class="subtitle" id="stage-result-score" style="font-size: 24px;">You got X / 10</p>
+            <p id="stage-result-msg" style="margin-bottom: 25px; font-size: 18px; font-weight: bold;"></p>
+            <button class="action-btn" id="stage-result-btn">Next Action</button>
+        </div>
+
+        <!-- 6. Final Result Screen -->
+        <div id="result-screen" style="display: none;">
+            <div style="font-size: 90px; animation: bounce 1.5s infinite;">🏆</div>
+            <h1 style="font-size: 36px; color: #FFD700;">Ultimate Winner!</h1>
+            <p class="subtitle" id="final-score" style="font-size: 28px; color: #4A00E0;">Total Score: 100 / 100 Points</p>
+            <p style="margin-bottom: 25px; font-size: 18px; font-weight: bold;">You are 100% ready for the FCE exam! Cambridge is shaking! 💅✨</p>
+            <button class="action-btn" onclick="location.reload()">Play Again 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Data generator for 50 questions divided into 5 stages
+        const generateQuestions = () => {
+            return [
+                // STAGE 1: Vocabulary (Questions 0-9)
+                { stage: 1, type: "mc", q: "She is very _____ of her academic achievements.", options: ["proud", "pleased", "happy", "satisfied"], a: "proud", exp: "'Proud of' is the correct collocation. You are 'pleased with' or 'happy about' something." },
+                { stage: 1, type: "mc", q: "You need to _____ attention to the teacher.", options: ["give", "pay", "make", "take"], a: "pay", exp: "The correct English expression is 'to pay attention'." },
+                { stage: 1, type: "mc", q: "He made a quick _____ from his illness.", options: ["recovery", "cure", "healing", "remedy"], a: "recovery", exp: "You 'make a recovery' from an illness. A doctor provides a cure." },
+                { stage: 1, type: "mc", q: "Can you _____ me a massive favor?", options: ["make", "do", "give", "bring"], a: "do", exp: "The collocation is 'do a favor'. We use 'do' for tasks and actions." },
+                { stage: 1, type: "mc", q: "I'm quite _____ on playing tennis.", options: ["keen", "fond", "enthusiastic", "eager"], a: "keen", exp: "We say 'keen on' something. It means you like it a lot." },
+                { stage: 1, type: "fill", q: "We ran ___ of milk, so I can't make pancakes.", a: "out", exp: "The phrasal verb 'run out of' means to have none left." },
+                { stage: 1, type: "fill", q: "Please ____ up your mind! We need a decision.", a: "make", exp: "'Make up your mind' means to make a decision." },
+                { stage: 1, type: "mc", q: "I usually ____ out with my friends on Saturdays.", options: ["hang", "go", "play", "stay"], a: "hang", exp: "To 'hang out' is an informal phrasal verb meaning to spend time relaxing with friends." },
+                { stage: 1, type: "fill", q: "Don't ____ up! You can pass this test!", a: "give", exp: "'Give up' means to stop trying or surrender." },
+                { stage: 1, type: "fill", q: "I am looking _____ to the weekend.", a: "forward", exp: "'Look forward to' means to be excited about something in the future." },
+
+                // STAGE 2: Grammar (Questions 10-19)
+                { stage: 2, type: "mc", q: "If I _____ you, I would study harder.", options: ["were", "am", "was", "be"], a: "were", exp: "This is the Second Conditional. We use 'were' for all subjects (If I were, if she were)." },
+                { stage: 2, type: "mc", q: "She asked me where I _____ going.", options: ["am", "was", "were", "have"], a: "was", exp: "In Reported Speech, we shift the tense back. 'I am going' becomes 'I was going'." },
+                { stage: 2, type: "mc", q: "I have lived here _____ 2015.", options: ["since", "for", "in", "from"], a: "since", exp: "We use 'since' with a specific point in time (2015). We use 'for' with a duration (for 5 years)." },
+                { stage: 2, type: "mc", q: "You _____ better see a doctor.", options: ["had", "would", "should", "could"], a: "had", exp: "'Had better' is a modal phrase used to give strong advice." },
+                { stage: 2, type: "mc", q: "I'm not used _____ up so early.", options: ["to getting", "to get", "getting", "get"], a: "to getting", exp: "'Be used to' is followed by a verb in the -ing form (gerund)." },
+                { stage: 2, type: "mc", q: "He _____ his car washed yesterday.", options: ["had", "has", "make", "did"], a: "had", exp: "Causative structure: 'have something done' (had his car washed)." },
+                { stage: 2, type: "mc", q: "It goes _____ saying that you are welcome.", options: ["without", "for", "by", "with"], a: "without", exp: "'It goes without saying' is an idiom meaning it is obvious." },
+                { stage: 2, type: "mc", q: "Despite _____ tired, she finished the race.", options: ["being", "be", "was", "is"], a: "being", exp: "'Despite' must be followed by a noun, pronoun, or a gerund (-ing form)." },
+                { stage: 2, type: "fill", q: "I wish I ____ more money to buy that phone.", a: "had", exp: "After 'wish' for present situations, we use the past simple tense." },
+                { stage: 2, type: "fill", q: "The window was broken ____ the boy.", a: "by", exp: "In passive voice, we use 'by' to show who performed the action." },
+
+                // STAGE 3: Reading & Comprehension (Questions 20-29)
+                { stage: 3, type: "reading", text: "Electric scooters have taken over cities. While teenagers love them for quick transport, adults complain they are left blocking sidewalks, causing hazards for pedestrians.", q: "Why do adults complain about the scooters?", options: ["They are too fast", "They block sidewalks", "They are expensive", "They make noise"], a: "They block sidewalks", exp: "The text explicitly states 'adults complain they are left blocking sidewalks'." },
+                { stage: 3, type: "reading", text: "Electric scooters have taken over cities. While teenagers love them for quick transport, adults complain they are left blocking sidewalks, causing hazards for pedestrians.", q: "What is the main benefit for teenagers?", options: ["Quick transport", "Cheap rental", "Looking cool", "Exercise"], a: "Quick transport", exp: "The text mentions 'teenagers love them for quick transport'." },
+                { stage: 3, type: "reading", text: "The new smartwatch lasts a week on a single charge. However, its tiny screen makes reading texts nearly impossible for some users.", q: "What is a negative point about the watch?", options: ["The battery life", "The price", "The screen size", "The strap"], a: "The screen size", exp: "The text highlights that its 'tiny screen makes reading texts nearly impossible'." },
+                { stage: 3, type: "reading", text: "The new smartwatch lasts a week on a single charge. However, its tiny screen makes reading texts nearly impossible for some users.", q: "How long does the battery last?", options: ["One day", "Seven days", "One month", "Three days"], a: "Seven days", exp: "'Lasts a week' means 7 days." },
+                { stage: 3, type: "reading", text: "I visited London. It rained daily, but the museums were incredible and completely free!", q: "What was a positive aspect of the trip?", options: ["The weather", "The free museums", "The food", "The hotels"], a: "The free museums", exp: "Despite the rain, the text praises the 'incredible and completely free' museums." },
+                { stage: 3, type: "mc", q: "Which word means 'extremely beautiful'?", options: ["Gorgeous", "Average", "Plain", "Ugly"], a: "Gorgeous", exp: "'Gorgeous' is an extreme adjective meaning very beautiful." },
+                { stage: 3, type: "mc", q: "Which word means 'very angry'?", options: ["Furious", "Annoyed", "Upset", "Sad"], a: "Furious", exp: "'Furious' is the extreme version of angry." },
+                { stage: 3, type: "mc", q: "Which word means 'very hungry'?", options: ["Starving", "Full", "Thirsty", "Tired"], a: "Starving", exp: "'Starving' means you are incredibly hungry." },
+                { stage: 3, type: "mc", q: "Which word means 'very funny'?", options: ["Hilarious", "Serious", "Boring", "Scary"], a: "Hilarious", exp: "'Hilarious' means extremely amusing or funny." },
+                { stage: 3, type: "mc", q: "Which word means 'very cold'?", options: ["Freezing", "Chilly", "Cool", "Warm"], a: "Freezing", exp: "'Freezing' is the extreme adjective for cold." },
+
+                // STAGE 4: Dialogues & Phrasal Verbs (Questions 30-39)
+                { stage: 4, type: "mc", q: "A: I'm feeling really nervous about the exam.\nB: _____", options: ["Don't worry, you'll do great!", "I am hungry too.", "Yes, it's very expensive.", "I bought a new car."], a: "Don't worry, you'll do great!", exp: "This is the only polite and logical response to someone feeling nervous." },
+                { stage: 4, type: "mc", q: "A: Would you mind opening the window?\nB: _____", options: ["No, not at all.", "Yes, please.", "I like apples.", "Tomorrow."], a: "No, not at all.", exp: "When someone asks 'Would you mind...?', saying 'No, not at all' means 'I don't mind doing it' (Yes, I will open it)." },
+                { stage: 4, type: "mc", q: "A: I think we should go to the cinema tonight.\nB: _____", options: ["That sounds like a good idea.", "I am 15 years old.", "My name is John.", "It's on the table."], a: "That sounds like a good idea.", exp: "This is the correct natural response to accepting a suggestion." },
+                { stage: 4, type: "mc", q: "A: How long does it take to get to the station?\nB: _____", options: ["About 20 minutes.", "It's very heavy.", "Since 2010.", "I like trains."], a: "About 20 minutes.", exp: "'How long does it take' asks for a duration of time for travel." },
+                { stage: 4, type: "mc", q: "A: Have you ever been to Italy?\nB: _____", options: ["No, but I'd love to go.", "Yes, I am eating pizza.", "I went yesterday.", "She is Italian."], a: "No, but I'd love to go.", exp: "This answers the present perfect question correctly with a logical follow-up." },
+                { stage: 4, type: "fill", q: "I can't hear the music. Please turn the volume ____.", a: "up", exp: "'Turn up' means to increase the volume." },
+                { stage: 4, type: "fill", q: "The plane is going to take ____ in 10 minutes.", a: "off", exp: "Planes 'take off' when they leave the ground." },
+                { stage: 4, type: "fill", q: "He always shows ____ his new shoes. (He boasts about them)", a: "off", exp: "To 'show off' means to display something proudly to get attention." },
+                { stage: 4, type: "fill", q: "I need to figure ____ the answer to this math problem.", a: "out", exp: "To 'figure out' means to solve or understand something." },
+                { stage: 4, type: "fill", q: "Please fill ____ this application form with a black pen.", a: "in", exp: "You 'fill in' or 'fill out' a form." },
+
+                // STAGE 5: Listening & Advanced Context (Questions 40-49)
+                { stage: 5, type: "audio", q: "Listen to the audio. What type of music is this?", options: ["Upbeat/Electronic", "Classical Piano", "Heavy Metal", "Acoustic Guitar"], a: "Upbeat/Electronic", exp: "The placeholder track is an electronic upbeat song." },
+                { stage: 5, type: "audio", q: "Where might you hear this type of background music?", options: ["At a club/party", "In a library", "During a funeral", "In a sleeping app"], a: "At a club/party", exp: "Fast, upbeat electronic music is played at parties or clubs." },
+                { stage: 5, type: "audio", q: "Does this song have singing vocals?", options: ["No, it's instrumental", "Yes, a female singer", "Yes, a male choir", "Yes, rap vocals"], a: "No, it's instrumental", exp: "There are no words in this specific track; it is instrumental." },
+                { stage: 5, type: "mc", q: "What does 'catchy' mean when talking about a song?", options: ["Easy to remember", "Very boring", "Too loud", "Sad"], a: "Easy to remember", exp: "A 'catchy' tune gets stuck in your head because it's memorable." },
+                { stage: 5, type: "mc", q: "If a song is a 'smash hit', what does it mean?", options: ["It is very successful", "It is terrible", "It broke the radio", "It is very old"], a: "It is very successful", exp: "A 'smash hit' is a widely popular and successful song or movie." },
+                { stage: 5, type: "mc", q: "You should always _____ up your computer files.", options: ["back", "keep", "save", "make"], a: "back", exp: "To 'back up' means to make a copy of digital information." },
+                { stage: 5, type: "mc", q: "She _____ after her mother. They act exactly the same.", options: ["takes", "looks", "goes", "comes"], a: "takes", exp: "To 'take after' someone means to resemble a family member in character or appearance." },
+                { stage: 5, type: "mc", q: "The meeting was called _____ because of the snow.", options: ["off", "out", "down", "away"], a: "off", exp: "'Call off' means to cancel an event." },
+                { stage: 5, type: "mc", q: "I ran _____ an old friend at the mall yesterday.", options: ["into", "across", "over", "through"], a: "into", exp: "'Run into' means to meet someone by accident." },
+                { stage: 5, type: "mc", q: "Final Question: The FCE exam tests you at which CEFR level?", options: ["B2", "A1", "C2", "A2"], a: "B2", exp: "The First Certificate in English (FCE) is designed for upper-intermediate B2 level students. You made it!" }
+            ];
+        };
+
+        const allQuestions = generateQuestions();
+        const stageTitles = [
+            { title: "Stage 1: Vocab Power", desc: "Prove you know your words!", emoji: "🧠" },
+            { title: "Stage 2: Grammar Boss", desc: "Tenses, conditionals, and rules!", emoji: "🛠️" },
+            { title: "Stage 3: Reading Ninja", desc: "Read fast, understand faster!", emoji: "📖" },
+            { title: "Stage 4: Social Butterfly", desc: "Dialogues & Phrasal Verbs!", emoji: "💬" },
+            { title: "Stage 5: Audio Master", desc: "Listen carefully to the vibes!", emoji: "🎧" }
+        ];
+
+        let currentStageIndex = 0; 
+        let currentQuestionIndex = 0; 
+        let stageScore = 0; 
+        let totalScore = 0; // Cumulative out of 100
+        let currentQuestionObj = null;
+        let pips = [];
+
+        // Elements
+        const screens = {
+            start: document.getElementById('start-screen'),
+            stageIntro: document.getElementById('stage-intro-screen'),
+            game: document.getElementById('question-box'),
+            stageResult: document.getElementById('stage-result-screen'),
+            final: document.getElementById('result-screen')
+        };
+        const dynamicContent = document.getElementById('dynamic-content');
+        const feedbackPanel = document.getElementById('feedback-panel');
+        const checkBtn = document.getElementById('check-btn');
+        const progressWrap = document.getElementById('progress-wrap');
+
+        function startGame() {
+            screens.start.style.display = 'none';
+            setupStageIntro();
+        }
+
+        function setupStageIntro() {
+            const stageInfo = stageTitles[currentStageIndex];
+            document.getElementById('stage-emoji').innerText = stageInfo.emoji;
+            document.getElementById('stage-title').innerText = stageInfo.title;
+            document.getElementById('stage-desc').innerText = stageInfo.desc;
+            
+            screens.stageResult.style.display = 'none';
+            screens.stageIntro.style.display = 'flex';
+        }
+
+        function startStage() {
+            screens.stageIntro.style.display = 'none';
+            document.getElementById('top-bar').style.display = 'flex';
+            progressWrap.style.display = 'flex';
+            screens.game.style.display = 'block';
+            
+            stageScore = 0;
+            currentQuestionIndex = currentStageIndex * 10; // Start index for this stage (0, 10, 20...)
+            
+            // Build Pips
+            progressWrap.innerHTML = '';
+            pips = [];
+            for(let i=0; i<10; i++){
+                const pip = document.createElement('div');
+                pip.className = 'pip';
+                progressWrap.appendChild(pip);
+                pips.push(pip);
+            }
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            currentQuestionObj = allQuestions[currentQuestionIndex];
+            dynamicContent.innerHTML = '';
+            feedbackPanel.style.display = 'none';
+            checkBtn.style.display = 'none';
+
+            // Highlight current pip
+            pips.forEach(p => p.classList.remove('active'));
+            pips[currentQuestionIndex % 10].classList.add('active');
+
+            let html = `<div class="question-text">${(currentQuestionIndex % 10) + 1}. ${currentQuestionObj.q}</div>`;
+
+            if (currentQuestionObj.type === 'reading') {
+                html = `<div class="reading-box">${currentQuestionObj.text}</div>` + html;
+            } else if (currentQuestionObj.type === 'audio') {
+                html = `<div class="audio-box">
+                    🎧 <strong>Listen closely!</strong>
+                    <audio controls id="q-audio"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+                </div>` + html;
+            }
+
+            if (currentQuestionObj.type === 'mc' || currentQuestionObj.type === 'reading' || currentQuestionObj.type === 'audio') {
+                html += `<div class="options">`;
+                // Shuffle options
+                const shuffled = [...currentQuestionObj.options].sort(() => Math.random() - 0.5);
+                shuffled.forEach(opt => {
+                    html += `<button class="option-btn" onclick="checkMCAnswer(this, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+                });
+                html += `</div>`;
+                dynamicContent.innerHTML = html.replace(/\n/g, '<br>');
+            } else if (currentQuestionObj.type === 'fill') {
+                html += `<input type="text" class="fill-input" id="fill-input" placeholder="Type your answer here..." autocomplete="off">`;
+                dynamicContent.innerHTML = html;
+                checkBtn.style.display = 'inline-block';
+            }
+        }
+
+        function checkMCAnswer(btn, selectedStr) {
+            // Disable all buttons
+            const btns = dynamicContent.querySelectorAll('.option-btn');
+            btns.forEach(b => {
+                b.disabled = true;
+                if(b.innerText === currentQuestionObj.a) {
+                    b.classList.add('actual-correct'); // Show correct answer to user
+                }
+            });
+
+            const isCorrect = (selectedStr === currentQuestionObj.a);
+            
+            if (isCorrect) {
+                btn.classList.add('selected-correct');
+            } else {
+                btn.classList.add('selected-wrong');
+            }
+
+            showFeedback(isCorrect);
+        }
+
+        function checkManualAnswer() {
+            const input = document.getElementById('fill-input');
+            const val = input.value.trim().toLowerCase();
+            const correctAns = currentQuestionObj.a.toLowerCase();
+            
+            input.disabled = true;
+            checkBtn.style.display = 'none';
+
+            showFeedback(val === correctAns);
+        }
+
+        function showFeedback(isCorrect) {
+            // Stop audio if playing
+            const audio = document.getElementById('q-audio');
+            if (audio) audio.pause();
+
+            const pip = pips[currentQuestionIndex % 10];
+            pip.classList.remove('active');
+
+            if (isCorrect) {
+                stageScore++;
+                pip.classList.add('correct');
+                document.getElementById('feedback-title').innerText = "Slay! Correct! 🎉";
+                feedbackPanel.className = "correct";
+            } else {
+                pip.classList.add('wrong');
+                document.getElementById('feedback-title').innerText = "Oof! Incorrect 😬";
+                feedbackPanel.className = "wrong";
+            }
+
+            document.getElementById('feedback-desc').innerHTML = `<strong>Answer:</strong> ${currentQuestionObj.a}<br><br>${currentQuestionObj.exp}`;
+            feedbackPanel.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            // Check if stage is finished (every 10 questions)
+            if (currentQuestionIndex % 10 === 0) {
+                finishStage();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function finishStage() {
+            document.getElementById('top-bar').style.display = 'none';
+            progressWrap.style.display = 'none';
+            screens.game.style.display = 'none';
+            
+            const passed = stageScore >= 7;
+            
+            document.getElementById('stage-result-score').innerText = `You scored: ${stageScore} / 10`;
+            const msgEl = document.getElementById('stage-result-msg');
+            const btnEl = document.getElementById('stage-result-btn');
+            const emojiEl = document.getElementById('stage-result-emoji');
+
+            if (passed) {
+                totalScore += (stageScore * 2); // 2 points per correct question
+                document.getElementById('score-display').innerText = `Total Points: ${totalScore}`;
+                
+                emojiEl.innerText = "✅";
+                msgEl.innerText = "Awesome job! You passed the stage! Let's keep going. 🚀";
+                msgEl.style.color = "#00C853";
+                
+                if (currentStageIndex === 4) {
+                    btnEl.innerText = "See Final Result 🏆";
+                    btnEl.onclick = showFinalResult;
+                } else {
+                    btnEl.innerText = "Next Stage ➡️";
+                    btnEl.onclick = () => {
+                        currentStageIndex++;
+                        setupStageIntro();
+                    };
+                }
+            } else {
+                emojiEl.innerText = "❌";
+                msgEl.innerText = "Yikes! You need at least 7/10 to pass. You gotta try again! 😭";
+                msgEl.style.color = "#FF3D00";
+                btnEl.innerText = "Retry Stage 🔄";
+                btnEl.onclick = startStage; // Restart the same stage without increasing index
+            }
+
+            screens.stageResult.style.display = 'flex';
+        }
+
+        function showFinalResult() {
+            screens.stageResult.style.display = 'none';
+            screens.final.style.display = 'flex';
+            
+            const finalP = document.getElementById('final-score');
+            finalP.innerText = `Total Score: ${totalScore} / 100 Points`;
+
+            if (totalScore === 100) {
+                finalP.style.color = "#00C853";
+            } else {
+                finalP.style.color = "#4A00E0";
+            }
+        }
+    </script>
+</body>
+</html>

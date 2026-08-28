@@ -309,6 +309,12 @@
         .badge-fill { background: #fdf5e8; color: #b8860b; border: 1px solid #f3e1b9; }
         .badge-dropdown { background: #fef3e6; color: #d97706; border: 1px solid #fbdcb8; }
         .badge-checkbox { background: #eaf7f3; color: var(--success); border: 1px solid #c2ece0; }
+        
+        /* New Badges for Stage 8 Question Types */
+        .badge-ynng { background: #f3e5f5; color: #8e24aa; border: 1px solid #e1bee7; }
+        .badge-unscramble { background: #e8eaf6; color: #3f51b5; border: 1px solid #c5cae9; }
+        .badge-spot { background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; }
+        .badge-match { background: #e0f2f1; color: #00897b; border: 1px solid #b2dfdb; }
 
     </style>
 </head>
@@ -316,7 +322,7 @@
 
     <header>
         <h2>🌍 Freshmen Interactive English Journey</h2>
-        <div class="score-badge" id="scoreDisplay">🏆 Points: 0 / 700 </div>
+        <div class="score-badge" id="scoreDisplay">🏆 Points: 0 / 820 </div>
         <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar"></div>
         </div>
@@ -353,7 +359,7 @@
                     </ul>
                     <p><em>💡 Pro Tip:</em> If you want to mention who performed the action in a passive sentence, use the preposition <strong>'by'</strong>.</p>
                 `,
-                requiredTime: 5,
+                requiredTime: 60,
                 questions: [
                     { type: 'mcq', question: "1. The famous novel *The Great Gatsby* __________ by F. Scott Fitzgerald in 1925.", options: ["writes", "was written", "has written", "is written"], correct: 1, explanation: "Because the action happened in the past (1925), we use the Past Simple passive: 'was' + past participle." },
                     { type: 'dropdown', question: "2. Select the correct phrase to complete the sentence: Coffee [___] in Colombia because of the perfect climate.", options: ["grow", "grew", "is grown", "are growing"], correct: 2, explanation: "For a general fact in the present, use Present Simple passive: 'is' + past participle (grown)." },
@@ -379,7 +385,7 @@
                         <li><strong>Second Conditional (Imaginary):</strong> If + Past Simple, would/wouldn't + base verb.</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'dropdown', question: "1. If I [___] you, I would study harder for the B1 test.", options: ["am", "will be", "were", "had been"], correct: 2, explanation: "This is the Second Conditional (imaginary advice). We use 'were' for all subjects in the 'if' clause." },
                     { type: 'fill', question: "2. First Conditional: If she wins the race, she ________ (get) the new goggles.", correct: ["will get"], explanation: "First conditional uses 'will' + base verb in the result clause." },
@@ -406,7 +412,7 @@
                         <li><strong>Collocations:</strong> Interested <em>in</em>, Good <em>at</em>, Afraid <em>of</em>, Depend <em>on</em>.</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'dropdown', question: "1. I am really looking forward [___] my summer holidays.", options: ["at", "on", "to", "for"], correct: 2, explanation: "The set phrase is 'look forward to'." },
                     { type: 'mcq', question: "2. My brother is very interested __________ reading mystery books.", options: ["on", "at", "in", "about"], correct: 2, explanation: "The adjective 'interested' is always followed by the preposition 'in'." },
@@ -432,7 +438,7 @@
                         <li><strong>Adjectives to Adverbs:</strong> Add <em>-ly</em>. (Quick &rarr; Quickly).</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'fill', question: "1. The ________ (INVENT) of the smartphone changed how we communicate.", correct: ["invention"], explanation: "We need a noun here. The noun form of 'invent' is 'invention'." },
                     { type: 'dropdown', question: "2. Agatha Christie is a highly [___] writer.", options: ["fame", "famously", "famous", "infamous"], correct: 2, explanation: "We need an adjective to describe the writer. The adjective of 'fame' is 'famous'." },
@@ -458,7 +464,7 @@
                         <li><strong>Result:</strong> So, Therefore, Consequently.</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'dropdown', question: "1. [___] it was raining, the cyclists continued their race.", options: ["However", "Although", "Because", "Therefore"], correct: 1, explanation: "'Although' is used to introduce a contrasting clause with a subject and verb (it was raining)." },
                     { type: 'fill', question: "2. He loves reading mystery novels. ________, his sister prefers science fiction.", correct: ["however"], explanation: "'However' is used to show contrast between two separate sentences." },
@@ -486,7 +492,7 @@
                         <li><strong>Whose:</strong> Used to show <em>possession</em>.</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'dropdown', question: "1. The teacher [___] gives us homework is very strict.", options: ["which", "who", "where", "whose"], correct: 1, explanation: "'Who' is the correct relative pronoun for a person (the teacher)." },
                     { type: 'fill', question: "2. The waterproof jacket ________ I bought yesterday is already ripped.", correct: ["which", "that"], explanation: "'Which' or 'that' is used to refer to a thing (the jacket)." },
@@ -512,7 +518,7 @@
                         <li><strong>Check Prepositions:</strong> Remember your collocations.</li>
                     </ul>
                 `,
-                requiredTime: 45,
+                requiredTime: 60,
                 questions: [
                     { type: 'dropdown', question: "1. Which sentence is grammatically correct? I [___] in Colombia.", options: ["am born", "was born", "have born", "born"], correct: 1, explanation: "Being born is an event in the past, requiring the past passive: 'was born'." },
                     { type: 'fill', question: "2. Second Conditional: If I ________ (know) the answer, I would tell you.", correct: ["knew"], explanation: "Second Conditional uses the past simple in the 'if' clause ('knew')." },
@@ -524,6 +530,46 @@
                     { type: 'fill', question: "8. Preposition: My sister is terrified ________ spiders.", correct: ["of"], explanation: "The adjective 'terrified' always takes the preposition 'of'." },
                     { type: 'mcq', question: "9. Word Transformation: To improve the city's __________ (DEVELOP), we need better roads.", options: ["develop", "developing", "developer", "development"], correct: 3, explanation: "We need an abstract noun here. The noun of develop is 'development'." },
                     { type: 'fill', question: "10. Connector: I was sick; ________, I stayed home from work.", correct: ["therefore", "consequently", "so"], explanation: "'Therefore' or 'consequently' introduces the logical result of being sick." }
+                ]
+            },
+            {
+                title: "Stage 8: Causative Forms (Get, Have, Let) 🛠️",
+                image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Causative Forms: Get, Have, and Let</h3>
+                    <p>Causative verbs are used when we do not perform an action ourselves, but instead cause someone else to do it by asking, paying, persuading, or allowing them.</p>
+                    <ul>
+                        <li><strong>Let (Allowing):</strong> To give someone permission to do something.<br>
+                        <em>Formula:</em> Let + Person + Base Verb<br>
+                        <em>Example:</em> My boss <strong>let me leave</strong> early.</li>
+                        
+                        <li><strong>Have (Delegating):</strong> To give someone the responsibility to do a task.<br>
+                        <em>Active Formula:</em> Have + Person + Base Verb<br>
+                        <em>Example:</em> I <strong>had the mechanic check</strong> the brakes.<br>
+                        <em>Passive Formula:</em> Have + Object + Past Participle (V3)<br>
+                        <em>Example:</em> I <strong>had my car washed</strong>.</li>
+                        
+                        <li><strong>Get (Persuading):</strong> To convince or encourage someone to do something.<br>
+                        <em>Active Formula:</em> Get + Person + <strong>to</strong> + Base Verb<br>
+                        <em>Example:</em> She <strong>got him to clean</strong> the house.<br>
+                        <em>Passive Formula:</em> Get + Object + Past Participle (V3)<br>
+                        <em>Example:</em> I <strong>got the roof repaired</strong>.</li>
+                    </ul>
+                `,
+                requiredTime: 60,
+                questions: [
+                    { type: 'mcq', question: "1. The manager had his assistant __________ the weekly report.", options: ["type", "to type", "typed", "typing"], correct: 0, explanation: "Active 'have' uses the base verb: have + person + base verb." },
+                    { type: 'fill', question: "2. I need to get my car __________ (fix) before the road trip.", correct: ["fixed"], explanation: "Passive 'get' uses the past participle: get + object + past participle." },
+                    { type: 'match', question: "3. Match the causative verb 'Let' with its correct definition:", options: ["To force someone to do a task", "To give permission or allow", "To persuade someone", "To assign a paid task"], correct: 1, explanation: "'Let' means to give permission (e.g., Let me go)." },
+                    { type: 'ynng', question: "4. Read the sentence: <em>'Sarah got her brother to clean the house.'</em><br><strong>Statement:</strong> Sarah's brother cleaned the house completely voluntarily without being asked.", options: ["Yes", "No", "Not Given"], correct: 1, explanation: "No. 'Got' implies she had to persuade or convince him to do it." },
+                    { type: 'unscramble', question: "5. Unscramble the sentence: (hair / cut / yesterday / had / I / my)", correct: ["i had my hair cut yesterday"], explanation: "Subject (I) + causative (had) + object (my hair) + past participle (cut) + time (yesterday)." },
+                    { type: 'spot', question: "6. Spot the mistake and type the <strong>fully corrected sentence</strong>: 'The teacher let the students to leave early.'", correct: ["the teacher let the students leave early"], explanation: "'Let' is followed by the base verb without 'to' (let + person + base verb)." },
+                    { type: 'mcq', question: "7. She got her best friend __________ her with the difficult math homework.", options: ["help", "to help", "helped", "helping"], correct: 1, explanation: "Active 'get' requires 'to' + base verb: get + person + to + base verb." },
+                    { type: 'match', question: "8. Match the situation with the correct causative verb: 'The security guard ________ the visitors enter the building.'", options: ["got", "had", "let", "made"], correct: 2, explanation: "The security guard gave permission, so 'let' is the correct choice." },
+                    { type: 'fill', question: "9. The director is going to have the actors __________ (rehearse) the scene one more time.", correct: ["rehearse"], explanation: "Active 'have' takes the base verb: have + person + base verb." },
+                    { type: 'ynng', question: "10. Read the sentence: <em>'We had the roof repaired last week after the storm.'</em><br><strong>Statement:</strong> The homeowners climbed on the roof and repaired it themselves.", options: ["Yes", "No", "Not Given"], correct: 1, explanation: "No. 'Had the roof repaired' means they arranged for someone else to do it." },
+                    { type: 'spot', question: "11. Spot the wrong word in this sentence and type <strong>only the corrected word</strong>: 'He got his laptop fix by the IT department.'", correct: ["fixed"], explanation: "In the passive causative (get + object + past participle), the main verb must be past participle ('fixed')." },
+                    { type: 'unscramble', question: "12. Unscramble the sentence: (us / use / let / our / calculators / professor / the)", correct: ["the professor let us use our calculators"], explanation: "Subject (The professor) + let + person (us) + base verb (use) + object (our calculators)." }
                 ]
             }
         ];
@@ -552,9 +598,9 @@
             container.innerHTML = `
                 <img src="bg2.webp" class="hero-img" alt="Study English">
                 <h1>Welcome to the Freshmen Challenge 🎯</h1>
-                <p>Test your English skills across 7 comprehensive stages. Earn 10 points for every correct answer!</p>
+                <p>Test your English skills across ${stages.length} comprehensive stages. Earn 10 points for every correct answer!</p>
                 <p>Read the grammar rules carefully. You must study the rules before continuing.</p>
-                <p>You need at least 600 points to pass.</p>
+                <p>You need at least 80% to pass.</p>
                 <button class="btn" onclick="startStage()">Start Adventure 🚀</button>
             `;
             updateScoreUI();
@@ -619,10 +665,14 @@
                 else if(q.type === 'fill') badgeHTML = `<span class="badge badge-fill">⌨️ Type Answer</span>`;
                 else if(q.type === 'dropdown') badgeHTML = `<span class="badge badge-dropdown">🔽 Select One</span>`;
                 else if(q.type === 'checkbox') badgeHTML = `<span class="badge badge-checkbox">☑️ Select Multiple</span>`;
+                else if(q.type === 'ynng') badgeHTML = `<span class="badge badge-ynng">🤔 Yes/No/Not Given</span>`;
+                else if(q.type === 'unscramble') badgeHTML = `<span class="badge badge-unscramble">🧩 Unscramble</span>`;
+                else if(q.type === 'spot') badgeHTML = `<span class="badge badge-spot">🔍 Spot the Mistake</span>`;
+                else if(q.type === 'match') badgeHTML = `<span class="badge badge-match">🔗 Matching</span>`;
 
                 html += `${badgeHTML}<div class="question-text">${q.question}</div>`;
                 
-                if (q.type === 'mcq') {
+                if (q.type === 'mcq' || q.type === 'ynng') {
                     html += `<div class="options-grid">`;
                     q.options.forEach((opt, oIndex) => {
                         html += `
@@ -633,9 +683,9 @@
                         `;
                     });
                     html += `</div>`;
-                } else if (q.type === 'fill') {
+                } else if (q.type === 'fill' || q.type === 'unscramble' || q.type === 'spot') {
                     html += `<input type="text" class="text-input" id="q${currentStage}_${qIndex}" placeholder="Type your answer here... ✍️">`;
-                } else if (q.type === 'dropdown') {
+                } else if (q.type === 'dropdown' || q.type === 'match') {
                     html += `<select class="select-input" id="q${currentStage}_${qIndex}">
                         <option value="" disabled selected>Choose the best option...</option>`;
                     q.options.forEach((opt, oIndex) => {
@@ -675,7 +725,7 @@
                 let userAnswerDisplay = "";
                 let correctAnswerDisplay = "";
 
-                if (q.type === 'mcq') {
+                if (q.type === 'mcq' || q.type === 'ynng') {
                     const selected = document.querySelector(`input[name="q${currentStage}_${qIndex}"]:checked`);
                     if (!selected) { allAnswered = false; return; }
                     
@@ -684,16 +734,17 @@
                     correctAnswerDisplay = q.options[q.correct];
                     if (userVal === q.correct) { isCorrect = true; }
                 } 
-                else if (q.type === 'fill') {
+                else if (q.type === 'fill' || q.type === 'unscramble' || q.type === 'spot') {
                     const inputEl = document.getElementById(`q${currentStage}_${qIndex}`);
-                    const inputVal = inputEl.value.trim().toLowerCase();
+                    // Removing extra spaces and normalizing casing for robust text matching
+                    const inputVal = inputEl.value.trim().toLowerCase().replace(/\s+/g, ' ');
                     if (inputVal === '') { allAnswered = false; return; }
                     
                     userAnswerDisplay = inputVal;
                     correctAnswerDisplay = q.correct.join(" OR ");
                     if (q.correct.includes(inputVal)) { isCorrect = true; }
                 } 
-                else if (q.type === 'dropdown') {
+                else if (q.type === 'dropdown' || q.type === 'match') {
                     const selectEl = document.getElementById(`q${currentStage}_${qIndex}`);
                     if (selectEl.value === '') { allAnswered = false; return; }
                     

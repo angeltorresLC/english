@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshmen  English Challenge: Master the Language! 🌟</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5ca86f;
+            --secondary: #e67e73;
+            --accent: #f4d06f;
+            --success: #65b492;
+            --danger: #e26d5c;
+            --dark: #3a4750;
+            --light: #f7f9fa;
+            --cream-bg: #e8f1f5;
+            --border-color: #d1e2eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: #eaeeef;
+        
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(to bottom, #389a2f, #2e2316);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            border-bottom: 4px solid #4a7d91;
+        }
+
+        header h2 {
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .score-badge {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 2px solid #e0be55;
+            transition: transform 0.3s;
+        }
+
+        .progress-bar-container {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.947);
+            border-radius: 20px;
+            margin: 15px auto 0;
+            height: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(92, 147, 168, 0.25);
+            margin: 40px 0;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+            border: 3px solid var(--border-color);
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--border-color);
+        }
+
+        h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+        h2 { color: var(--secondary); margin-bottom: 20px; }
+        p, .explanation-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px; color: #4a4a4a; }
+
+        .grammar-box {
+            background-color: var(--cream-bg);
+            border-left: 6px solid var(--primary);
+            padding: 25px;
+            text-align: left;
+            margin-bottom: 30px;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+            max-height: 400px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .grammar-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .grammar-box h4 {
+            color: var(--dark);
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .grammar-box ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .grammar-box li {
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            box-shadow: 0 5px 15px rgba(92, 147, 168, 0.4);
+            margin-top: 15px;
+            border: 2px solid #457588;
+        }
+
+        .btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(92, 147, 168, 0.6); background-color: #4a915b; }
+        .btn:disabled { background-color: #ccc; border-color: #b0b0b0; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-success { background-color: var(--success); border-color: #559c87; box-shadow: 0 5px 15px rgba(107, 185, 162, 0.4); }
+        .btn-success:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(107, 185, 162, 0.6); background-color: #559c87; }
+
+        .question-block {
+            text-align: left;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+        }
+
+        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: var(--dark); }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .option-label {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            font-size: 1.05rem;
+        }
+
+        .option-label:hover { border-color: var(--primary); background: #eef6f9; }
+        .option-label input { margin-right: 10px; transform: scale(1.2); accent-color: var(--primary); }
+
+        .text-input, .select-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: white;
+        }
+
+        .text-input:focus, .select-input:focus { border-color: var(--primary); }
+
+        #timer {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--secondary);
+            margin: 15px 0;
+            background: #fde8e7;
+            border: 2px solid #f5c2bc;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        
+        .score-pop { transform: scale(1.1); background-color: var(--success); color: white; border-color: #488271; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(42, 58, 68, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            animation: fadeIn 0.4s ease;
+            border: 3px solid var(--primary);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .feedback-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .feedback-correct {
+            background-color: #eaf7f3;
+            border-left: 6px solid var(--success);
+            border-top: 1px solid #d0ede4;
+            border-right: 1px solid #d0ede4;
+            border-bottom: 1px solid #d0ede4;
+        }
+
+        .feedback-incorrect {
+            background-color: #fdf1f0;
+            border-left: 6px solid var(--danger);
+            border-top: 1px solid #f9d6d3;
+            border-right: 1px solid #f9d6d3;
+            border-bottom: 1px solid #f9d6d3;
+        }
+
+        .feedback-explanation {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #555;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .badge-mcq { background: #eef6f9; color: var(--primary); border: 1px solid var(--border-color); }
+        .badge-fill { background: #fdf5e8; color: #b8860b; border: 1px solid #f3e1b9; }
+        .badge-dropdown { background: #fef3e6; color: #d97706; border: 1px solid #fbdcb8; }
+        .badge-checkbox { background: #eaf7f3; color: var(--success); border: 1px solid #c2ece0; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>🌍 Freshmen Interactive English Journey</h2>
+        <div class="score-badge" id="scoreDisplay">🏆 Points: 0 / 700 </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </header>
+
+    <div class="container fade-in" id="mainContainer"></div>
+
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">📊 Stage Results</h2>
+                <p style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0;" id="modalScore"></p>
+            </div>
+            <div id="modalFeedbackList"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-success" onclick="closeModalAndNext()">Continue to Next Stage ⏭️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stages = [
+            {
+                title: "Stage 1: The Passive Voice 🗣️",
+                image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Mastering the Passive Voice</h3>
+                    <p>In an active sentence, the <strong>subject</strong> does the action. In a passive sentence, the <strong>subject receives</strong> the action. We use the passive voice when we don't know who did the action, when it is obvious, or when the action itself is more important than the doer.</p>
+                    <h4>📐 Core Formula:</h4>
+                    <p><strong>Object + Verb 'to be' (in the correct tense) + Past Participle (V3)</strong></p>
+                    <ul>
+                        <li><strong>Present Simple:</strong> <em>Active:</em> They clean the office. &rarr; <em>Passive:</em> The office <strong>is cleaned</strong>.</li>
+                        <li><strong>Past Simple:</strong> <em>Active:</em> Shakespeare wrote Hamlet. &rarr; <em>Passive:</em> Hamlet <strong>was written</strong> by Shakespeare.</li>
+                    </ul>
+                    <p><em>💡 Pro Tip:</em> If you want to mention who performed the action in a passive sentence, use the preposition <strong>'by'</strong>.</p>
+                `,
+                requiredTime: 5,
+                questions: [
+                    { type: 'mcq', question: "1. The famous novel *The Great Gatsby* __________ by F. Scott Fitzgerald in 1925.", options: ["writes", "was written", "has written", "is written"], correct: 1, explanation: "Because the action happened in the past (1925), we use the Past Simple passive: 'was' + past participle." },
+                    { type: 'dropdown', question: "2. Select the correct phrase to complete the sentence: Coffee [___] in Colombia because of the perfect climate.", options: ["grow", "grew", "is grown", "are growing"], correct: 2, explanation: "For a general fact in the present, use Present Simple passive: 'is' + past participle (grown)." },
+                    { type: 'mcq', question: "3. The new mountain biking trail __________ next month.", options: ["will build", "was built", "will be built", "is built"], correct: 2, explanation: "The time indicator 'next month' requires the future passive: 'will be' + past participle." },
+                    { type: 'fill', question: "4. Type the correct passive form (Past Simple): The mystery in the story ________ (solve) at the end of the book.", correct: ["was solved"], explanation: "For a completed action in the past story, use Past Simple passive: 'was' + solved." },
+                    { type: 'checkbox', question: "5. Select ALL sentences that are in the PASSIVE voice:", options: ["The car is being washed.", "John is washing the car.", "The cake was eaten.", "She eats cake every day."], correct: [0, 2], explanation: "Options 1 and 3 use 'to be' + 'past participle' structure, placing the object at the front." },
+                    { type: 'fill', question: "6. Type the correct passive form (Past Simple): The tax form ________ (fill) out yesterday.", correct: ["was filled"], explanation: "Because of 'yesterday', we need the Past Simple passive: 'was filled'." },
+                    { type: 'dropdown', question: "7. A new waterproof jacket [___] to the winner of the race yesterday.", options: ["was given", "gave", "is given", "gives"], correct: 0, explanation: "The action happened yesterday to the jacket (object), so we need Past Simple passive: 'was given'." },
+                    { type: 'fill', question: "8. Type the correct passive form (Present Perfect): Homework ________ (finish) by the students.", correct: ["has been finished"], explanation: "For recently completed actions with a result now, use Present Perfect passive: 'has been' + past participle." },
+                    { type: 'mcq', question: "9. English __________ in many countries around the world.", options: ["speaks", "spoke", "is spoken", "is speaking"], correct: 2, explanation: "This is a general fact, so we use Present Simple passive: 'is spoken'." },
+                    { type: 'dropdown', question: "10. The test results [___] tomorrow morning.", options: ["announced", "will announce", "will be announced", "are announced"], correct: 2, explanation: "For an action that hasn't happened yet, use Future passive: 'will be announced'." }
+                ]
+            },
+            {
+                title: "Stage 2: Conditionals (Zero, 1st, 2nd) 🔀",
+                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Mastering Conditionals</h3>
+                    <p>Conditionals discuss outcomes that depend on a specific condition. A conditional sentence has two parts: the <strong>If-clause</strong> (the condition) and the <strong>Main clause</strong> (the result).</p>
+                    <ul>
+                        <li><strong>Zero Conditional (Facts):</strong> If + Present Simple, Present Simple.</li>
+                        <li><strong>First Conditional (Real likely future):</strong> If + Present Simple, will/won't + base verb.</li>
+                        <li><strong>Second Conditional (Imaginary):</strong> If + Past Simple, would/wouldn't + base verb.</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'dropdown', question: "1. If I [___] you, I would study harder for the B1 test.", options: ["am", "will be", "were", "had been"], correct: 2, explanation: "This is the Second Conditional (imaginary advice). We use 'were' for all subjects in the 'if' clause." },
+                    { type: 'fill', question: "2. First Conditional: If she wins the race, she ________ (get) the new goggles.", correct: ["will get"], explanation: "First conditional uses 'will' + base verb in the result clause." },
+                    { type: 'mcq', question: "3. If you heat water to 100 degrees Celsius, it __________.", options: ["boiled", "will boil", "boils", "would boil"], correct: 2, explanation: "This is a scientific fact (Zero Conditional), so both clauses use Present Simple." },
+                    { type: 'fill', question: "4. Second Conditional: If I ________ (have) more free time, I would read more.", correct: ["had"], explanation: "Second Conditional uses Past Simple in the 'if' clause." },
+                    { type: 'checkbox', question: "5. Select ALL sentences that are in the FIRST Conditional:", options: ["If it rains, we will stay home.", "If I were rich, I'd travel.", "She will call you if she has time.", "If water freezes, it becomes ice."], correct: [0, 2], explanation: "First conditional uses Present Simple + Will. (The 2nd option is 2nd conditional, the 4th is Zero conditional)." },
+                    { type: 'fill', question: "6. First Conditional: If it rains tomorrow, we ________ (not go) to the park.", correct: ["will not go", "won't go"], explanation: "First Conditional negative result clause requires 'will not' or 'won't' + base verb." },
+                    { type: 'dropdown', question: "7. If they won the lottery, they [___] a large house in Bogota.", options: ["buy", "will buy", "would buy", "bought"], correct: 2, explanation: "Second conditional (imaginary situation because of 'won'). The result clause needs 'would' + base verb." },
+                    { type: 'fill', question: "8. Zero Conditional: If you mix yellow and blue, you ________ (get) green.", correct: ["get"], explanation: "Zero conditional for general truths uses Present Simple in both clauses." },
+                    { type: 'mcq', question: "9. She will miss the bus if she __________ up late.", options: ["wakes", "woke", "will wake", "wake"], correct: 0, explanation: "First Conditional: The 'if' clause must be in Present Simple ('wakes' because of 'she')." },
+                    { type: 'fill', question: "10. Second Conditional: If he ________ (be) the president, he would lower the taxes.", correct: ["were", "was"], explanation: "Second Conditional requires past simple. 'Were' is preferred for all subjects in formal English." }
+                ]
+            },
+            {
+                title: "Stage 3: Phrasal Verbs & Prepositions 🧩",
+                image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Mastering Phrasal Verbs & Prepositions</h3>
+                    <p>English frequently uses combinations of verbs and prepositions (or adverbs) that completely change the original meaning of the verb.</p>
+                    <ul>
+                        <li><strong>Give up:</strong> To stop trying or abandon a habit.</li>
+                        <li><strong>Look forward to:</strong> To be excited about the future.</li>
+                        <li><strong>Find out:</strong> To discover information.</li>
+                        <li><strong>Collocations:</strong> Interested <em>in</em>, Good <em>at</em>, Afraid <em>of</em>, Depend <em>on</em>.</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'dropdown', question: "1. I am really looking forward [___] my summer holidays.", options: ["at", "on", "to", "for"], correct: 2, explanation: "The set phrase is 'look forward to'." },
+                    { type: 'mcq', question: "2. My brother is very interested __________ reading mystery books.", options: ["on", "at", "in", "about"], correct: 2, explanation: "The adjective 'interested' is always followed by the preposition 'in'." },
+                    { type: 'fill', question: "3. Don't give ________! You can easily pass this exam if you keep practicing.", correct: ["up"], explanation: "The phrasal verb meaning to surrender or quit is 'give up'." },
+                    { type: 'dropdown', question: "4. The success of the outdoor event depends [___] the weather.", options: ["in", "of", "on", "with"], correct: 2, explanation: "The verb 'depend' is always followed by the preposition 'on'." },
+                    { type: 'checkbox', question: "5. Select ALL the prepositions that can follow the verb 'turn' to make a phrasal verb:", options: ["up", "down", "in", "off", "underneath"], correct: [0, 1, 2, 3], explanation: "Turn up, turn down, turn in (submit/sleep), and turn off are all valid phrasal verbs. Turn underneath is not." },
+                    { type: 'mcq', question: "6. I need to find __________ what time the train leaves.", options: ["in", "out", "on", "up"], correct: 1, explanation: "The phrasal verb to discover information is 'find out'." },
+                    { type: 'fill', question: "7. She is really good ________ solving puzzles.", correct: ["at"], explanation: "The adjective 'good' (when talking about skills) takes the preposition 'at'." },
+                    { type: 'dropdown', question: "8. We have run [___] of milk. Can you buy some more?", options: ["out", "away", "down", "off"], correct: 0, explanation: "The phrasal verb meaning to have none left is 'run out (of)'." },
+                    { type: 'fill', question: "9. He apologized ________ being late to the meeting.", correct: ["for"], explanation: "You apologize 'for' an action." },
+                    { type: 'mcq', question: "10. Please take __________ your muddy shoes before entering the house.", options: ["out", "off", "away", "up"], correct: 1, explanation: "The phrasal verb for removing clothing/shoes is 'take off'." }
+                ]
+            },
+            {
+                title: "Stage 4: Word Transformation 🔄",
+                image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Word Formation & Transformation</h3>
+                    <p>At the B1 level, you must understand how to create different parts of speech from a base word.</p>
+                    <ul>
+                        <li><strong>Verbs to Nouns:</strong> Add <em>-tion, -sion, -ment, -ance, -ity</em>. (Develop &rarr; Development).</li>
+                        <li><strong>Nouns/Verbs to Adjectives:</strong> Add <em>-ous, -al, -ful, -less, -able</em>. (Care &rarr; Careful).</li>
+                        <li><strong>Adjectives to Adverbs:</strong> Add <em>-ly</em>. (Quick &rarr; Quickly).</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'fill', question: "1. The ________ (INVENT) of the smartphone changed how we communicate.", correct: ["invention"], explanation: "We need a noun here. The noun form of 'invent' is 'invention'." },
+                    { type: 'dropdown', question: "2. Agatha Christie is a highly [___] writer.", options: ["fame", "famously", "famous", "infamous"], correct: 2, explanation: "We need an adjective to describe the writer. The adjective of 'fame' is 'famous'." },
+                    { type: 'fill', question: "3. The teacher gave a very clear ________ (EXPLAIN) of the grammar rules.", correct: ["explanation"], explanation: "We need a noun after 'clear'. The noun form of 'explain' is 'explanation'." },
+                    { type: 'mcq', question: "4. It is highly __________ (PROBABLE) that it will snow in this tropical city.", options: ["probable", "improbable", "probability", "probably"], correct: 1, explanation: "Context indicates it's very unlikely. The negative adjective is 'improbable'." },
+                    { type: 'fill', question: "5. He rode his mountain bike very ________ (QUICK) down the hill.", correct: ["quickly"], explanation: "We need an adverb to describe how he rode. The adverb is 'quickly'." },
+                    { type: 'checkbox', question: "6. Select ALL the words that are NOUNS:", options: ["Decide", "Decision", "Predictable", "Development", "Beautiful"], correct: [1, 3], explanation: "Words ending in -sion and -ment are typical nouns." },
+                    { type: 'fill', question: "7. His ________ (KNOW) of English grammar is very impressive.", correct: ["knowledge"], explanation: "We need a noun. The noun form of 'know' is 'knowledge'." },
+                    { type: 'dropdown', question: "8. The weather in the mountains can be very [___].", options: ["predict", "prediction", "predictable", "unpredictable"], correct: 3, explanation: "Context implies mountains change fast, so the negative adjective 'unpredictable' is correct." },
+                    { type: 'fill', question: "9. We need to find a ________ (SOLVE) to this math problem.", correct: ["solution"], explanation: "We need a noun. The noun form of 'solve' is 'solution'." },
+                    { type: 'mcq', question: "10. The view from the top of the Andes is absolutely __________ (BEAUTY).", options: ["beauty", "beautiful", "beautifully", "beautify"], correct: 1, explanation: "We need an adjective to describe the view. The adjective of 'beauty' is 'beautiful'." }
+                ]
+            },
+            {
+                title: "Stage 5: Linking Words & Connectors 🔗",
+                image: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Linking Words (Connectors)</h3>
+                    <p>Connectors build bridges between your ideas. They are essential for reading comprehension and writing flow.</p>
+                    <ul>
+                        <li><strong>Contrast:</strong> Although, Even though, Despite, In spite of, However.</li>
+                        <li><strong>Reason:</strong> Because, Since, As, Because of, Due to.</li>
+                        <li><strong>Result:</strong> So, Therefore, Consequently.</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'dropdown', question: "1. [___] it was raining, the cyclists continued their race.", options: ["However", "Although", "Because", "Therefore"], correct: 1, explanation: "'Although' is used to introduce a contrasting clause with a subject and verb (it was raining)." },
+                    { type: 'fill', question: "2. He loves reading mystery novels. ________, his sister prefers science fiction.", correct: ["however"], explanation: "'However' is used to show contrast between two separate sentences." },
+                    { type: 'dropdown', question: "3. The flight to Bogota was delayed [___] the bad weather.", options: ["because", "due to", "since", "although"], correct: 1, explanation: "'Due to' is followed by a noun phrase ('the bad weather'), whereas 'because' needs a full clause." },
+                    { type: 'fill', question: "4. I want to buy a new jacket; ________, I don't have enough money.", correct: ["however"], explanation: "'However' shows contrast and fits the punctuation (semicolon + comma)." },
+                    { type: 'mcq', question: "5. __________ being very tired, she finished grading all the exams.", options: ["Although", "Because of", "Despite", "However"], correct: 2, explanation: "'Despite' is followed by a gerund (-ing form) or a noun phrase, showing contrast." },
+                    { type: 'checkbox', question: "6. Select ALL connectors that express REASON or CAUSE:", options: ["Because", "Therefore", "Due to", "Since", "However"], correct: [0, 2, 3], explanation: "'Because', 'Due to', and 'Since' introduce a reason. 'Therefore' is a result, 'However' is a contrast." },
+                    { type: 'mcq', question: "7. The hotel was terrible. __________, it was very expensive.", options: ["Furthermore", "Although", "Despite", "Because"], correct: 0, explanation: "'Furthermore' is used to add another point (usually matching negative-negative or positive-positive)." },
+                    { type: 'fill', question: "8. We will stay at the coffee shop ________ it stops raining outside.", correct: ["until"], explanation: "'Until' shows that the action will stop when the condition is met." },
+                    { type: 'dropdown', question: "9. You can use my computer [___] you are careful with it.", options: ["as long as", "unless", "despite", "although"], correct: 0, explanation: "'As long as' sets a condition (provided that you are careful)." },
+                    { type: 'fill', question: "10. The road was closed. ________, we had to take a different route.", correct: ["therefore", "consequently", "so"], explanation: "'Therefore' or 'consequently' introduce a result based on the previous sentence." }
+                ]
+            },
+            {
+                title: "Stage 6: Relative Clauses 🕵️‍♂️",
+                image: "https://images.unsplash.com/photo-1455390582262-044cdead27d8?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Relative Clauses</h3>
+                    <p>Relative clauses are used to add extra information about a noun in a sentence without having to start a completely new sentence.</p>
+                    <ul>
+                        <li><strong>Who:</strong> Used for <em>people</em>.</li>
+                        <li><strong>Which:</strong> Used for <em>things and animals</em>.</li>
+                        <li><strong>That:</strong> Used in <em>Defining</em> relative clauses instead of who/which.</li>
+                        <li><strong>Where:</strong> Used for <em>places</em>.</li>
+                        <li><strong>Whose:</strong> Used to show <em>possession</em>.</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'dropdown', question: "1. The teacher [___] gives us homework is very strict.", options: ["which", "who", "where", "whose"], correct: 1, explanation: "'Who' is the correct relative pronoun for a person (the teacher)." },
+                    { type: 'fill', question: "2. The waterproof jacket ________ I bought yesterday is already ripped.", correct: ["which", "that"], explanation: "'Which' or 'that' is used to refer to a thing (the jacket)." },
+                    { type: 'mcq', question: "3. Colombia is the country __________ the best coffee is produced.", options: ["which", "that", "where", "when"], correct: 2, explanation: "'Where' is used to refer to a location or place." },
+                    { type: 'fill', question: "4. Do you know the boy ________ bicycle was stolen?", correct: ["whose"], explanation: "'Whose' indicates possession (the bicycle belongs to the boy)." },
+                    { type: 'checkbox', question: "5. Select ALL pronouns that can complete this sentence: The book [___] I am reading is fascinating.", options: ["who", "which", "that", "where"], correct: [1, 2], explanation: "Because it's a defining clause about a thing, you can use 'which' or 'that'." },
+                    { type: 'fill', question: "6. The store ________ sells biking equipment is closed today.", correct: ["which", "that"], explanation: "'Which' or 'that' is used for a thing/business." },
+                    { type: 'dropdown', question: "7. My brother, [___] lives in Madrid, is visiting us next week.", options: ["who", "that", "which", "whose"], correct: 0, explanation: "For people in non-defining clauses (with commas), we MUST use 'who', not 'that'." },
+                    { type: 'fill', question: "8. 2020 was the year ________ the pandemic started.", correct: ["when"], explanation: "'When' is used to refer to a specific time or year." },
+                    { type: 'mcq', question: "9. The students __________ test scores were the highest received a certificate.", options: ["who", "whom", "whose", "which"], correct: 2, explanation: "'Whose' shows possession (the test scores belong to the students)." },
+                    { type: 'fill', question: "10. A library is a place ________ you can study quietly.", correct: ["where"], explanation: "'Where' is the correct pronoun for a location." }
+                ]
+            },
+            {
+                title: "Stage 7: Final B1 Challenge 🏆",
+                image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
+                grammarRules: `
+                    <h3>📌 Final Review Instructions & Exam Strategies</h3>
+                    <p>This final stage tests a mixture of everything you have learned! Take a deep breath. You've got this!</p>
+                    <ul>
+                        <li><strong>Read the entire sentence:</strong> Look for time indicators!</li>
+                        <li><strong>Identify the subject:</strong> Active or Passive?</li>
+                        <li><strong>Check Prepositions:</strong> Remember your collocations.</li>
+                    </ul>
+                `,
+                requiredTime: 45,
+                questions: [
+                    { type: 'dropdown', question: "1. Which sentence is grammatically correct? I [___] in Colombia.", options: ["am born", "was born", "have born", "born"], correct: 1, explanation: "Being born is an event in the past, requiring the past passive: 'was born'." },
+                    { type: 'fill', question: "2. Second Conditional: If I ________ (know) the answer, I would tell you.", correct: ["knew"], explanation: "Second Conditional uses the past simple in the 'if' clause ('knew')." },
+                    { type: 'mcq', question: "3. Millions of copies of that book __________ around the world.", options: ["have been sold", "has sold", "are selling", "was sold"], correct: 0, explanation: "Plural subject 'Millions' requires 'have'. It's an action up to now, so Present Perfect passive is used." },
+                    { type: 'fill', question: "4. Phrasal Verb: My brother gave ________ smoking two years ago.", correct: ["up"], explanation: "To stop a habit is to 'give up'." },
+                    { type: 'checkbox', question: "5. Select ALL the correct options for this blank: [___] the heavy rain, we enjoyed our hike.", options: ["Although", "Despite", "In spite of", "Because of"], correct: [1, 2], explanation: "'The heavy rain' is a noun phrase. To show contrast with a noun phrase, you must use 'Despite' or 'In spite of'." },
+                    { type: 'fill', question: "6. Relative Clause: The man ________ car I bought is my neighbor.", correct: ["whose"], explanation: "Shows possession; I bought his car." },
+                    { type: 'dropdown', question: "7. I am not used [___] up so early in the morning.", options: ["to wake", "to waking", "wake", "waking"], correct: 1, explanation: "The structure 'be used to' is followed by a gerund (-ing form)." },
+                    { type: 'fill', question: "8. Preposition: My sister is terrified ________ spiders.", correct: ["of"], explanation: "The adjective 'terrified' always takes the preposition 'of'." },
+                    { type: 'mcq', question: "9. Word Transformation: To improve the city's __________ (DEVELOP), we need better roads.", options: ["develop", "developing", "developer", "development"], correct: 3, explanation: "We need an abstract noun here. The noun of develop is 'development'." },
+                    { type: 'fill', question: "10. Connector: I was sick; ________, I stayed home from work.", correct: ["therefore", "consequently", "so"], explanation: "'Therefore' or 'consequently' introduces the logical result of being sick." }
+                ]
+            }
+        ];
+
+        // STATE VARIABLES
+        let currentStage = 0;
+        let correctAnswers = 0;
+        let totalQuestions = stages.reduce((sum, stage) => sum + stage.questions.length, 0);
+        let countdownTimer;
+        
+        // POINTS SYSTEM
+        const POINTS_PER_QUESTION = 10;
+        const MAX_POINTS = totalQuestions * POINTS_PER_QUESTION;
+        
+        // DOM Elements
+        const container = document.getElementById('mainContainer');
+        const progressBar = document.getElementById('progressBar');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const modalFeedbackList = document.getElementById('modalFeedbackList');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalScore = document.getElementById('modalScore');
+
+        // INITIALIZE APP
+        function init() {
+            container.innerHTML = `
+                <img src="bg2.webp" class="hero-img" alt="Study English">
+                <h1>Welcome to the Freshmen Challenge 🎯</h1>
+                <p>Test your English skills across 7 comprehensive stages. Earn 10 points for every correct answer!</p>
+                <p>Read the grammar rules carefully. You must study the rules before continuing.</p>
+                <p>You need at least 600 points to pass.</p>
+                <button class="btn" onclick="startStage()">Start Adventure 🚀</button>
+            `;
+            updateScoreUI();
+        }
+        
+        function updateScoreUI() {
+            scoreDisplay.innerText = `🏆 Points: ${correctAnswers * POINTS_PER_QUESTION} / ${MAX_POINTS}`;
+            scoreDisplay.classList.add('score-pop');
+            setTimeout(() => scoreDisplay.classList.remove('score-pop'), 300);
+        }
+
+        // RENDER GRAMMAR EXPLANATION WITH TIMER
+        function startStage() {
+            const stage = stages[currentStage];
+            let timeLeft = stage.requiredTime;
+            
+            progressBar.style.width = `${(currentStage / stages.length) * 100}%`;
+
+            container.innerHTML = `
+                <h2>${stage.title}</h2>
+                <img src="${stage.image}" class="hero-img" alt="Stage Image">
+                <div class="grammar-box">
+                    ${stage.grammarRules}
+                </div>
+                <div id="timer">⏳ Please read. Time remaining: ${timeLeft}s</div>
+                <br>
+                <button class="btn" id="startQuestionsBtn" disabled>Start Questions ✍️</button>
+            `;
+
+            const timerDisplay = document.getElementById('timer');
+            const startBtn = document.getElementById('startQuestionsBtn');
+
+            if (countdownTimer) clearInterval(countdownTimer);
+
+            countdownTimer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = `⏳ Please read. Time remaining: ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    timerDisplay.innerText = "✅ You may now begin!";
+                    timerDisplay.style.backgroundColor = "var(--success)";
+                    timerDisplay.style.color = "white";
+                    timerDisplay.style.borderColor = "#488271";
+                    startBtn.disabled = false;
+                    startBtn.onclick = renderQuestions;
+                }
+            }, 1000);
+        }
+
+        // RENDER QUESTIONS FOR CURRENT STAGE
+        function renderQuestions() {
+            const stage = stages[currentStage];
+            let html = `<h2>${stage.title} - Questions 🧠</h2>`;
+            
+            stage.questions.forEach((q, qIndex) => {
+                html += `<div class="question-block">`;
+                
+                // Add Badges for Question Type
+                let badgeHTML = '';
+                if(q.type === 'mcq') badgeHTML = `<span class="badge badge-mcq">🔘 Multiple Choice</span>`;
+                else if(q.type === 'fill') badgeHTML = `<span class="badge badge-fill">⌨️ Type Answer</span>`;
+                else if(q.type === 'dropdown') badgeHTML = `<span class="badge badge-dropdown">🔽 Select One</span>`;
+                else if(q.type === 'checkbox') badgeHTML = `<span class="badge badge-checkbox">☑️ Select Multiple</span>`;
+
+                html += `${badgeHTML}<div class="question-text">${q.question}</div>`;
+                
+                if (q.type === 'mcq') {
+                    html += `<div class="options-grid">`;
+                    q.options.forEach((opt, oIndex) => {
+                        html += `
+                            <label class="option-label">
+                                <input type="radio" name="q${currentStage}_${qIndex}" value="${oIndex}">
+                                ${opt}
+                            </label>
+                        `;
+                    });
+                    html += `</div>`;
+                } else if (q.type === 'fill') {
+                    html += `<input type="text" class="text-input" id="q${currentStage}_${qIndex}" placeholder="Type your answer here... ✍️">`;
+                } else if (q.type === 'dropdown') {
+                    html += `<select class="select-input" id="q${currentStage}_${qIndex}">
+                        <option value="" disabled selected>Choose the best option...</option>`;
+                    q.options.forEach((opt, oIndex) => {
+                        html += `<option value="${oIndex}">${opt}</option>`;
+                    });
+                    html += `</select>`;
+                } else if (q.type === 'checkbox') {
+                    html += `<div class="options-grid">`;
+                    q.options.forEach((opt, oIndex) => {
+                        html += `
+                            <label class="option-label">
+                                <input type="checkbox" name="q${currentStage}_${qIndex}" value="${oIndex}">
+                                ${opt}
+                            </label>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                
+                html += `</div>`;
+            });
+
+            html += `<button class="btn" onclick="submitStage()">Submit & View Feedback 📝</button>`;
+            container.innerHTML = html;
+            window.scrollTo(0, 0);
+        }
+
+        // SUBMIT AND CHECK ANSWERS, THEN SHOW MODAL
+        function submitStage() {
+            const stage = stages[currentStage];
+            let allAnswered = true;
+            let stagePoints = 0;
+            let feedbackHTML = "";
+
+            stage.questions.forEach((q, qIndex) => {
+                let isCorrect = false;
+                let userAnswerDisplay = "";
+                let correctAnswerDisplay = "";
+
+                if (q.type === 'mcq') {
+                    const selected = document.querySelector(`input[name="q${currentStage}_${qIndex}"]:checked`);
+                    if (!selected) { allAnswered = false; return; }
+                    
+                    const userVal = parseInt(selected.value);
+                    userAnswerDisplay = q.options[userVal];
+                    correctAnswerDisplay = q.options[q.correct];
+                    if (userVal === q.correct) { isCorrect = true; }
+                } 
+                else if (q.type === 'fill') {
+                    const inputEl = document.getElementById(`q${currentStage}_${qIndex}`);
+                    const inputVal = inputEl.value.trim().toLowerCase();
+                    if (inputVal === '') { allAnswered = false; return; }
+                    
+                    userAnswerDisplay = inputVal;
+                    correctAnswerDisplay = q.correct.join(" OR ");
+                    if (q.correct.includes(inputVal)) { isCorrect = true; }
+                } 
+                else if (q.type === 'dropdown') {
+                    const selectEl = document.getElementById(`q${currentStage}_${qIndex}`);
+                    if (selectEl.value === '') { allAnswered = false; return; }
+                    
+                    const userVal = parseInt(selectEl.value);
+                    userAnswerDisplay = q.options[userVal];
+                    correctAnswerDisplay = q.options[q.correct];
+                    if (userVal === q.correct) { isCorrect = true; }
+                } 
+                else if (q.type === 'checkbox') {
+                    const checkboxes = document.querySelectorAll(`input[name="q${currentStage}_${qIndex}"]:checked`);
+                    if (checkboxes.length === 0) { allAnswered = false; return; }
+                    
+                    const userVals = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort();
+                    const correctVals = q.correct.slice().sort();
+                    
+                    userAnswerDisplay = userVals.map(val => q.options[val]).join(" + ");
+                    correctAnswerDisplay = correctVals.map(val => q.options[val]).join(" + ");
+                    
+                    if (JSON.stringify(userVals) === JSON.stringify(correctVals)) {
+                        isCorrect = true;
+                    }
+                }
+
+                if(isCorrect) {
+                    stagePoints += POINTS_PER_QUESTION;
+                    correctAnswers++;
+                }
+
+                const statusClass = isCorrect ? 'feedback-correct' : 'feedback-incorrect';
+                const statusText = isCorrect ? '✅ Correct' : '❌ Incorrect';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <p><strong>Question:</strong> ${q.question}</p>
+                        <p><strong>Your Answer:</strong> ${userAnswerDisplay} (${statusText})</p>
+                        ${!isCorrect ? `<p><strong>Correct Answer:</strong> ${correctAnswerDisplay}</p>` : ''}
+                        <div class="feedback-explanation">
+                            <strong>💡 Explanation:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (!allAnswered) {
+                alert("⚠️ Please answer all questions before submitting!");
+                return;
+            }
+
+            updateScoreUI();
+
+            modalTitle.innerText = `${stage.title} - Feedback 📝`;
+            modalScore.innerText = `You earned ${stagePoints} points in this stage! 🌟`;
+            modalFeedbackList.innerHTML = feedbackHTML;
+            feedbackModal.style.display = "flex";
+        }
+
+        // CLOSE MODAL AND PROCEED
+        function closeModalAndNext() {
+            feedbackModal.style.display = "none";
+            currentStage++;
+            
+            if (currentStage < stages.length) {
+                startStage();
+            } else {
+                showResults();
+            }
+        }
+
+        // SHOW FINAL RESULTS
+        function showResults() {
+            progressBar.style.width = "100%";
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            let message = "";
+            let image = "";
+
+            if (percentage >= 80) {
+                message = "Excellent work! You have truly mastered B1 English! 🎓🔥";
+                image = "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80";
+            } else if (percentage >= 60) {
+                message = "Great job! You have a solid understanding, but keep practicing! 👍📚";
+                image = "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80";
+            } else {
+                message = "Don't give up! Review the grammar rules and try again. 💪📖";
+                image = "https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&w=800&q=80";
+            }
+
+            container.innerHTML = `
+                <h1>Course Completed! 🎉</h1>
+                <img src="${image}" class="hero-img" alt="Results">
+                <h2>Total Points: ${correctAnswers * POINTS_PER_QUESTION} / ${MAX_POINTS}</h2>
+                <p style="font-size: 1.5rem; color: var(--primary);"><strong>${percentage}% Accuracy</strong></p>
+                <p>${message}</p>
+                <button class="btn" onclick="location.reload()">Restart Challenge 🔄</button>
+            `;
+            window.scrollTo(0, 0);
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Results</title>
+    <style>
+        :root {
+            --system-blue: #007AFF;
+            --system-blue-hover: #005bb5;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-primary: #1D1D1F;
+            --text-secondary: #868b87;
+            --input-bg: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 15% 50%, rgba(251, 194, 235, 0.75), transparent 55%),
+                        radial-gradient(circle at 85% 30%, rgba(161, 140, 209, 0.75), transparent 55%),
+                        radial-gradient(circle at 50% 80%, rgba(255, 236, 210, 0.75), transparent 55%),
+                        url('monkey_bg.jpg') center center / cover no-repeat fixed;
+            background-color: #f4f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 20px;
+            color: var(--text-primary);
+        }
+
+        .page-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 28px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .filters-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 260px;
+            flex-shrink: 0;
+            padding: 30px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 
+                        inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        .filters-sidebar h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .app-container {
+            flex: 1;
+            min-width: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 
+                        inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+        
+        /* New Header Wrapper for Title and Image */
+        .header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .header-wrapper h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .side-image {
+            width: 120px;
+            flex-shrink: 0;
+            border-radius: 15px;
+            object-fit: contain;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .shield-icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: text-bottom;
+            display: inline-block;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #1D1D1F, #434345);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Active Filters Display */
+        .active-filters {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-badge {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            color: var(--system-blue);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-badge strong {
+            margin-right: 5px;
+            color: #1D1D1F;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            border-radius: 20px;
+            padding: 10px 10px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .dashboard-card .dash-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-card .dash-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--system-blue);
+        }
+
+        .search-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            background: var(--input-bg);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 999px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+        .search-tag:focus-within {
+            background: #ffffff;
+            border-color: var(--system-blue);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+        }
+
+        .search-tag label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .search-tag input,
+        .search-tag select {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            padding: 0;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .score-legend {
+            margin-top: 10px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .score-legend strong {
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .score-legend span {
+            color: var(--system-blue);
+            font-weight: 600;
+        }
+
+        .score-legend ul {
+            margin: 0 0 8px 0;
+            padding-left: 18px;
+        }
+
+        .score-legend li {
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 1100px) {
+            .side-image {
+                display: none;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .page-layout {
+                flex-direction: column;
+            }
+
+            .filters-sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+
+            .filters-sidebar h2 {
+                width: 100%;
+                margin-bottom: 0;
+            }
+
+            .search-tag {
+                flex: 1 1 auto;
+                min-width: 160px;
+            }
+        }
+
+        .results-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: none; 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            white-space: nowrap;
+        }
+
+        td {
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .score-badge {
+            background: var(--system-blue);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        
+        .total-badge {
+            background: #5856D6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Chart Panels (Results by Year / Student Evolution) */
+        .chart-panel {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            border-radius: 20px;
+            padding: 18px 20px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .chart-panel h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-panel h4 svg {
+            width: 19px;
+            height: 19px;
+            color: var(--system-blue);
+            flex-shrink: 0;
+        }
+
+        .chart-panel .chart-sub {
+            margin: 4px 0 14px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-canvas-wrap {
+            position: relative;
+            height: 260px;
+        }
+
+        .chart-empty-msg {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            height: 260px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .evolution-panel {
+            display: none;
+        }
+
+        .evolution-panel.show {
+            display: block;
+        }
+
+        .year-stat {
+            display: none;
+            flex-direction: column;
+            align-items: stretch;
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            background: rgba(0, 122, 255, 0.08);
+            border: 1px solid rgba(0, 122, 255, 0.18);
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .year-stat.show {
+            display: flex;
+        }
+
+        .year-stat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .year-stat-header svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: var(--system-blue);
+        }
+
+        .year-stat-header strong {
+            color: var(--system-blue);
+            font-weight: 700;
+        }
+
+        .score-distribution {
+            display: none;
+            margin-top: 8px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 122, 255, 0.15);
+            font-size: 0.85rem;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .score-distribution.show {
+            display: flex;
+        }
+
+        .score-pill {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: var(--text-primary);
+        }
+
+        .best-results-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--system-blue), #5856D6);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .best-results-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .best-results-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 122, 255, 0.35);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(29, 29, 31, 0.45);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 560px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-tab.active {
+            background: #ffffff;
+            color: var(--system-blue);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+        }
+
+        .modal-group {
+            margin-bottom: 18px;
+        }
+
+        .modal-group h3 {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 0 0 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-count {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .modal-table td {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-rank {
+            font-weight: 700;
+            color: var(--system-blue);
+            width: 36px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="page-layout">
+        
+        <aside class="filters-sidebar">
+            <h2>🔎 Filters</h2>
+            <div class="search-tag">
+                <label for="searchName">First Name</label>
+                <input type="text" id="searchName" placeholder="e.g., Ana Sofia">
+            </div>
+
+            <div class="search-tag">
+                <label for="searchLastName">Last Name</label>
+                <input type="text" id="searchLastName" placeholder="e.g., Cardenas">
+            </div>
+
+            <div class="search-tag">
+                <label for="searchYear">Year</label>
+                <select id="searchYear">
+                    <option value="">Any Year</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+
+            <div class="search-tag">
+                <label for="searchExam">Exam Type</label>
+                <select id="searchExam">
+                    <option value="">Any Exam</option>
+                    <option value="YLE Starters">Starters</option>
+                    <option value="YLE Movers">Movers</option>
+                    <option value="YLE Flyers">Flyers</option>
+                </select>
+            </div>
+
+            <div class="search-tag">
+                <label for="searchScore">Final Score</label>
+                <input type="text" id="searchScore" placeholder="e.g., RW3">
+            </div>
+            
+           <div class="score-legend">
+                <strong>Result Legend</strong>
+                <ul>
+                    <li><span>RW:</span> Reading and Writing</li>
+                    <li><span>L:</span> Listening</li>
+                    <li><span>S:</span> Speaking</li>
+                </ul>
+                <div><b>
+                    The numbers indicate the amount of <img src="shield.png" class="shield-icon" alt="shields">. <br>
+                    For example, <em>RW5-L4-S5</em> means: <br>
+                    Reading and Writing: 5<br> <img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"> <br>
+                    Listening: 4 <br><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><br>
+                    Speaking: 5 <br><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields"><img src="shield.png" class="shield-icon" alt="shields">.<br>
+                    Max. # of shields: 5 per skill (Total 15).
+                    </b>
+                </div>
+            </div>
+        </aside>
+
+        <div class="app-container">
+            
+            <div class="header-wrapper">
+                <h3>Student Records</h3>
+                <img src="q.png" class="side-image" alt="Descent Decorative Image">
+                <img src="descent.png" class="side-image" alt="Descent Decorative Image">
+            </div>
+            
+            <div id="activeFilters" class="active-filters"></div>
+            
+            <div class="main-content">
+                
+                <div class="dashboard-grid" id="dashboardGrid">
+                    <div class="dashboard-card">
+                        <div class="dash-label">Total Candidates</div>
+                        <div class="dash-value" id="dashTotal">0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dash-label">Perfect Scores</div>
+                        <div class="dash-value" id="dashPerfect">0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dash-label">Avg Total Shields</div>
+                        <div class="dash-value" id="dashAvgTotal">0.0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dash-label">Avg RW Shields</div>
+                        <div class="dash-value" id="dashAvgRw">0.0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dash-label">Avg L Shields</div>
+                        <div class="dash-value" id="dashAvgL">0.0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dash-label">Avg S Shields</div>
+                        <div class="dash-value" id="dashAvgS">0.0</div>
+                    </div>
+                </div>
+
+                <div class="chart-panel" id="yearChartPanel">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                        </svg>
+                        Results by Year
+                    </h4>
+                    <p class="chart-sub">Average shields per skill (bars, left axis) and average total out of 15 (line, right axis) for the candidates currently shown</p>
+                    <div class="chart-canvas-wrap" id="yearChartWrap">
+                        <canvas id="yearChartCanvas"></canvas>
+                    </div>
+                    <div class="chart-empty-msg" id="yearChartEmpty">No scored results to chart yet.</div>
+                </div>
+
+                <div class="year-stat" id="yearStat">
+                    <div class="year-stat-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                        </svg>
+                        <span id="yearStatText"></span>
+                    </div>
+                    <div id="scoreDistribution" class="score-distribution"></div>
+                </div>
+
+                <div class="chart-panel evolution-panel" id="evolutionPanel">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.306a11.95 11.95 0 015.814-5.518l2.74-1.22m0 0l-5.94-2.281m5.94 2.28l-2.28 5.941" />
+                        </svg>
+                        <span id="evolutionTitle">Student Evolution</span>
+                    </h4>
+                    <p class="chart-sub">Shields earned across each exam sitting, in chronological order</p>
+                    <div class="chart-canvas-wrap">
+                        <canvas id="evolutionChartCanvas"></canvas>
+                    </div>
+                </div>
+
+                <button type="button" id="bestResultsBtn" class="best-results-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2a1 1 0 01.894.553L15.236 7.5l5.447.792a1 1 0 01.554 1.706l-3.94 3.842.93 5.424a1 1 0 01-1.451 1.054L12 17.9l-4.776 2.51a1 1 0 01-1.451-1.054l.93-5.424-3.94-3.842a1 1 0 01.554-1.706l5.447-.792 2.342-4.947A1 1 0 0112 2z"/>
+                    </svg>
+                    View Best Results
+                </button>
+
+                <div id="emptyState" class="empty-state">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                    </svg>
+                    <p>Enter search criteria to view student results.</p>
+                    
+                </div>
+
+                <div class="results-container" id="resultsContainer">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Exam</th>
+                                <th>Year</th>
+                                <th>Score</th>
+                                <th>Total Shields</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Best Results Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h2 id="modalTitle">Best Results</h2>
+                <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <button type="button" class="modal-tab active" data-mode="year">By Year</button>
+                <button type="button" class="modal-tab" data-mode="exam">By Exam</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+
+    <!-- External Database -->
+    <script src="data.js"></script>
+    
+    <!-- Application Logic -->
+    <script>
+        const nameInput = document.getElementById('searchName');
+        const lastNameInput = document.getElementById('searchLastName');
+        const yearSelect = document.getElementById('searchYear');
+        const examSelect = document.getElementById('searchExam');
+        const scoreInput = document.getElementById('searchScore');
+        
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const tableBody = document.getElementById('tableBody');
+        const yearStat = document.getElementById('yearStat');
+        const yearStatText = document.getElementById('yearStatText');
+        const activeFiltersContainer = document.getElementById('activeFilters');
+
+        // NORMALIZATION HELPERS
+        function normalizeForUnique(str) {
+            if (!str) return "";
+            return str
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "") // removes accents (ó, á, etc.)
+                .replace(/\s+/g, "")             // removes spaces
+                .toLowerCase();                  // removes uppercase differences
+        }
+
+        function removeAccentsAndLower(str) {
+            if (!str) return "";
+            return str
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase();
+        }
+
+        // Render Active Filters
+        function updateActiveFiltersDisplay() {
+            const activeFilters = [];
+            
+            if (nameInput.value.trim()) {
+                activeFilters.push(`<strong></strong> ${nameInput.value.trim()}`);
+            }
+            if (lastNameInput.value.trim()) {
+                activeFilters.push(`<strong></strong> ${lastNameInput.value.trim()}`);
+            }
+            if (yearSelect.value) {
+                activeFilters.push(`<strong></strong> ${yearSelect.options[yearSelect.selectedIndex].text}`);
+            }
+            if (examSelect.value) {
+                activeFilters.push(`<strong></strong> ${examSelect.options[examSelect.selectedIndex].text}`);
+            }
+            if (scoreInput.value.trim()) {
+                activeFilters.push(`<strong></strong> ${scoreInput.value.trim()}`);
+            }
+
+            if (activeFilters.length > 0) {
+                activeFiltersContainer.innerHTML = activeFilters.map(filter => `<span class="filter-badge">${filter}</span>`).join('');
+                activeFiltersContainer.style.display = 'flex';
+            } else {
+                activeFiltersContainer.innerHTML = '';
+                activeFiltersContainer.style.display = 'none';
+            }
+        }
+
+        // Dashboard logic
+        function updateDashboard(dataArray) {
+            const uniqueCandidates = new Set();
+            let perfectScores = 0;
+            let rwTotal = 0, lTotal = 0, sTotal = 0;
+            let validScoresCount = 0;
+
+            dataArray.forEach(student => {
+                // Combine Last and First name and normalize to count unique individuals
+                const fullName = (student.lastName || "") + (student.firstName || "");
+                uniqueCandidates.add(normalizeForUnique(fullName));
+
+                if (student.score === "RW5-L5-S5") {
+                    perfectScores++;
+                }
+                
+                if (student.score && student.score !== "Pending") {
+                    const match = student.score.match(/RW(\d+)-L(\d+)-S(\d+)/);
+                    if (match) {
+                        rwTotal += parseInt(match[1], 10);
+                        lTotal += parseInt(match[2], 10);
+                        sTotal += parseInt(match[3], 10);
+                        validScoresCount++;
+                    }
+                }
+            });
+
+            const total = uniqueCandidates.size; // Update using the unique count
+            const avgRw = validScoresCount ? (rwTotal / validScoresCount).toFixed(1) : "0.0";
+            const avgL = validScoresCount ? (lTotal / validScoresCount).toFixed(1) : "0.0";
+            const avgS = validScoresCount ? (sTotal / validScoresCount).toFixed(1) : "0.0";
+            const avgTotal = validScoresCount ? ((rwTotal + lTotal + sTotal) / validScoresCount).toFixed(1) : "0.0";
+
+            document.getElementById('dashTotal').innerText = total;
+            document.getElementById('dashPerfect').innerText = perfectScores;
+            document.getElementById('dashAvgRw').innerText = avgRw;
+            document.getElementById('dashAvgL').innerText = avgL;
+            document.getElementById('dashAvgS').innerText = avgS;
+            document.getElementById('dashAvgTotal').innerText = avgTotal;
+        }
+
+        // ---- Chart helpers: Results by Year / Student Evolution ----
+        const CHART_COLORS = {
+            rw: '#007AFF',   
+            l: '#5856D6',    
+            s: '#FF9F0A',    
+            total: '#1D1D1F' 
+        };
+
+        const EXAM_ORDER = { 'YLE Starters': 0, 'YLE Movers': 1, 'YLE Flyers': 2 };
+
+        let yearChartInstance = null;
+        let evolutionChartInstance = null;
+
+        function parseShieldScore(score) {
+            if (!score || score === 'Pending') return null;
+            const match = score.match(/RW(\d+)-L(\d+)-S(\d+)/);
+            if (!match) return null;
+            const rw = parseInt(match[1], 10);
+            const l = parseInt(match[2], 10);
+            const s = parseInt(match[3], 10);
+            return { rw, l, s, total: rw + l + s };
+        }
+
+        function updateYearChart(dataArray) {
+            const canvas = document.getElementById('yearChartCanvas');
+            const emptyMsg = document.getElementById('yearChartEmpty');
+            if (!canvas) return;
+
+            const byYear = {};
+            dataArray.forEach(student => {
+                const shields = parseShieldScore(student.score);
+                if (!shields) return;
+                const y = student.year || 'Unspecified';
+                if (!byYear[y]) byYear[y] = { rw: 0, l: 0, s: 0, count: 0 };
+                byYear[y].rw += shields.rw;
+                byYear[y].l += shields.l;
+                byYear[y].s += shields.s;
+                byYear[y].count += 1;
+            });
+
+            const years = Object.keys(byYear).sort();
+
+            if (years.length === 0 || typeof Chart === 'undefined') {
+                canvas.style.display = 'none';
+                if (emptyMsg) emptyMsg.style.display = 'flex';
+                if (yearChartInstance) {
+                    yearChartInstance.destroy();
+                    yearChartInstance = null;
+                }
+                return;
+            }
+
+            canvas.style.display = 'block';
+            if (emptyMsg) emptyMsg.style.display = 'none';
+
+            const avgRw = years.map(y => +(byYear[y].rw / byYear[y].count).toFixed(2));
+            const avgL = years.map(y => +(byYear[y].l / byYear[y].count).toFixed(2));
+            const avgS = years.map(y => +(byYear[y].s / byYear[y].count).toFixed(2));
+            const avgTotal = years.map(y => +((byYear[y].rw + byYear[y].l + byYear[y].s) / byYear[y].count).toFixed(2));
+            const counts = years.map(y => byYear[y].count);
+
+            if (yearChartInstance) {
+                yearChartInstance.data.labels = years;
+                yearChartInstance.data.datasets[0].data = avgRw;
+                yearChartInstance.data.datasets[1].data = avgL;
+                yearChartInstance.data.datasets[2].data = avgS;
+                yearChartInstance.data.datasets[3].data = avgTotal;
+                yearChartInstance.update();
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
+            yearChartInstance = new Chart(ctx, {
+                data: {
+                    labels: years,
+                    datasets: [
+                        { type: 'bar', label: 'Avg Reading & Writing', data: avgRw, backgroundColor: CHART_COLORS.rw, borderRadius: 6, maxBarThickness: 30, yAxisID: 'y' },
+                        { type: 'bar', label: 'Avg Listening', data: avgL, backgroundColor: CHART_COLORS.l, borderRadius: 6, maxBarThickness: 30, yAxisID: 'y' },
+                        { type: 'bar', label: 'Avg Speaking', data: avgS, backgroundColor: CHART_COLORS.s, borderRadius: 6, maxBarThickness: 30, yAxisID: 'y' },
+                        { type: 'line', label: 'Avg Total (/15)', data: avgTotal, borderColor: CHART_COLORS.total, backgroundColor: CHART_COLORS.total, borderWidth: 2, tension: 0.3, pointRadius: 4, pointBackgroundColor: CHART_COLORS.total, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 }, color: '#1D1D1F' } },
+                        tooltip: {
+                            callbacks: {
+                                afterBody: (items) => `Scored candidates: ${counts[items[0].dataIndex]}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            position: 'left',
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1, color: '#868b87' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            title: { display: true, text: 'Avg shields / skill', color: '#868b87', font: { size: 10 } }
+                        },
+                        y1: {
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 15,
+                            ticks: { stepSize: 3, color: '#868b87' },
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Avg total / 15', color: '#868b87', font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { color: '#868b87' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function findIsolatedStudent(dataArray) {
+            const groups = {};
+            dataArray.forEach(student => {
+                // Ensure grouped records ignore accents, spacing, and casing
+                const key = normalizeForUnique((student.lastName || "") + (student.firstName || ""));
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(student);
+            });
+
+            const keys = Object.keys(groups).filter(k => k !== '');
+            if (keys.length === 1 && groups[keys[0]].length > 1) {
+                return groups[keys[0]];
+            }
+            return null;
+        }
+
+        function updateEvolutionChart(dataArray) {
+            const panel = document.getElementById('evolutionPanel');
+            const records = findIsolatedStudent(dataArray);
+
+            if (!records) {
+                panel.classList.remove('show');
+                if (evolutionChartInstance) {
+                    evolutionChartInstance.destroy();
+                    evolutionChartInstance = null;
+                }
+                return;
+            }
+
+            const sorted = records.slice().sort((a, b) => {
+                if (a.year !== b.year) return String(a.year).localeCompare(String(b.year));
+                return (EXAM_ORDER[a.exam] ?? 99) - (EXAM_ORDER[b.exam] ?? 99);
+            });
+
+            const labels = sorted.map(s => `${(s.exam || '').replace('YLE ', '')} '${String(s.year).slice(-2)}`);
+            const rw = sorted.map(s => { const sc = parseShieldScore(s.score); return sc ? sc.rw : null; });
+            const l = sorted.map(s => { const sc = parseShieldScore(s.score); return sc ? sc.l : null; });
+            const s_ = sorted.map(s => { const sc = parseShieldScore(s.score); return sc ? sc.s : null; });
+            const total = sorted.map(s => { const sc = parseShieldScore(s.score); return sc ? sc.total : null; });
+
+            document.getElementById('evolutionTitle').textContent =
+                `${sorted[0].firstName} ${sorted[0].lastName} — Evolution Across Exams`;
+
+            panel.classList.add('show');
+
+            if (typeof Chart === 'undefined') return;
+
+            const canvas = document.getElementById('evolutionChartCanvas');
+            const ctx = canvas.getContext('2d');
+
+            if (evolutionChartInstance) {
+                evolutionChartInstance.data.labels = labels;
+                evolutionChartInstance.data.datasets[0].data = rw;
+                evolutionChartInstance.data.datasets[1].data = l;
+                evolutionChartInstance.data.datasets[2].data = s_;
+                evolutionChartInstance.data.datasets[3].data = total;
+                evolutionChartInstance.update();
+                return;
+            }
+
+            evolutionChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        { label: 'Reading & Writing', data: rw, borderColor: CHART_COLORS.rw, backgroundColor: CHART_COLORS.rw, tension: 0.3, spanGaps: true, pointRadius: 4, yAxisID: 'y' },
+                        { label: 'Listening', data: l, borderColor: CHART_COLORS.l, backgroundColor: CHART_COLORS.l, tension: 0.3, spanGaps: true, pointRadius: 4, yAxisID: 'y' },
+                        { label: 'Speaking', data: s_, borderColor: CHART_COLORS.s, backgroundColor: CHART_COLORS.s, tension: 0.3, spanGaps: true, pointRadius: 4, yAxisID: 'y' },
+                        { label: 'Total', data: total, borderColor: CHART_COLORS.total, backgroundColor: CHART_COLORS.total, borderDash: [5, 4], tension: 0.3, spanGaps: true, pointRadius: 3, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 }, color: '#1D1D1F' } }
+                    },
+                    scales: {
+                        y: {
+                            position: 'left',
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1, color: '#868b87' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            title: { display: true, text: 'Shields / skill', color: '#868b87', font: { size: 10 } }
+                        },
+                        y1: {
+                            position: 'right',
+                            beginAtZero: true,
+                            max: 15,
+                            ticks: { stepSize: 3, color: '#868b87' },
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Total / 15', color: '#868b87', font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { color: '#868b87' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateYearStat(yearTerm, filteredData) {
+            const distContainer = document.getElementById('scoreDistribution');
+
+            if (!yearTerm) {
+                yearStat.classList.remove('show');
+                distContainer.classList.remove('show');
+                return;
+            }
+
+            const count = filteredData.length;
+            yearStatText.innerHTML = `<strong>${count}</strong> candidate${count === 1 ? '' : 's'} found for <strong>${yearTerm}</strong>`;
+            
+            const scoreCounts = {};
+            filteredData.forEach(student => {
+                const score = student.score;
+                scoreCounts[score] = (scoreCounts[score] || 0) + 1;
+            });
+
+            if (Object.keys(scoreCounts).length > 0 && count > 0) {
+                const pills = Object.entries(scoreCounts)
+                    .sort((a, b) => b[1] - a[1]) 
+                    .map(([score, qty]) => {
+                        const percentage = ((qty / count) * 100).toFixed(1);
+                        return `<span class="score-pill"><strong>${score}</strong>: ${qty} candidate${qty === 1 ? '' : 's'} (${percentage}%)</span>`;
+                    })
+                    .join('');
+                
+                distContainer.innerHTML = pills;
+                distContainer.classList.add('show');
+            } else {
+                distContainer.classList.remove('show');
+                distContainer.innerHTML = '';
+            }
+
+            yearStat.classList.add('show');
+        }
+
+        function renderTable(dataArray) {
+            tableBody.innerHTML = '';
+
+            if (dataArray.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #86868B; padding: 30px;">No matching records found.</td></tr>`;
+                return;
+            }
+
+            dataArray.forEach(student => {
+                let totalShieldsHtml = '<span style="color: var(--text-secondary)">-</span>';
+                if (student.score && student.score !== "Pending") {
+                    const match = student.score.match(/RW(\d+)-L(\d+)-S(\d+)/);
+                    if (match) {
+                        const sum = parseInt(match[1], 10) + parseInt(match[2], 10) + parseInt(match[3], 10);
+                        totalShieldsHtml = `<span class="total-badge">${sum} / 15</span>`;
+                    }
+                } else if (student.score === "Pending") {
+                    totalShieldsHtml = '<span style="color: var(--text-secondary); font-size: 0.85rem;">Pending</span>';
+                }
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${student.lastName}</strong></td>
+                    <td>${student.firstName}</td>
+                    <td>${student.exam}</td>
+                    <td>${student.year}</td>
+                    <td><span class="score-badge">${student.score}</span></td>
+                    <td>${totalShieldsHtml}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function handleSearch() {
+            updateActiveFiltersDisplay(); 
+            
+            // Normalize inputs
+            const nameTerm = removeAccentsAndLower(nameInput.value.trim());
+            const lastNameTerm = removeAccentsAndLower(lastNameInput.value.trim());
+            const yearTerm = yearSelect.value;
+            const examTerm = examSelect.value.toLowerCase();
+            const scoreTerm = scoreInput.value.toLowerCase().trim();
+
+            if (typeof studentDatabase === 'undefined') return;
+
+            if (!nameTerm && !lastNameTerm && !yearTerm && !examTerm && !scoreTerm) {
+                resultsContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                updateYearStat('', []);
+                updateDashboard(studentDatabase);
+                updateYearChart(studentDatabase);
+                updateEvolutionChart([]);
+                return;
+            }
+
+            resultsContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+
+            const filteredData = studentDatabase.filter(student => {
+                // Normalize student data against the search parameters 
+                const sFirstName = removeAccentsAndLower(student.firstName);
+                const sLastName = removeAccentsAndLower(student.lastName);
+                
+                const matchesName = !nameTerm || sFirstName.includes(nameTerm);
+                const matchesLastName = !lastNameTerm || sLastName.includes(lastNameTerm);
+                const matchesYear = yearTerm === '' || student.year === yearTerm;
+                const matchesExam = examTerm === '' || student.exam.toLowerCase().includes(examTerm);
+                const matchesScore = !scoreTerm || student.score.toLowerCase().includes(scoreTerm);
+
+                return matchesName && matchesLastName && matchesYear && matchesExam && matchesScore;
+            });
+
+            renderTable(filteredData);
+            updateYearStat(yearTerm, filteredData); 
+            updateDashboard(filteredData);
+            updateYearChart(filteredData);
+            updateEvolutionChart(filteredData);
+        }
+
+        nameInput.addEventListener('input', handleSearch);
+        lastNameInput.addEventListener('input', handleSearch);
+        yearSelect.addEventListener('change', handleSearch);
+        examSelect.addEventListener('change', handleSearch);
+        scoreInput.addEventListener('input', handleSearch);
+
+        // Best Results Modal logic
+        const bestResultsBtn = document.getElementById('bestResultsBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalBody = document.getElementById('modalBody');
+        const modalTabs = document.querySelectorAll('.modal-tab');
+
+        function getScoreValue(score) {
+            if (!score || score === "Pending") return -Infinity;
+            const match = String(score).match(/\d+/g);
+            if (match) {
+                return match.reduce((acc, curr) => acc + parseInt(curr, 10), 0);
+            }
+            return -Infinity;
+        }
+
+        function getBestResults(mode) {
+            if (typeof studentDatabase === 'undefined') return {};
+
+            const key = mode === 'exam' ? 'exam' : 'year';
+            const groups = {};
+
+            studentDatabase.forEach(student => {
+                const groupKey = student[key] || 'Unspecified';
+                if (!groups[groupKey]) groups[groupKey] = [];
+                groups[groupKey].push(student);
+            });
+
+            const sortedGroupKeys = Object.keys(groups).sort();
+            const best = {};
+            sortedGroupKeys.forEach(groupKey => {
+                const sorted = groups[groupKey]
+                    .slice()
+                    .sort((a, b) => getScoreValue(b.score) - getScoreValue(a.score));
+                best[groupKey] = {
+                    total: sorted.length,
+                    top: sorted.slice(0, 3)
+                };
+            });
+
+            return best;
+        }
+
+        function renderModal(mode) {
+            const grouped = getBestResults(mode);
+            const groupKeys = Object.keys(grouped);
+
+            if (groupKeys.length === 0) {
+                modalBody.innerHTML = `<p class="modal-empty">No student data available yet.</p>`;
+                return;
+            }
+
+            modalBody.innerHTML = groupKeys.map(groupKey => `
+                <div class="modal-group">
+                    <h3>
+                        <span>${mode === 'exam' ? groupKey : `Year ${groupKey}`}</span>
+                        <span class="modal-count">${grouped[groupKey].total} candidate${grouped[groupKey].total === 1 ? '' : 's'}</span>
+                    </h3>
+                    <table class="modal-table">
+                        <tbody>
+                            ${grouped[groupKey].top.map((student, index) => `
+                                <tr>
+                                    <td class="modal-rank">#${index + 1}</td>
+                                    <td>${student.firstName} ${student.lastName}</td>
+                                    <td>${mode === 'exam' ? student.year : student.exam}</td>
+                                    <td><span class="score-badge">${student.score}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `).join('');
+        }
+
+        function setActiveTab(mode) {
+            modalTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
+        }
+
+        function openModal() {
+            modalOverlay.classList.add('open');
+            setActiveTab('year');
+            renderModal('year');
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('open');
+        }
+
+        bestResultsBtn.addEventListener('click', openModal);
+        modalClose.addEventListener('click', closeModal);
+
+        modalOverlay.addEventListener('click', (event) => {
+            if (event.target === modalOverlay) closeModal();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
+        });
+
+        modalTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                setActiveTab(tab.dataset.mode);
+                renderModal(tab.dataset.mode);
+            });
+        });
+
+        // Initialize on load
+        if (typeof studentDatabase !== 'undefined') {
+            updateDashboard(studentDatabase);
+            updateYearChart(studentDatabase);
+        }
+        updateActiveFiltersDisplay(); 
+    </script>
+</body>
+</html>

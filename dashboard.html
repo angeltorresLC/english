@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Student Exam Results</title>
     <style>
         :root {
@@ -75,12 +75,11 @@
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 
                         inset 0 1px 0 rgba(255,255,255,0.6);
         }
         
-        /* New Header Wrapper for Title and Image */
         .header-wrapper {
             display: flex;
             justify-content: space-between;
@@ -108,18 +107,6 @@
             height: 20px;
             vertical-align: text-bottom;
             display: inline-block;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-top: 0;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #1D1D1F, #434345);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         /* Active Filters Display */
@@ -160,7 +147,7 @@
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(0, 122, 255, 0.15);
             border-radius: 20px;
-            padding: 10px 10px;
+            padding: 15px 10px;
             text-align: center;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
             transition: transform 0.2s ease;
@@ -259,40 +246,12 @@
             margin-bottom: 4px;
         }
 
-        @media (max-width: 1100px) {
-            .side-image {
-                display: none;
-            }
-        }
-
-        @media (max-width: 850px) {
-            .page-layout {
-                flex-direction: column;
-            }
-
-            .filters-sidebar {
-                width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
-                padding: 10px;
-            }
-
-            .filters-sidebar h2 {
-                width: 100%;
-                margin-bottom: 0;
-            }
-
-            .search-tag {
-                flex: 1 1 auto;
-                min-width: 160px;
-            }
-        }
-
         .results-container {
             margin-top: 20px;
             background: rgba(255, 255, 255, 0.4);
             border-radius: 20px;
-            overflow-x: auto;
+            overflow-x: auto; /* Ensures table scrolls horizontally */
+            -webkit-overflow-scrolling: touch;
             border: 1px solid rgba(255, 255, 255, 0.5);
             display: none; 
         }
@@ -330,8 +289,7 @@
             background: rgba(255, 255, 255, 0.8);
         }
 
-        .score-badge {
-            background: var(--system-blue);
+        .score-badge, .total-badge {
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
@@ -340,17 +298,9 @@
             display: inline-block;
             white-space: nowrap;
         }
-        
-        .total-badge {
-            background: #5856D6;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: inline-block;
-            white-space: nowrap;
-        }
+
+        .score-badge { background: var(--system-blue); }
+        .total-badge { background: #5856D6; }
 
         .empty-state {
             text-align: center;
@@ -366,7 +316,6 @@
             opacity: 0.5;
         }
 
-        /* Chart Panels (Results by Year / Student Evolution) */
         .chart-panel {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(0, 122, 255, 0.15);
@@ -374,6 +323,7 @@
             padding: 18px 20px 12px;
             margin-bottom: 20px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
         }
 
         .chart-panel h4 {
@@ -402,6 +352,7 @@
         .chart-canvas-wrap {
             position: relative;
             height: 260px;
+            width: 100%;
         }
 
         .chart-empty-msg {
@@ -414,13 +365,8 @@
             text-align: center;
         }
 
-        .evolution-panel {
-            display: none;
-        }
-
-        .evolution-panel.show {
-            display: block;
-        }
+        .evolution-panel { display: none; }
+        .evolution-panel.show { display: block; }
 
         .year-stat {
             display: none;
@@ -436,9 +382,7 @@
             color: var(--text-primary);
         }
 
-        .year-stat.show {
-            display: flex;
-        }
+        .year-stat.show { display: flex; }
 
         .year-stat-header {
             display: flex;
@@ -468,9 +412,7 @@
             flex-wrap: wrap;
         }
 
-        .score-distribution.show {
-            display: flex;
-        }
+        .score-distribution.show { display: flex; }
 
         .score-pill {
             background: rgba(255, 255, 255, 0.7);
@@ -523,9 +465,7 @@
             z-index: 1000;
         }
 
-        .modal-overlay.open {
-            display: flex;
-        }
+        .modal-overlay.open { display: flex; }
 
         .modal-box {
             width: 100%;
@@ -572,10 +512,6 @@
             transition: background 0.2s ease;
         }
 
-        .modal-close:hover {
-            background: rgba(0, 0, 0, 0.12);
-        }
-
         .modal-tabs {
             display: flex;
             gap: 8px;
@@ -604,14 +540,8 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .modal-body {
-            overflow-y: auto;
-        }
-
-        .modal-group {
-            margin-bottom: 18px;
-        }
-
+        .modal-body { overflow-y: auto; }
+        .modal-group { margin-bottom: 18px; }
         .modal-group h3 {
             display: flex;
             align-items: baseline;
@@ -647,6 +577,79 @@
             font-weight: 700;
             color: var(--system-blue);
             width: 36px;
+        }
+
+        /* ---------------- RESPONSIVE MEDIA QUERIES ---------------- */
+        
+        @media (max-width: 1100px) {
+            .side-image { display: none; }
+        }
+
+        @media (max-width: 850px) {
+            .page-layout { flex-direction: column; }
+            .filters-sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 20px;
+            }
+            .filters-sidebar h2 { width: 100%; margin-bottom: 0; }
+            .search-tag { flex: 1 1 auto; min-width: 160px; }
+            body { padding: 40px 15px; }
+        }
+
+        /* Mobile specific styling */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+            .page-layout {
+                gap: 15px;
+            }
+            .filters-sidebar {
+                flex-direction: column;
+                padding: 15px;
+                border-radius: 20px;
+            }
+            .search-tag {
+                width: 100%;
+            }
+            .app-container {
+                padding: 15px;
+                border-radius: 20px;
+            }
+            .header-wrapper h3 {
+                font-size: 1.4rem;
+                text-align: center;
+                width: 100%;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr); /* Forces 2 items per row instead of cramming */
+                gap: 10px;
+            }
+            .dashboard-card {
+                padding: 12px 8px;
+            }
+            .dashboard-card .dash-value {
+                font-size: 1.4rem;
+            }
+            .chart-panel, .year-stat {
+                padding: 15px 12px;
+            }
+            .chart-canvas-wrap {
+                height: 220px; /* Reduce chart height slightly for mobile */
+            }
+            .modal-box {
+                padding: 20px 15px;
+                border-radius: 18px;
+            }
+            .modal-header h2 {
+                font-size: 1.2rem;
+            }
+            .modal-table td {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+            }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
@@ -1248,7 +1251,6 @@
         function handleSearch() {
             updateActiveFiltersDisplay(); 
             
-            // Normalize inputs
             const nameTerm = removeAccentsAndLower(nameInput.value.trim());
             const lastNameTerm = removeAccentsAndLower(lastNameInput.value.trim());
             const yearTerm = yearSelect.value;
@@ -1271,7 +1273,6 @@
             emptyState.style.display = 'none';
 
             const filteredData = studentDatabase.filter(student => {
-                // Normalize student data against the search parameters 
                 const sFirstName = removeAccentsAndLower(student.firstName);
                 const sLastName = removeAccentsAndLower(student.lastName);
                 
@@ -1405,7 +1406,6 @@
             });
         });
 
-        // Initialize on load
         if (typeof studentDatabase !== 'undefined') {
             updateDashboard(studentDatabase);
             updateYearChart(studentDatabase);
